@@ -81,6 +81,7 @@ endif;
     <div class="hero-overlay">
         <h1>Welcome to <span class="highlight">BrewHub</span></h1>
         <p>Crafting coffee of outstanding quality.</p>
+        <?= $this->Html->link('Content Blocks', ['plugin' => 'ContentBlocks', 'controller' => 'ContentBlocks', 'action' => 'index']) ?>
     </div>
 </header>
 
