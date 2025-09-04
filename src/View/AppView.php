@@ -47,5 +47,6 @@ class AppView extends View
             'file' => '<input type="file" name="{{name}}" class="form-control-file"{{attrs}}/>'
         ];
         $this->Form->setTemplates($formTemplate);
+        $this->loadHelper('ContentBlocks.ContentBlock'); //CMS loader
     }
 }
