@@ -87,7 +87,14 @@ class UsersTable extends Table
             ->scalar('password')
             ->maxLength('password', 255)
             ->requirePresence('password', 'create')
-            ->notEmptyString('password');
+            ->notEmptyString('password')
+            ->add('password_confirm', 'custom', [
+                'rule' => function ($value, $context) {
+                    return isset($context['data']['password']) &&
+                        $value === $context['data']['password'];
+                },
+                'message' => 'Passwords do not match.',
+            ]);
 
         $validator
             ->scalar('user_type')
