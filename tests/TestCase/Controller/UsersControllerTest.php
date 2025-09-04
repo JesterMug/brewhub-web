@@ -82,4 +82,15 @@ class UsersControllerTest extends TestCase
     {
         $this->markTestIncomplete('Not implemented yet.');
     }
+
+    /**
+     * Test login method
+     *
+     * @return void
+     * @link \App\Controller\UsersController::login()
+     */
+    public function testLogin(): void
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
 }

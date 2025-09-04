@@ -24,8 +24,8 @@ class CartItemsFixture extends TestFixture
                 'product_variant_id' => 1,
                 'quantity' => 1,
                 'is_preorder' => 1,
-                'date_added' => 1756899326,
-                'date_modified' => 1756899326,
+                'date_added' => 1756992888,
+                'date_modified' => 1756992888,
             ],
         ];
         parent::init();

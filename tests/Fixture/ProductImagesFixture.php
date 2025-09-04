@@ -22,7 +22,7 @@ class ProductImagesFixture extends TestFixture
                 'id' => 1,
                 'product_id' => 1,
                 'image_file' => 'Lorem ipsum dolor sit amet',
-                'date_created' => '2025-09-03 11:35:26',
+                'date_created' => '2025-09-04 13:34:48',
             ],
         ];
         parent::init();

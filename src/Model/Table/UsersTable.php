@@ -41,7 +41,6 @@ class UsersTable extends Table
     {
         parent::initialize($config);
 
-        $this->addBehavior('CanAuthenticate');
         $this->setTable('users');
         $this->setDisplayField('first_name');
         $this->setPrimaryKey('id');
@@ -87,18 +86,10 @@ class UsersTable extends Table
             ->scalar('password')
             ->maxLength('password', 255)
             ->requirePresence('password', 'create')
-            ->notEmptyString('password')
-            ->add('password_confirm', 'custom', [
-                'rule' => function ($value, $context) {
-                    return isset($context['data']['password']) &&
-                        $value === $context['data']['password'];
-                },
-                'message' => 'Passwords do not match.',
-            ]);
+            ->notEmptyString('password');
 
         $validator
             ->scalar('user_type')
-            ->requirePresence('user_type', 'create')
             ->notEmptyString('user_type');
 
         $validator
@@ -116,7 +107,7 @@ class UsersTable extends Table
 
         $validator
             ->dateTime('date_modified')
-            ->allowEmptyDateTime('date_modified');
+            ->notEmptyDateTime('date_modified');
 
         return $validator;
     }

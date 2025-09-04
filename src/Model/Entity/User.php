@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Model\Entity;
 
-use Authentication\PasswordHasher\DefaultPasswordHasher;
 use Cake\ORM\Entity;
 
 /**
@@ -18,7 +17,7 @@ use Cake\ORM\Entity;
  * @property string|null $nonce
  * @property \Cake\I18n\DateTime|null $nonce_expiry
  * @property \Cake\I18n\DateTime $date_created
- * @property \Cake\I18n\DateTime|null $date_modified
+ * @property \Cake\I18n\DateTime $date_modified
  *
  * @property \App\Model\Entity\Address[] $addresses
  * @property \App\Model\Entity\Cart[] $carts
@@ -41,8 +40,8 @@ class User extends Entity
         'email' => true,
         'password' => true,
         'user_type' => true,
-        'nonce' => false,
-        'nonce_expiry' => false,
+        'nonce' => true,
+        'nonce_expiry' => true,
         'date_created' => true,
         'date_modified' => true,
         'addresses' => true,
@@ -58,21 +57,4 @@ class User extends Entity
     protected array $_hidden = [
         'password',
     ];
-
-    /**
-     * Hashing password for User entity
-     *
-     * @param string $password Password field
-     * @return string|null hashed password
-     * @see \App\Model\Entity\User::$password
-     */
-    protected function _setPassword(string $password): ?string
-    {
-        if (strlen($password) > 0) {
-            return (new DefaultPasswordHasher())->hash($password);
-        }
-
-        return $password;
-    }
-
 }
