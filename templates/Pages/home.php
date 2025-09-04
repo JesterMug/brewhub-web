@@ -79,8 +79,8 @@ endif;
 
 <header class="hero">
     <div class="hero-overlay">
-        <h1>Welcome to <span class="highlight">BrewHub</span></h1>
-        <p>Crafting coffee of outstanding quality.</p>
+        <h1>Shop the Highest Quality <br> Beans & Merchandise </h1>
+        <p>Ensure .</p>
     </div>
 </header>
 

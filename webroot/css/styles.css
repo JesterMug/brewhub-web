@@ -42,22 +42,22 @@ body {
 
 .hero {
     position: relative;
-    background: url('../img/coffee-hero.jpg') center/cover no-repeat;
+    background: url('../img/coffee-background9.jpg') center/cover no-repeat;
     height: 90vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
+    text-align: left;
 }
 .hero-overlay {
-    background: rgba(0,0,0,0.6);
+    //
     padding: 2rem;
     border-radius: 1rem;
 }
 .hero h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 3rem;
-    margin-bottom: 1rem;
+    font-family: 'Monaco', sans-serif;
+    font-size: 4rem;
+    margin-bottom: 0;
 }
 
 .hero h1 .highlight {
