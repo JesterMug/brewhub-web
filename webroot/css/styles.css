@@ -1,0 +1,113 @@
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: #111;
+    color: #eee;
+    line-height: 1.6;
+}
+
+.navbar {
+    background: #000;
+    padding: 1rem 2rem;
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between; /* brand left, links right */
+    align-items: center;
+}
+
+.navbar .brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: #cfa15d;
+    text-decoration: none;
+}
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links a {
+    color: #eee;
+    text-decoration: none;
+    font-weight: 600;
+}
+.nav-links a:hover {
+    color: #cfa15d;
+}
+
+.hero {
+    position: relative;
+    background: url('../img/coffee-hero.jpg') center/cover no-repeat;
+    height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.hero-overlay {
+    background: rgba(0,0,0,0.6);
+    padding: 2rem;
+    border-radius: 1rem;
+}
+.hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero h1 .highlight {
+    color: #cfa15d;          /* gold accent */
+    font-weight: 700;
+    font-size: 3rem;       /* slightly larger */
+}
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+.btn {
+    padding: 0.8rem 1.6rem;
+    border-radius: 50px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+}
+.btn-primary {
+    background: #cfa15d;
+    color: #111;
+}
+.btn-primary:hover {
+    background: #b5894c;
+}
+.btn-outline {
+    border: 2px solid #cfa15d;
+    color: #cfa15d;
+    padding: 0.5rem 1rem;
+}
+.btn-outline:hover {
+    background: #cfa15d;
+    color: #111 !important;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+    padding: 4rem 2rem;
+    text-align: center;
+}
+.features h2 {
+    font-family: 'Playfair Display', serif;
+    color: #cfa15d;
+}
+
+.footer {
+    background: #000;
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.9rem;
+}
