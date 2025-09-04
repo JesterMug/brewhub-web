@@ -3,30 +3,31 @@
  * @var \App\View\AppView $this
  * @var iterable<\App\Model\Entity\Product> $products
  */
+
+echo $this->Html->css('/vendor/datatables/dataTables.bootstrap4.min.css', ['block' => true]);
+echo $this->Html->script('/vendor/datatables/jquery.dataTables.min.js', ['block' => true]);
+echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['block' => true]);
 ?>
 <div class="products index content">
-    <?= $this->Html->link(__('New Product'), ['action' => 'add'], ['class' => 'button float-right']) ?>
-    <h3><?= __('Products') ?></h3>
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800"><?= __('Products') ?></h1>
+        <a href="<?= $this->Url->build(['action' => 'add']) ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                class="fas fa-plus fa-sm text-white-50"></i> New Product</a>
+    </div>
     <div class="table-responsive">
-        <table>
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
                 <tr>
-                    <th><?= $this->Paginator->sort('id') ?></th>
-                    <th><?= $this->Paginator->sort('name') ?></th>
-                    <th><?= $this->Paginator->sort('category') ?></th>
-                    <th><?= $this->Paginator->sort('date_created') ?></th>
-                    <th><?= $this->Paginator->sort('date_modified') ?></th>
+                    <th><?= h('Name') ?></th>
+                    <th><?= h('Category') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($products as $product): ?>
                 <tr>
-                    <td><?= $this->Number->format($product->id) ?></td>
                     <td><?= h($product->name) ?></td>
                     <td><?= h($product->category) ?></td>
-                    <td><?= h($product->date_created) ?></td>
-                    <td><?= h($product->date_modified) ?></td>
                     <td class="actions">
                         <?= $this->Html->link(__('View'), ['action' => 'view', $product->id]) ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $product->id]) ?>
@@ -35,7 +36,7 @@
                             ['action' => 'delete', $product->id],
                             [
                                 'method' => 'delete',
-                                'confirm' => __('Are you sure you want to delete # {0}?', $product->id),
+                                'confirm' => __('Are you sure you want to delete {0}? This will delete all associated product variants and images.', $product->name),
                             ]
                         ) ?>
                     </td>
@@ -44,14 +45,9 @@
             </tbody>
         </table>
     </div>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
-        </ul>
-        <p><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></p>
-    </div>
+    <script>
+        $(document).ready(function() {
+            $('#dataTable').DataTable();
+        });
+    </script>
 </div>

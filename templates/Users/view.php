@@ -3,21 +3,15 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\User $user
  */
+echo $this->Html->css('/vendor/datatables/dataTables.bootstrap4.min.css', ['block' => true]);
+echo $this->Html->script('/vendor/datatables/jquery.dataTables.min.js', ['block' => true]);
+echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['block' => true]);
 ?>
 <div class="row">
-    <aside class="column">
-        <div class="side-nav">
-            <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Html->link(__('Edit User'), ['action' => 'edit', $user->id], ['class' => 'side-nav-item']) ?>
-            <?= $this->Form->postLink(__('Delete User'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id), 'class' => 'side-nav-item']) ?>
-            <?= $this->Html->link(__('List Users'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
-            <?= $this->Html->link(__('New User'), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
-        </div>
-    </aside>
     <div class="column column-80">
         <div class="users view content">
             <h3><?= h($user->first_name) ?></h3>
-            <table>
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <tr>
                     <th><?= __('First Name') ?></th>
                     <td><?= h($user->first_name) ?></td>
@@ -35,18 +29,6 @@
                     <td><?= h($user->user_type) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Nonce') ?></th>
-                    <td><?= h($user->nonce) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Id') ?></th>
-                    <td><?= $this->Number->format($user->id) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Nonce Expiry') ?></th>
-                    <td><?= h($user->nonce_expiry) ?></td>
-                </tr>
-                <tr>
                     <th><?= __('Date Created') ?></th>
                     <td><?= h($user->date_created) ?></td>
                 </tr>
@@ -55,11 +37,18 @@
                     <td><?= h($user->date_modified) ?></td>
                 </tr>
             </table>
+            <div class="side-nav">
+                <?php if ($user->user_type != 'superuser') : ?>
+                    <?= $this->Html->link(__('Edit User'), ['action' => 'edit', $user->id], ['class' => 'side-nav-item']) ?>
+                    <?= $this->Form->postLink(__('Delete User'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id), 'class' => 'side-nav-item']) ?>
+                <?php endif; ?>
+                <?= $this->Html->link(__('List Users'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
+            </div>
             <div class="related">
-                <h4><?= __('Related Addresses') ?></h4>
                 <?php if (!empty($user->addresses)) : ?>
+                <h4><?= __('Related Addresses') ?></h4>
                 <div class="table-responsive">
-                    <table>
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <tr>
                             <th><?= __('Id') ?></th>
                             <th><?= __('Label') ?></th>
@@ -108,10 +97,10 @@
                 <?php endif; ?>
             </div>
             <div class="related">
-                <h4><?= __('Related Carts') ?></h4>
                 <?php if (!empty($user->carts)) : ?>
+                <h4><?= __('Related Carts') ?></h4>
                 <div class="table-responsive">
-                    <table>
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <tr>
                             <th><?= __('Id') ?></th>
                             <th><?= __('User Id') ?></th>
@@ -148,10 +137,10 @@
                 <?php endif; ?>
             </div>
             <div class="related">
-                <h4><?= __('Related Orders') ?></h4>
                 <?php if (!empty($user->orders)) : ?>
+                <h4><?= __('Related Orders') ?></h4>
                 <div class="table-responsive">
-                    <table>
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <tr>
                             <th><?= __('Id') ?></th>
                             <th><?= __('User Id') ?></th>

@@ -27,6 +27,8 @@ class ProductImage extends Entity
      * @var array<string, bool>
      */
     protected array $_accessible = [
+        '*' => true,
+        'id' => false,
         'product_id' => true,
         'image_file' => true,
         'date_created' => true,

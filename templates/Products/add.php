@@ -4,28 +4,18 @@
  * @var \App\Model\Entity\Product $product
  */
 ?>
-<div class="row">
-    <aside class="column">
-        <div class="side-nav">
-            <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Html->link(__('List Products'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
-        </div>
-    </aside>
-    <div class="column column-80">
-        <div class="products form content">
-            <?= $this->Form->create($product) ?>
-            <fieldset>
-                <legend><?= __('Add Product') ?></legend>
-                <?php
-                    echo $this->Form->control('name');
-                    echo $this->Form->control('category');
-                    echo $this->Form->control('description');
-                    echo $this->Form->control('date_created');
-                    echo $this->Form->control('date_modified');
-                ?>
-            </fieldset>
-            <?= $this->Form->button(__('Submit')) ?>
-            <?= $this->Form->end() ?>
-        </div>
-    </div>
-</div>
+<h1 class="h3 mb-2 text-gray-800">Add New Product</h1>
+<?= $this->Form->create($product, ['type' => 'file']) ?>
+    <?php
+    echo $this->Form->control('name');
+    echo $this->Form->control('category');
+    echo $this->Form->control('description');
+    echo $this->Form->control('product_images_files[]', [
+        'type' => 'file',
+        'multiple' => true,
+        'label' => 'Upload Images'
+    ]);
+    ?>
+
+    <?= $this->Form->button(__('Submit'), ['class' => 'btn btn-primary']) ?>
+<?= $this->Form->end() ?>

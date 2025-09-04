@@ -3,37 +3,35 @@
  * @var \App\View\AppView $this
  * @var iterable<\App\Model\Entity\Form> $forms
  */
+
+echo $this->Html->css('/vendor/datatables/dataTables.bootstrap4.min.css', ['block' => true]);
+echo $this->Html->script('/vendor/datatables/jquery.dataTables.min.js', ['block' => true]);
+echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['block' => true]);
 ?>
 <div class="forms index content">
-    <?= $this->Html->link(__('New Form'), ['action' => 'add'], ['class' => 'button float-right']) ?>
-    <h3><?= __('Forms') ?></h3>
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800"><?= __('Forms') ?></h1>
+    </div>
     <div class="table-responsive">
-        <table>
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
                 <tr>
-                    <th><?= $this->Paginator->sort('id') ?></th>
-                    <th><?= $this->Paginator->sort('first_name') ?></th>
-                    <th><?= $this->Paginator->sort('last_name') ?></th>
-                    <th><?= $this->Paginator->sort('email') ?></th>
-                    <th><?= $this->Paginator->sort('replied_status') ?></th>
-                    <th><?= $this->Paginator->sort('date_created') ?></th>
-                    <th><?= $this->Paginator->sort('date_replied') ?></th>
+                    <th><?= h('Name') ?></th>
+                    <th><?= h('Email') ?></th>
+                    <th><?= h('Replied') ?></th>
+                    <th><?= h('Date') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($forms as $form): ?>
                 <tr>
-                    <td><?= $this->Number->format($form->id) ?></td>
-                    <td><?= h($form->first_name) ?></td>
-                    <td><?= h($form->last_name) ?></td>
+                    <td><?= h($form->first_name), ' ', h($form->last_name) ?></td>
                     <td><?= h($form->email) ?></td>
-                    <td><?= h($form->replied_status) ?></td>
+                    <td><?= h($form->replied_status ? 'Yes' : 'No') ?></td>
                     <td><?= h($form->date_created) ?></td>
-                    <td><?= h($form->date_replied) ?></td>
                     <td class="actions">
                         <?= $this->Html->link(__('View'), ['action' => 'view', $form->id]) ?>
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $form->id]) ?>
                         <?= $this->Form->postLink(
                             __('Delete'),
                             ['action' => 'delete', $form->id],
@@ -48,14 +46,9 @@
             </tbody>
         </table>
     </div>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
-        </ul>
-        <p><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></p>
-    </div>
+    <script>
+        $(document).ready(function() {
+            $('#dataTable').DataTable();
+        });
+    </script>
 </div>

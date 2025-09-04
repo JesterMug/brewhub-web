@@ -3,6 +3,9 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Product $product
  */
+echo $this->Html->css('/vendor/datatables/dataTables.bootstrap4.min.css', ['block' => true]);
+echo $this->Html->script('/vendor/datatables/jquery.dataTables.min.js', ['block' => true]);
+echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['block' => true]);
 ?>
 <div class="row">
     <aside class="column">
@@ -17,7 +20,7 @@
     <div class="column column-80">
         <div class="products view content">
             <h3><?= h($product->name) ?></h3>
-            <table>
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <tr>
                     <th><?= __('Name') ?></th>
                     <td><?= h($product->name) ?></td>
@@ -25,10 +28,6 @@
                 <tr>
                     <th><?= __('Category') ?></th>
                     <td><?= h($product->category) ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Id') ?></th>
-                    <td><?= $this->Number->format($product->id) ?></td>
                 </tr>
                 <tr>
                     <th><?= __('Date Created') ?></th>
@@ -46,10 +45,10 @@
                 </blockquote>
             </div>
             <div class="related">
-                <h4><?= __('Related Product Coffee') ?></h4>
                 <?php if (!empty($product->product_coffee)) : ?>
+                <h4><?= __('Related Product Coffee') ?></h4>
                 <div class="table-responsive">
-                    <table>
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <tr>
                             <th><?= __('Id') ?></th>
                             <th><?= __('Product Id') ?></th>
@@ -92,10 +91,10 @@
                 <?php endif; ?>
             </div>
             <div class="related">
-                <h4><?= __('Related Product Images') ?></h4>
                 <?php if (!empty($product->product_images)) : ?>
+                <h4><?= __('Related Product Images') ?></h4>
                 <div class="table-responsive">
-                    <table>
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <tr>
                             <th><?= __('Id') ?></th>
                             <th><?= __('Product Id') ?></th>
@@ -111,7 +110,6 @@
                             <td><?= h($productImage->date_created) ?></td>
                             <td class="actions">
                                 <?= $this->Html->link(__('View'), ['controller' => 'ProductImages', 'action' => 'view', $productImage->id]) ?>
-                                <?= $this->Html->link(__('Edit'), ['controller' => 'ProductImages', 'action' => 'edit', $productImage->id]) ?>
                                 <?= $this->Form->postLink(
                                     __('Delete'),
                                     ['controller' => 'ProductImages', 'action' => 'delete', $productImage->id],
@@ -128,10 +126,10 @@
                 <?php endif; ?>
             </div>
             <div class="related">
-                <h4><?= __('Related Product Merchandise') ?></h4>
                 <?php if (!empty($product->product_merchandise)) : ?>
+                <h4><?= __('Related Product Merchandise') ?></h4>
                 <div class="table-responsive">
-                    <table>
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <tr>
                             <th><?= __('Id') ?></th>
                             <th><?= __('Product Id') ?></th>
@@ -162,10 +160,10 @@
                 <?php endif; ?>
             </div>
             <div class="related">
-                <h4><?= __('Related Product Variants') ?></h4>
                 <?php if (!empty($product->product_variants)) : ?>
+                <h4><?= __('Related Product Variants') ?></h4>
                 <div class="table-responsive">
-                    <table>
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <tr>
                             <th><?= __('Id') ?></th>
                             <th><?= __('Product Id') ?></th>
@@ -207,4 +205,9 @@
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            $('#dataTable').DataTable();
+        });
+    </script>
 </div>
