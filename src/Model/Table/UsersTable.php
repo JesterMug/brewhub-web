@@ -41,6 +41,7 @@ class UsersTable extends Table
     {
         parent::initialize($config);
 
+        $this->addBehavior('CanAuthenticate');
         $this->setTable('users');
         $this->setDisplayField('first_name');
         $this->setPrimaryKey('id');
