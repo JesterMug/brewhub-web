@@ -17,7 +17,7 @@ use Cake\ORM\Entity;
  * @property string|null $nonce
  * @property \Cake\I18n\DateTime|null $nonce_expiry
  * @property \Cake\I18n\DateTime $date_created
- * @property \Cake\I18n\DateTime|null $date_modified
+ * @property \Cake\I18n\DateTime $date_modified
  *
  * @property \App\Model\Entity\Address[] $addresses
  * @property \App\Model\Entity\Cart[] $carts

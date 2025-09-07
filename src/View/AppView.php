@@ -37,6 +37,7 @@ class AppView extends View
      */
     public function initialize(): void
     {
+        $this->loadHelper('Authentication.Identity');
         $formTemplate = [
             'inputContainer' => '<div class="input {{type}}{{required}}">{{content}}</div>',
             'label' => '<label{{attrs}} class="form-label">{{text}} </label>',

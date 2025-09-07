@@ -90,7 +90,6 @@ class UsersTable extends Table
 
         $validator
             ->scalar('user_type')
-            ->requirePresence('user_type', 'create')
             ->notEmptyString('user_type');
 
         $validator
@@ -108,7 +107,7 @@ class UsersTable extends Table
 
         $validator
             ->dateTime('date_modified')
-            ->allowEmptyDateTime('date_modified');
+            ->notEmptyDateTime('date_modified');
 
         return $validator;
     }

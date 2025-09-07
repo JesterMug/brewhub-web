@@ -25,7 +25,7 @@ class InventoryTransactionsFixture extends TestFixture
                 'quantity_change' => 1,
                 'note' => 'Lorem ipsum dolor sit amet',
                 'created_by' => 'Lorem ipsum dolor sit amet',
-                'date_created' => 1756899326,
+                'date_created' => 1756992888,
             ],
         ];
         parent::init();
