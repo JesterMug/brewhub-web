@@ -1,3 +1,6 @@
+<?php
+$this->disableAutoLayout();
+?>
 <!DOCTYPE html>
 
 <html lang="en">
