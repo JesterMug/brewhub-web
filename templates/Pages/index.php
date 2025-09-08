@@ -1,4 +1,5 @@
 <?php
+$this->disableAutoLayout();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -7,16 +8,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Shop Homepage - Start Bootstrap Template</title>
+    <title>Shop Homepage</title>
     <!-- Custom styles for this template-->
-    <?= $this->Html->css(['shop.css']) ?>
     <?= $this->Html->css(['styles']) ?>
+    <?= $this->Html->css(['shop']) ?>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
 
-    <?= $this->Html->script(['/vendor/jquery/shop.js']) ?>
-
+    <?= $this->Html->script(['/vendor/jquery/jquery.min.js']) ?>
 </head>
 <body>
 <?= $this->element('navigation') ?>

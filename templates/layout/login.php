@@ -1,42 +1,49 @@
 <?php
 /**
- * Login layout
- *
- * This layout comes with no navigation bar and Flash renderer placeholder. Usually used for login page or similar.
+ * Login layout using SB Admin 2
  *
  * @var \App\View\AppView $this
  */
-
 use Cake\Core\Configure;
 
 $appLocale = Configure::read('App.defaultLocale');
 ?>
 <!DOCTYPE html>
 <html lang="<?= $appLocale ?>">
+
 <head>
     <?= $this->Html->charset() ?>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>
-        <?= $this->fetch('title') ?> - Cake CMS/Auth Sample
-    </title>
-    <?= $this->Html->meta('icon') ?>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
+    <title><?= $this->fetch('title') ?> - BrewHub</title>
 
-    <?= $this->Html->css(['normalize.min', 'milligram.min', 'cake']) ?>
+    <!-- Fonts and CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,900" rel="stylesheet">
+    <?= $this->Html->css([
+        '/vendor/fontawesome-free/css/all.min',
+        '/css/sb-admin-2'
+    ]) ?>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
 </head>
-<body>
-<main class="main">
-    <?= $this->fetch('content') ?>
-</main>
-<footer>
-    <?= $this->element('footer_copyright', [], ['ignoreMissing' => true]); ?>
 
-    <?= $this->fetch('footer_script') ?>
-</footer>
+<body class="bg-gradient-primary">
+
+<?= $this->Flash->render() ?>
+
+<?= $this->fetch('content') ?>
+
+<!-- JS -->
+<?= $this->Html->script([
+    '/vendor/jquery/jquery.min',
+    '/vendor/bootstrap/js/bootstrap.bundle.min',
+    '/vendor/jquery-easing/jquery.easing.min',
+    '/js/sb-admin-2'
+]) ?>
+
+<?= $this->fetch('footer_script') ?>
 </body>
 </html>

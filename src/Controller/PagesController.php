@@ -52,16 +52,7 @@ class PagesController extends AppController
             return $this->redirect(['controller' => 'Auth', 'action' => 'login']);
         }
 
-        // Ensure we render with the main admin layout
         $this->viewBuilder()->setLayout('default');
-    }
-
-    public function index()
-    {
-        $query = $this->Pages->find();
-        $pages = $this->paginate($query);
-
-        $this->set(compact('pages'));
     }
 
     public function display(string ...$path): ?Response

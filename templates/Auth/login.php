@@ -1,59 +1,85 @@
 <?php
 /**
+ * Login page
+ *
  * @var \App\View\AppView $this
  */
-
-use Cake\Core\Configure;
-
-$debug = Configure::read('debug');
-
 $this->layout = 'login';
 $this->assign('title', 'Login');
 ?>
-<div class="container login">
-    <div class="row">
-        <div class="column column-50 column-offset-25">
-            <div class="users form content">
 
-                <?= $this->Form->create() ?>
+<div class="container">
 
-                <fieldset>
+    <div class="row justify-content-center">
 
-                    <legend>Login</legend>
+        <div class="col-xl-10 col-lg-12 col-md-9">
 
-                    <?= $this->Flash->render() ?>
+            <div class="card o-hidden border-0 shadow-lg my-5">
+                <div class="card-body p-0">
+                    <div class="row">
+                        <!-- Left image -->
+                        <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
 
-                    <?php
-                    /*
-                     * NOTE: regarding 'value' config in the login page form controls
-                     * In this demo the email and password fields will be filled by demo account
-                     * credentials when debug mode is on. You should NOT do that in your production
-                     * systems. Also it's a good practice to clear (set password value to empty)
-                     * in the view so when an error occurred with form validation, the password
-                     * values are always cleared.
-                     */
-                    echo $this->Form->control('email', [
-                        'type' => 'email',
-                        'required' => true,
-                        'autofocus' => true,
-                    ]);
-                    echo $this->Form->control('password', [
-                        'type' => 'password',
-                        'required' => true,
-                        'value' => ''
-                    ]);
-                    ?>
-                </fieldset>
+                        <!-- Right form -->
+                        <div class="col-lg-6">
+                            <div class="p-5">
+                                <div class="text-center">
+                                    <h1 class="h4 text-gray-900 mb-4">Welcome back</h1>
+                                </div>
 
-                <?= $this->Form->button('Login') ?>
-                <?= $this->Html->link('Forgot password?', ['controller' => 'Auth', 'action' => 'forgetPassword'], ['class' => 'button button-outline']) ?>
-                <?= $this->Form->end() ?>
+                                <?= $this->Form->create(null, ['class' => 'user']) ?>
 
-                <hr class="hr-between-buttons">
+                                <div class="form-group">
+                                    <?= $this->Form->control('email', [
+                                        'label' => false,
+                                        'class' => 'form-control form-control-user',
+                                        'placeholder' => 'Enter Email Address...',
+                                        'required' => true,
+                                        'autofocus' => true
+                                    ]) ?>
+                                </div>
 
-                <?= $this->Html->link('Register new user', ['controller' => 'Auth', 'action' => 'register'], ['class' => 'button button-clear']) ?>
-                <?= $this->Html->link('Go to Homepage', '/', ['class' => 'button button-clear']) ?>
+                                <div class="form-group">
+                                    <?= $this->Form->control('password', [
+                                        'label' => false,
+                                        'class' => 'form-control form-control-user',
+                                        'placeholder' => 'Password',
+                                        'required' => true,
+                                        'value' => ''
+                                    ]) ?>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox small">
+                                        <input type="checkbox" class="custom-control-input" id="customCheck">
+                                        <label class="custom-control-label" for="customCheck">Remember Me</label>
+                                    </div>
+                                </div>
+
+                                <?= $this->Form->button('Login', [
+                                    'class' => 'btn btn-primary btn-user btn-block'
+                                ]) ?>
+
+                                <?= $this->Form->end() ?>
+
+                                <hr>
+                                <div class="text-center">
+                                    <?= $this->Html->link('Forgot Password?', ['action' => 'forgetPassword'], ['class' => 'small']) ?>
+                                </div>
+                                <div class="text-center">
+                                    <?= $this->Html->link('Create an Account!', ['action' => 'register'], ['class' => 'small']) ?>
+                                </div>
+                                <div class="text-center">
+                                    <?= $this->Html->link('Go to Homepage', '/', ['class' => 'small']) ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
         </div>
+
     </div>
+
 </div>
