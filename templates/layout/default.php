@@ -1,3 +1,6 @@
+<?php
+$user = $this->request->getAttribute('identity');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,7 +21,8 @@
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <?= $this->Html->css(['sb-admin-2.min.css']) ?>
+    <?= $this->Html->css(['sb-admin-2']) ?>
+    <?= $this->Html->css(['admin-overrides']) ?>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
@@ -31,12 +35,16 @@
 
 <!-- Page Wrapper -->
 <div id="wrapper">
+    <?php if ($user && ($user->user_type !== 'admin' || $user->user_type !== 'superuser')) : ?>
 
+    <?php endif; ?>
+
+    <?php if ($user && ($user->user_type === 'admin' || $user->user_type === 'superuser')) : ?>
     <!-- Sidebar -->
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?= $this->Url->build('/') ?>">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?= $this->Url->build('') ?>">
             <div class="sidebar-brand-icon">
                 <i class="fas fa-mug-hot"></i>
             </div>
@@ -46,11 +54,11 @@
         <!-- Divider -->
         <hr class="sidebar-divider my-0">
 
-        <!-- Nav Item - Dashboard -->
-        <li class="nav-item active">
-            <a class="nav-link" href="<?= $this->Url->build(['controller' => 'pages', 'action' => 'display', 'home']) ?>">
-                <i class="fas fa-fw fa-home"></i>
-                <span>Homepage</span></a>
+        <!-- Nav Item - Admin Dashboard -->
+        <li class="nav-item">
+            <a class="nav-link" href="<?= $this->Url->build(['controller' => 'Pages', 'action' => 'dashboard']) ?>">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span></a>
         </li>
 
         <!-- Divider -->
@@ -159,12 +167,15 @@
 
     </ul>
     <!-- End of Sidebar -->
+    <?php endif; ?>
+
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
 
         <!-- Main Content -->
         <div id="content">
+            <?php if ($user && ($user->user_type === 'admin' || $user->user_type === 'superuser')) : ?>
 
             <!-- Topbar -->
             <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
@@ -181,7 +192,9 @@
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                                <?= h($user ? $user->first_name . ' ' . $user->last_name : 'Guest') ?>
+                            </span>
                             <?=$this->Html->image('undraw_profile.svg', ['class' => 'img-profile rounded-circle'])?>
                         </a>
                         <!-- Dropdown - User Information -->
@@ -211,6 +224,7 @@
 
             </nav>
             <!-- End of Topbar -->
+            <?php endif; ?>
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
@@ -273,7 +287,6 @@
 <?= $this->Html->script(['sb-admin-2.min.js']) ?>
 
 <?= $this->fetch('script') ?>
-
 </body>
 
 </html>
