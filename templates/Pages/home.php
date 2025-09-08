@@ -1,98 +1,206 @@
 <?php
-/**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link      https://cakephp.org CakePHP(tm) Project
- * @since     0.10.0
- * @license   https://opensource.org/licenses/mit-license.php MIT License
- * @var \App\View\AppView $this
- */
-use Cake\Cache\Cache;
-use Cake\Core\Configure;
-use Cake\Core\Plugin;
-use Cake\Datasource\ConnectionManager;
-use Cake\Error\Debugger;
-use Cake\Http\Exception\NotFoundException;
-
 $this->disableAutoLayout();
-
-$checkConnection = function (string $name) {
-    $error = null;
-    $connected = false;
-    try {
-        ConnectionManager::get($name)->getDriver()->connect();
-        // No exception means success
-        $connected = true;
-    } catch (Exception $connectionError) {
-        $error = $connectionError->getMessage();
-        if (method_exists($connectionError, 'getAttributes')) {
-            $attributes = $connectionError->getAttributes();
-            if (isset($attributes['message'])) {
-                $error .= '<br />' . $attributes['message'];
-            }
-        }
-        if ($name === 'debug_kit') {
-            $error = 'Try adding your current <b>top level domain</b> to the
-                <a href="https://book.cakephp.org/debugkit/5/en/index.html#configuration" target="_blank">DebugKit.safeTld</a>
-            config and reload.';
-            if (!in_array('sqlite', \PDO::getAvailableDrivers())) {
-                $error .= '<br />You need to install the PHP extension <code>pdo_sqlite</code> so DebugKit can work properly.';
-            }
-        }
-    }
-
-    return compact('connected', 'error');
-};
-
-if (!Configure::read('debug')) :
-    throw new NotFoundException(
-        'Please replace templates/Pages/home.php with your own version or re-enable debug mode.'
-    );
-endif;
-
 ?>
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
     <title>BrewHub</title>
-    <?= $this->Html->css('styles') ?>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
+
+
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+
+
+
+
+
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
+
+
+
+
 </head>
-<body>
+<body id="page-top">
+<!-- Navigation-->
 <?= $this->element('navigation') ?>
-
-
-<header class="hero">
-    <div class="hero-overlay">
-        <h1>Shop the Highest Quality <br> Beans & Merchandise </h1>
-        <p>Ensure .</p>
+<!-- Masthead-->
+<header class="masthead">
+    <div class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center">
+        <div class="d-flex justify-content-center">
+            <div class="text-center">
+                <h1 class="mx-auto my-0 text-uppercase">Grayscale</h1>
+                <h2 class="text-white-50 mx-auto mt-2 mb-5">A free, responsive, one page Bootstrap theme created by Start Bootstrap.</h2>
+                <a class="btn btn-primary" href="#about">Get Started</a>
+            </div>
+        </div>
     </div>
 </header>
-
-<section class="features container">
-    <div class="feature">
-        <h2>Premium blends</h2>
-        <p>Curated coffees roasted to perfection, tailored for every taste.</p>
-    </div>
-    <div class="feature">
-        <h2>Carefully crafted</h2>
-        <p>We bring a special level of passion and care to our brews.</p>
-    </div>
-    <div class="feature">
-        <h2>Merchandise</h2>
-        <p>The perfect paraphernalia to complement your cuppa your way.</p>
+<!-- About-->
+<section class="about-section text-center" id="about">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-lg-8">
+                <h2 class="text-white mb-4">Built with Bootstrap 5</h2>
+                <p class="text-white-50">
+                    Grayscale is a free Bootstrap theme created by Start Bootstrap. It can be yours right now, simply download the template on
+                    <a href="https://startbootstrap.com/theme/grayscale/">the preview page.</a>
+                    The theme is open source, and you can use it for any purpose, personal or commercial.
+                </p>
+            </div>
+        </div>
+        <img class="img-fluid" src="assets/img/ipad.png" alt="..." />
     </div>
 </section>
-
-<footer class="footer">
-    <p>&copy; <?= date('Y') ?> BrewHub. All Rights Reserved.</p>
-</footer>
+<!-- Projects-->
+<section class="projects-section bg-light" id="projects">
+    <div class="container px-4 px-lg-5">
+        <!-- Featured Project Row-->
+        <div class="row gx-0 mb-4 mb-lg-5 align-items-center">
+            <div class="col-xl-8 col-lg-7"><img class="img-fluid mb-3 mb-lg-0" src="assets/img/bg-masthead.jpg" alt="..." /></div>
+            <div class="col-xl-4 col-lg-5">
+                <div class="featured-text text-center text-lg-left">
+                    <h4>Shoreline</h4>
+                    <p class="text-black-50 mb-0">Grayscale is open source and MIT licensed. This means you can use it for any project - even commercial projects! Download it, customize it, and publish your website!</p>
+                </div>
+            </div>
+        </div>
+        <!-- Project One Row-->
+        <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
+            <div class="col-lg-6"><img class="img-fluid" src="assets/img/demo-image-01.jpg" alt="..." /></div>
+            <div class="col-lg-6">
+                <div class="bg-black text-center h-100 project">
+                    <div class="d-flex h-100">
+                        <div class="project-text w-100 my-auto text-center text-lg-left">
+                            <h4 class="text-white">Misty</h4>
+                            <p class="mb-0 text-white-50">An example of where you can put an image of a project, or anything else, along with a description.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Project Two Row-->
+        <div class="row gx-0 justify-content-center">
+            <div class="col-lg-6"><img class="img-fluid" src="assets/img/demo-image-02.jpg" alt="..." /></div>
+            <div class="col-lg-6 order-lg-first">
+                <div class="bg-black text-center h-100 project">
+                    <div class="d-flex h-100">
+                        <div class="project-text w-100 my-auto text-center text-lg-right">
+                            <h4 class="text-white">Mountains</h4>
+                            <p class="mb-0 text-white-50">Another example of a project with its respective description. These sections work well responsively as well!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Signup-->
+<section class="signup-section" id="signup">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5">
+            <div class="col-md-10 col-lg-8 mx-auto text-center">
+                <i class="far fa-paper-plane fa-2x mb-2 text-white"></i>
+                <h2 class="text-white mb-5">Subscribe to receive updates!</h2>
+                <!-- * * * * * * * * * * * * * * *-->
+                <!-- * * SB Forms Contact Form * *-->
+                <!-- * * * * * * * * * * * * * * *-->
+                <!-- This form is pre-integrated with SB Forms.-->
+                <!-- To make this form functional, sign up at-->
+                <!-- https://startbootstrap.com/solution/contact-forms-->
+                <!-- to get an API token!-->
+                <form class="form-signup" id="contactForm" data-sb-form-api-token="API_TOKEN">
+                    <!-- Email address input-->
+                    <div class="row input-group-newsletter">
+                        <div class="col"><input class="form-control" id="emailAddress" type="email" placeholder="Enter email address..." aria-label="Enter email address..." data-sb-validations="required,email" /></div>
+                        <div class="col-auto"><button class="btn btn-primary disabled" id="submitButton" type="submit">Notify Me!</button></div>
+                    </div>
+                    <div class="invalid-feedback mt-2" data-sb-feedback="emailAddress:required">An email is required.</div>
+                    <div class="invalid-feedback mt-2" data-sb-feedback="emailAddress:email">Email is not valid.</div>
+                    <!-- Submit success message-->
+                    <!---->
+                    <!-- This is what your users will see when the form-->
+                    <!-- has successfully submitted-->
+                    <div class="d-none" id="submitSuccessMessage">
+                        <div class="text-center mb-3 mt-2 text-white">
+                            <div class="fw-bolder">Form submission successful!</div>
+                            To activate this form, sign up at
+                            <br />
+                            <a href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+                        </div>
+                    </div>
+                    <!-- Submit error message-->
+                    <!---->
+                    <!-- This is what your users will see when there is-->
+                    <!-- an error submitting the form-->
+                    <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3 mt-2">Error sending message!</div></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Contact-->
+<section class="contact-section bg-black">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5">
+            <div class="col-md-4 mb-3 mb-md-0">
+                <div class="card py-4 h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-map-marked-alt text-primary mb-2"></i>
+                        <h4 class="text-uppercase m-0">Address</h4>
+                        <hr class="my-4 mx-auto" />
+                        <div class="small text-black-50">4923 Market Street, Orlando FL</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3 mb-md-0">
+                <div class="card py-4 h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-envelope text-primary mb-2"></i>
+                        <h4 class="text-uppercase m-0">Email</h4>
+                        <hr class="my-4 mx-auto" />
+                        <div class="small text-black-50"><a href="#!">hello@yourdomain.com</a></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3 mb-md-0">
+                <div class="card py-4 h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-mobile-alt text-primary mb-2"></i>
+                        <h4 class="text-uppercase m-0">Phone</h4>
+                        <hr class="my-4 mx-auto" />
+                        <div class="small text-black-50">+1 (555) 902-8832</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="social d-flex justify-content-center">
+            <a class="mx-2" href="#!"><i class="fab fa-twitter"></i></a>
+            <a class="mx-2" href="#!"><i class="fab fa-facebook-f"></i></a>
+            <a class="mx-2" href="#!"><i class="fab fa-github"></i></a>
+        </div>
+    </div>
+</section>
+<!-- Footer-->
+<footer class="footer bg-black small text-center text-white-50"><div class="container px-4 px-lg-5">Copyright &copy; Your Website 2023</div></footer>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="js/scripts.js"></script>
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+<!-- * *                               SB Forms JS                               * *-->
+<!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+<script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
 </body>
 </html>
