@@ -43,6 +43,27 @@ class PagesController extends AppController
      *   be found and not in debug mode.
      * @throws \Cake\View\Exception\MissingTemplateException In debug mode.
      */
+
+    public function dashboard()
+    {
+        $user = $this->request->getAttribute('identity');
+        if (!$user || !in_array($user->user_type ?? null, ['admin', 'superuser'], true)) {
+            $this->Flash->error('You are not authorized to access the admin dashboard.');
+            return $this->redirect(['controller' => 'Auth', 'action' => 'login']);
+        }
+
+        // Ensure we render with the main admin layout
+        $this->viewBuilder()->setLayout('default');
+    }
+
+    public function index()
+    {
+        $query = $this->Pages->find();
+        $pages = $this->paginate($query);
+
+        $this->set(compact('pages'));
+    }
+
     public function display(string ...$path): ?Response
     {
         if (!$path) {

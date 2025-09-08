@@ -62,19 +62,11 @@ endif;
 <head>
     <meta charset="UTF-8">
     <title>BrewHub</title>
-    <link rel="stylesheet" href="webroot/css/styles.css">
+    <?= $this->Html->css('styles') ?>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-<nav class="navbar">
-    <div class="container">
-        <a href="<?= $this->Url->build('/') ?>" class="brand">BrewHub</a>
-        <ul class="nav-links">
-            <li><a href="<?= $this->Url->build(['controller' => 'forms', 'action' => 'index']) ?>">Admin</a></li>
-            <li><a href="<?= $this->Url->build(['controller' => 'forms', 'action' => 'add']) ?>" class="btn btn-outline">Get in Touch</a></li>
-        </ul>
-    </div>
-</nav>
+<?= $this->element('navigation') ?>
 
 
 <header class="hero">

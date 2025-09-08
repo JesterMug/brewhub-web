@@ -5,9 +5,18 @@
  */
 ?>
 <h1 class="h3 mb-2 text-gray-800">Add New Product</h1>
-<?= $this->Form->create($product, ['type' => 'file']) ?>
+<?= $this->Form->create($product, ['type' => 'file', 'id' => 'productForm']) ?>
     <?php
     echo $this->Form->control('name');
+    echo $this->Form->control('product_type', [
+        'type' => 'select',
+        'options' => [
+            'coffee' => 'Coffee Beans',
+            'merchandise' => 'Merchandise'
+        ],
+        'empty' => 'Select Product Type',
+        'id' => 'productType'
+    ]);
     echo $this->Form->control('category');
     echo $this->Form->control('description');
     echo $this->Form->control('product_images_files[]', [

@@ -15,6 +15,13 @@ class FormsController extends AppController
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
+
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->Authentication->allowUnauthenticated(['add']);
+    }
+
     public function index()
     {
         $query = $this->Forms->find();
