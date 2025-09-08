@@ -22,7 +22,7 @@ class OrdersFixture extends TestFixture
                 'id' => 1,
                 'user_id' => 1,
                 'address_id' => 1,
-                'order_date' => 1756899326,
+                'order_date' => 1756992888,
                 'shipping_status' => 'Lorem ipsum dolor sit amet',
             ],
         ];

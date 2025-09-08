@@ -11,6 +11,18 @@ namespace App\Controller;
 class UsersController extends AppController
 {
     /**
+     * Initialize controller
+     *
+     * @return void
+     */
+    public function initialize(): void
+    {
+        parent::initialize();
+
+        $this->Authentication->allowUnauthenticated(['login']);
+    }
+
+    /**
      * Index method
      *
      * @return \Cake\Http\Response|null|void Renders view
@@ -96,5 +108,28 @@ class UsersController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    /**
+     * Login method
+     *
+     * @return \Cake\Http\Response|null|void Redirects on successful login, renders view otherwise.
+     */
+    public function login()
+    {
+        $this->request->allowMethod(['get', 'post']);
+        $result = $this->Authentication->getResult();
+        if ($result->isValid()) {
+            $this->Flash->success(__('Login successful'));
+            $redirect = $this->Authentication->getLoginRedirect();
+            if ($redirect) {
+                return $this->redirect($redirect);
+            }
+        }
+
+        // Display error if user submitted and authentication failed
+        if ($this->request->is('post')) {
+            $this->Flash->error(__('Invalid username or password'));
+        }
     }
 }

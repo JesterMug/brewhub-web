@@ -37,6 +37,7 @@ class AppView extends View
      */
     public function initialize(): void
     {
+        $this->loadHelper('Authentication.Identity');
         $formTemplate = [
             'inputContainer' => '<div class="input {{type}}{{required}}">{{content}}</div>',
             'label' => '<label{{attrs}} class="form-label">{{text}} </label>',
@@ -46,5 +47,6 @@ class AppView extends View
             'file' => '<input type="file" name="{{name}}" class="form-control-file"{{attrs}}/>'
         ];
         $this->Form->setTemplates($formTemplate);
+        $this->loadHelper('ContentBlocks.ContentBlock'); //CMS loader
     }
 }

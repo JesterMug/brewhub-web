@@ -24,8 +24,8 @@ class ProductVariantsFixture extends TestFixture
                 'size' => 'Lorem ipsum do',
                 'price' => 1.5,
                 'stock' => 1,
-                'date_created' => 1756899326,
-                'date_modified' => 1756899326,
+                'date_created' => 1756992888,
+                'date_modified' => 1756992888,
                 'sku' => 'Lorem ipsum dolor sit amet',
             ],
         ];

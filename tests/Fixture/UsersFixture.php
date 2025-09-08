@@ -26,9 +26,9 @@ class UsersFixture extends TestFixture
                 'password' => 'Lorem ipsum dolor sit amet',
                 'user_type' => 'Lorem ipsum dolor sit amet',
                 'nonce' => 'Lorem ipsum dolor sit amet',
-                'nonce_expiry' => '2025-09-03 11:35:26',
-                'date_created' => '2025-09-03 11:35:26',
-                'date_modified' => '2025-09-03 11:35:26',
+                'nonce_expiry' => '2025-09-04 13:34:48',
+                'date_created' => '2025-09-04 13:34:48',
+                'date_modified' => '2025-09-04 13:34:48',
             ],
         ];
         parent::init();
