@@ -39,9 +39,9 @@ $this->disableAutoLayout();
     <div class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center">
         <div class="d-flex justify-content-center">
             <div class="text-center">
-                <h1 class="mx-auto my-0 text-uppercase">Grayscale</h1>
-                <h2 class="text-white-50 mx-auto mt-2 mb-5">A free, responsive, one page Bootstrap theme created by Start Bootstrap.</h2>
-                <a class="btn btn-primary" href="#about">Get Started</a>
+                <h1 class="mx-auto my-0 text-uppercase">Experience Reliable Premium Coffee now</h1>
+                <h2 class="text-white-50 mx-auto mt-2 mb-5">Premium Coffee Blends and Merchandise from the Eastern Suburbs of Melbourne.</h2>
+                <a class="btn btn-primary" href="#about">Shop now</a>
             </div>
         </div>
     </div>
@@ -51,39 +51,41 @@ $this->disableAutoLayout();
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-lg-8">
-                <h2 class="text-white mb-4">Built with Bootstrap 5</h2>
+                <h2 class="text-white mb-4">Experience our Blend of the Month!</h2>
                 <p class="text-white-50">
-                    Grayscale is a free Bootstrap theme created by Start Bootstrap. It can be yours right now, simply download the template on
-                    <a href="https://startbootstrap.com/theme/grayscale/">the preview page.</a>
-                    The theme is open source, and you can use it for any purpose, personal or commercial.
+                    This month's premium coffee blend was developed by our special blend makers in South Jamaica.
+                   <!-- <a href="https://startbootstrap.com/theme/grayscale/">the preview page.</a> -->
+                    With unique notes of Cinnamon and Soursop, try out our new speciality blend of the month. Stocks are limited.
                 </p>
             </div>
         </div>
-        <img class="img-fluid" src="assets/img/ipad.png" alt="..." />
+        <img class="img-fluid" src="assets/img/coffee-bg2.png" alt="..." style="opacity: 0.7; width: 600px; height: 600px; margin-bottom: 50px;" />
+
     </div>
+    <a class="btn btn-secondary mb-5" href="#about"> Buy Now </a>
 </section>
 <!-- Projects-->
 <section class="projects-section bg-light" id="projects">
     <div class="container px-4 px-lg-5">
         <!-- Featured Project Row-->
         <div class="row gx-0 mb-4 mb-lg-5 align-items-center">
-            <div class="col-xl-8 col-lg-7"><img class="img-fluid mb-3 mb-lg-0" src="assets/img/bg-masthead.jpg" alt="..." /></div>
+            <div class="col-xl-8 col-lg-7"><img class="img-fluid mb-3 mb-lg-0" src="assets/img/coffee-bg3.png" alt="..." style="width:600px; Height:600px" /></div>
             <div class="col-xl-4 col-lg-5">
                 <div class="featured-text text-center text-lg-left">
-                    <h4>Shoreline</h4>
-                    <p class="text-black-50 mb-0">Grayscale is open source and MIT licensed. This means you can use it for any project - even commercial projects! Download it, customize it, and publish your website!</p>
+                    <h4>Premium Blends</h4>
+                    <p class="text-black-50 mb-0">Browse from our collection of premium hand-crafted beans, speciality blends and many more...</p>
                 </div>
             </div>
         </div>
         <!-- Project One Row-->
         <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
-            <div class="col-lg-6"><img class="img-fluid" src="assets/img/demo-image-01.jpg" alt="..." /></div>
+            <div class="col-lg-6"><img class="img-fluid" src="assets/img/coffee-bg4.jpg" alt="..." /></div>
             <div class="col-lg-6">
                 <div class="bg-black text-center h-100 project">
                     <div class="d-flex h-100">
                         <div class="project-text w-100 my-auto text-center text-lg-left">
-                            <h4 class="text-white">Misty</h4>
-                            <p class="mb-0 text-white-50">An example of where you can put an image of a project, or anything else, along with a description.</p>
+                            <h4 class="text-white">Straight from the source</h4>
+                            <p class="mb-0 text-white-50">Experience fresh premium blends supplied straight from local farmers around the globe</p>
                         </div>
                     </div>
                 </div>
@@ -91,13 +93,17 @@ $this->disableAutoLayout();
         </div>
         <!-- Project Two Row-->
         <div class="row gx-0 justify-content-center">
-            <div class="col-lg-6"><img class="img-fluid" src="assets/img/demo-image-02.jpg" alt="..." /></div>
+            <div class="col-lg-6"><img class="img-fluid" src="assets/img/coffee-bg5.jpg" alt="..." /></div>
             <div class="col-lg-6 order-lg-first">
                 <div class="bg-black text-center h-100 project">
                     <div class="d-flex h-100">
                         <div class="project-text w-100 my-auto text-center text-lg-right">
-                            <h4 class="text-white">Mountains</h4>
-                            <p class="mb-0 text-white-50">Another example of a project with its respective description. These sections work well responsively as well!</p>
+                            <h4 class="text-white">Subscription service</h4>
+                            <p class="mb-0 text-white-50">Experience regular uncompromised delivery using our subscription based delivery service
+                            which can deliver at intervals of your choosing so you never have to wait (Only available for local Melbourne based customers)
+
+
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -105,13 +111,21 @@ $this->disableAutoLayout();
         </div>
     </div>
 </section>
+
+
+
+
+
+
+
+
 <!-- Signup-->
 <section class="signup-section" id="signup">
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5">
             <div class="col-md-10 col-lg-8 mx-auto text-center">
                 <i class="far fa-paper-plane fa-2x mb-2 text-white"></i>
-                <h2 class="text-white mb-5">Subscribe to receive updates!</h2>
+                <h2 class="text-white mb-5">Contact Us</h2>
                 <!-- * * * * * * * * * * * * * * *-->
                 <!-- * * SB Forms Contact Form * *-->
                 <!-- * * * * * * * * * * * * * * *-->
@@ -119,36 +133,43 @@ $this->disableAutoLayout();
                 <!-- To make this form functional, sign up at-->
                 <!-- https://startbootstrap.com/solution/contact-forms-->
                 <!-- to get an API token!-->
-                <form class="form-signup" id="contactForm" data-sb-form-api-token="API_TOKEN">
+                <!--<form class="form-signup" id="contactForm" data-sb-form-api-token="API_TOKEN"> -->
                     <!-- Email address input-->
-                    <div class="row input-group-newsletter">
-                        <div class="col"><input class="form-control" id="emailAddress" type="email" placeholder="Enter email address..." aria-label="Enter email address..." data-sb-validations="required,email" /></div>
-                        <div class="col-auto"><button class="btn btn-primary disabled" id="submitButton" type="submit">Notify Me!</button></div>
-                    </div>
-                    <div class="invalid-feedback mt-2" data-sb-feedback="emailAddress:required">An email is required.</div>
-                    <div class="invalid-feedback mt-2" data-sb-feedback="emailAddress:email">Email is not valid.</div>
-                    <!-- Submit success message-->
+                <!--   <div class="row input-group-newsletter">
+                       <div class="col"><input class="form-control" id="emailAddress" type="email" placeholder="Enter email address..." aria-label="Enter email address..." data-sb-validations="required,email" /></div>
+                       <div class="col-auto"><button class="btn btn-primary disabled" id="submitButton" type="submit">Notify Me!</button></div>
+                   </div>
+                   <div class="invalid-feedback mt-2" data-sb-feedback="emailAddress:required">An email is required.</div>
+                   <div class="invalid-feedback mt-2" data-sb-feedback="emailAddress:email">Email is not valid.</div> -->
+                   <!-- Submit success message-->
                     <!---->
                     <!-- This is what your users will see when the form-->
                     <!-- has successfully submitted-->
-                    <div class="d-none" id="submitSuccessMessage">
-                        <div class="text-center mb-3 mt-2 text-white">
-                            <div class="fw-bolder">Form submission successful!</div>
-                            To activate this form, sign up at
-                            <br />
-                            <a href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
-                        </div>
-                    </div>
-                    <!-- Submit error message-->
+                <!-- <div class="d-none" id="submitSuccessMessage">
+                     <div class="text-center mb-3 mt-2 text-white">
+                         <div class="fw-bolder">Form submission successful!</div>
+                         To activate this form, sign up at
+                         <br />
+                         <a href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+                     </div>
+                 </div> -->
+                 <!-- Submit error message-->
                     <!---->
                     <!-- This is what your users will see when there is-->
                     <!-- an error submitting the form-->
-                    <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3 mt-2">Error sending message!</div></div>
-                </form>
+                <!--    <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3 mt-2">Error sending message!</div></div>-->
+                <!--   </form> -->
             </div>
         </div>
     </div>
 </section>
+
+
+
+
+
+
+
 <!-- Contact-->
 <section class="contact-section bg-black">
     <div class="container px-4 px-lg-5">
@@ -159,7 +180,7 @@ $this->disableAutoLayout();
                         <i class="fas fa-map-marked-alt text-primary mb-2"></i>
                         <h4 class="text-uppercase m-0">Address</h4>
                         <hr class="my-4 mx-auto" />
-                        <div class="small text-black-50">4923 Market Street, Orlando FL</div>
+                        <div class="small text-black-50">3002 East Melbourne, Vic</div>
                     </div>
                 </div>
             </div>
@@ -169,7 +190,7 @@ $this->disableAutoLayout();
                         <i class="fas fa-envelope text-primary mb-2"></i>
                         <h4 class="text-uppercase m-0">Email</h4>
                         <hr class="my-4 mx-auto" />
-                        <div class="small text-black-50"><a href="#!">hello@yourdomain.com</a></div>
+                        <div class="small text-black-50"><a href="#!">BrewHub@gmail.com</a></div>
                     </div>
                 </div>
             </div>
@@ -179,20 +200,20 @@ $this->disableAutoLayout();
                         <i class="fas fa-mobile-alt text-primary mb-2"></i>
                         <h4 class="text-uppercase m-0">Phone</h4>
                         <hr class="my-4 mx-auto" />
-                        <div class="small text-black-50">+1 (555) 902-8832</div>
+                        <div class="small text-black-50">0492 199 332</div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="social d-flex justify-content-center">
-            <a class="mx-2" href="#!"><i class="fab fa-twitter"></i></a>
-            <a class="mx-2" href="#!"><i class="fab fa-facebook-f"></i></a>
-            <a class="mx-2" href="#!"><i class="fab fa-github"></i></a>
-        </div>
-    </div>
-</section>
-<!-- Footer-->
-<footer class="footer bg-black small text-center text-white-50"><div class="container px-4 px-lg-5">Copyright &copy; Your Website 2023</div></footer>
+        <!-- <div class="social d-flex justify-content-center">
+             <a class="mx-2" href="#!"><i class="fab fa-twitter"></i></a>
+             <a class="mx-2" href="#!"><i class="fab fa-facebook-f"></i></a>
+             <a class="mx-2" href="#!"><i class="fab fa-github"></i></a>
+         </div> -->
+     </div>
+ </section>
+ <!-- Footer-->
+<footer class="footer bg-black small text-center text-white-50"><div class="container px-4 px-lg-5">Copyright &copy; 2025 BrewHub. All Rights Reserved.</div></footer>
 <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Core theme JS-->
