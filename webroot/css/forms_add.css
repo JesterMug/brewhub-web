@@ -1,0 +1,24 @@
+body { padding-top: 70px; }
+@media (min-width: 992px) { body { padding-top: 76px; } }
+
+#mainNav {
+  background-color: #343a40 !important;
+}
+
+#mainNav .navbar-brand,
+#mainNav .nav-link {
+  color: #f8f9fa !important;
+}
+
+#mainNav .nav-link:hover,
+#mainNav .nav-link:focus {
+  color: #e9ecef !important;
+}
+
+#mainNav .navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+#mainNav .navbar-toggler-icon {
+  filter: invert(1) grayscale(100%);
+}

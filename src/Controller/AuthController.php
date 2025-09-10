@@ -219,8 +219,6 @@ class AuthController extends AppController
         $result = $this->Authentication->getResult();
         if ($result && $result->isValid()) {
             $this->Authentication->logout();
-
-            $this->Flash->success('You have been logged out successfully. ');
         }
 
         // Redirect to home page after logout
