@@ -59,8 +59,8 @@ class ShopController extends AppController
         }
 
         $productsTable = TableRegistry::getTableLocator()->get('Products');
-        $product = $productsTable->get($id, contain: [
-            ['ProductImages', 'ProductVariants'],
+        $product = $productsTable->get($id, [
+            'contain' => ['ProductImages', 'ProductVariants'],
         ]);
 
         $this->set(compact('product'));
