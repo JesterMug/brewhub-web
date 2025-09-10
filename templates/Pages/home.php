@@ -39,7 +39,7 @@ $this->disableAutoLayout();
     <div class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center">
         <div class="d-flex justify-content-center">
             <div class="text-center">
-                <h1 class="mx-auto my-0 text-uppercase">Experience Reliable Premium Coffee now</h1>
+                <h1 class="mx-auto my-0 text-uppercase display-4 display-md-2">Experience Reliable Premium Coffee now</h1>
                 <h2 class="text-white-50 mx-auto mt-2 mb-5">Premium Coffee Blends and Merchandise from the Eastern Suburbs of Melbourne.</h2>
                 <a class="btn btn-primary" href="<?= $this->Url->Build(['controller' => 'Shop', 'action' => 'index']) ?>">Shop now</a>
             </div>
@@ -59,7 +59,7 @@ $this->disableAutoLayout();
                 </p>
             </div>
         </div>
-        <img class="img-fluid" src="assets/img/coffee-bg2.png" alt="..." style="opacity: 0.7; width: 600px; height: 600px; margin-bottom: 50px;" />
+        <img class="img-fluid" src="assets/img/coffee-bg2.png" alt="..." style="opacity: 0.7; margin-bottom: 50px;" />
 
     </div>
     <a class="btn btn-secondary mb-5" href="<?= $this->Url->Build(['controller' => 'shop', 'action' => 'view/30']) ?>"> Buy Now </a>
@@ -69,7 +69,7 @@ $this->disableAutoLayout();
     <div class="container px-4 px-lg-5">
         <!-- Featured Project Row-->
         <div class="row gx-0 mb-4 mb-lg-5 align-items-center">
-            <div class="col-xl-8 col-lg-7"><img class="img-fluid mb-3 mb-lg-0" src="assets/img/coffee-bg3.png" alt="..." style="width:600px; Height:600px" /></div>
+            <div class="col-xl-8 col-lg-7"><img class="img-fluid mb-3 mb-lg-0" src="assets/img/coffee-bg3.png" alt="..."/></div>
             <div class="col-xl-4 col-lg-5">
                 <div class="featured-text text-center text-lg-left">
                     <h4>Premium Blends</h4>
