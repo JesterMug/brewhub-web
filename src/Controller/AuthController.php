@@ -223,7 +223,7 @@ class AuthController extends AppController
             $this->Flash->success('You have been logged out successfully. ');
         }
 
-        // Otherwise just send them to the login page
-        return $this->redirect(['controller' => 'Auth', 'action' => 'login']);
+        // Redirect to home page after logout
+        return $this->redirect('/');
     }
 }
