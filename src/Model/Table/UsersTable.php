@@ -90,6 +90,7 @@ class UsersTable extends Table
 
         $validator
             ->scalar('user_type')
+            ->requirePresence('user_type', 'create')
             ->notEmptyString('user_type');
 
         $validator
