@@ -16,7 +16,7 @@
 
 
                 <li class="nav-item">
-                <a class ="nav-link" href="<?= $this->Url->build(['controller' => 'shop', 'action' => 'index']) ?>">Shop</a>
+                <a class ="nav-link" href="<?= $this->Url->build(['controller' => 'forms', 'action' => 'add']) ?>">Shop</a>
                 </li>
 
 
