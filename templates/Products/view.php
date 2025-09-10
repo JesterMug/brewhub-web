@@ -46,12 +46,10 @@ echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['bl
             </div>
             <div class="related">
                 <?php if (!empty($product->product_coffee)) : ?>
-                <h4><?= __('Related Product Coffee') ?></h4>
+                <h4><?= __('Details') ?></h4>
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <tr>
-                            <th><?= __('Id') ?></th>
-                            <th><?= __('Product Id') ?></th>
                             <th><?= __('Roast Level') ?></th>
                             <th><?= __('Brew Type') ?></th>
                             <th><?= __('Bean Type') ?></th>
@@ -59,12 +57,9 @@ echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['bl
                             <th><?= __('Caffeine Level') ?></th>
                             <th><?= __('Origin Country') ?></th>
                             <th><?= __('Certifications') ?></th>
-                            <th class="actions"><?= __('Actions') ?></th>
                         </tr>
                         <?php foreach ($product->product_coffee as $productCoffee) : ?>
                         <tr>
-                            <td><?= h($productCoffee->id) ?></td>
-                            <td><?= h($productCoffee->product_id) ?></td>
                             <td><?= h($productCoffee->roast_level) ?></td>
                             <td><?= h($productCoffee->brew_type) ?></td>
                             <td><?= h($productCoffee->bean_type) ?></td>
@@ -72,18 +67,6 @@ echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['bl
                             <td><?= h($productCoffee->caffeine_level) ?></td>
                             <td><?= h($productCoffee->origin_country) ?></td>
                             <td><?= h($productCoffee->certifications) ?></td>
-                            <td class="actions">
-                                <?= $this->Html->link(__('View'), ['controller' => 'ProductCoffee', 'action' => 'view', $productCoffee->id]) ?>
-                                <?= $this->Html->link(__('Edit'), ['controller' => 'ProductCoffee', 'action' => 'edit', $productCoffee->id]) ?>
-                                <?= $this->Form->postLink(
-                                    __('Delete'),
-                                    ['controller' => 'ProductCoffee', 'action' => 'delete', $productCoffee->id],
-                                    [
-                                        'method' => 'delete',
-                                        'confirm' => __('Are you sure you want to delete # {0}?', $productCoffee->id),
-                                    ]
-                                ) ?>
-                            </td>
                         </tr>
                         <?php endforeach; ?>
                     </table>
@@ -92,22 +75,16 @@ echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['bl
             </div>
             <div class="related">
                 <?php if (!empty($product->product_images)) : ?>
-                <h4><?= __('Related Product Images') ?></h4>
+                <h4><?= __('Images') ?></h4>
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <tr>
-                            <th><?= __('Id') ?></th>
-                            <th><?= __('Product Id') ?></th>
                             <th><?= __('Image File') ?></th>
-                            <th><?= __('Date Created') ?></th>
                             <th class="actions"><?= __('Actions') ?></th>
                         </tr>
                         <?php foreach ($product->product_images as $productImage) : ?>
                         <tr>
-                            <td><?= h($productImage->id) ?></td>
-                            <td><?= h($productImage->product_id) ?></td>
                             <td><?= h($productImage->image_file) ?></td>
-                            <td><?= h($productImage->date_created) ?></td>
                             <td class="actions">
                                 <?= $this->Html->link(__('View'), ['controller' => 'ProductImages', 'action' => 'view', $productImage->id]) ?>
                                 <?= $this->Form->postLink(
@@ -127,19 +104,15 @@ echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['bl
             </div>
             <div class="related">
                 <?php if (!empty($product->product_merchandise)) : ?>
-                <h4><?= __('Related Product Merchandise') ?></h4>
+                <h4><?= __('Details') ?></h4>
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <tr>
-                            <th><?= __('Id') ?></th>
-                            <th><?= __('Product Id') ?></th>
                             <th><?= __('Material') ?></th>
                             <th class="actions"><?= __('Actions') ?></th>
                         </tr>
                         <?php foreach ($product->product_merchandise as $productMerchandise) : ?>
                         <tr>
-                            <td><?= h($productMerchandise->id) ?></td>
-                            <td><?= h($productMerchandise->product_id) ?></td>
                             <td><?= h($productMerchandise->material) ?></td>
                             <td class="actions">
                                 <?= $this->Html->link(__('View'), ['controller' => 'ProductMerchandise', 'action' => 'view', $productMerchandise->id]) ?>
@@ -161,29 +134,21 @@ echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['bl
             </div>
             <div class="related">
                 <?php if (!empty($product->product_variants)) : ?>
-                <h4><?= __('Related Product Variants') ?></h4>
+                <h4><?= __('Variants') ?></h4>
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <tr>
-                            <th><?= __('Id') ?></th>
-                            <th><?= __('Product Id') ?></th>
                             <th><?= __('Size') ?></th>
                             <th><?= __('Price') ?></th>
                             <th><?= __('Stock') ?></th>
-                            <th><?= __('Date Created') ?></th>
-                            <th><?= __('Date Modified') ?></th>
                             <th><?= __('Sku') ?></th>
                             <th class="actions"><?= __('Actions') ?></th>
                         </tr>
                         <?php foreach ($product->product_variants as $productVariant) : ?>
                         <tr>
-                            <td><?= h($productVariant->id) ?></td>
-                            <td><?= h($productVariant->product_id) ?></td>
                             <td><?= h($productVariant->size) ?></td>
                             <td><?= h($productVariant->price) ?></td>
                             <td><?= h($productVariant->stock) ?></td>
-                            <td><?= h($productVariant->date_created) ?></td>
-                            <td><?= h($productVariant->date_modified) ?></td>
                             <td><?= h($productVariant->sku) ?></td>
                             <td class="actions">
                                 <?= $this->Html->link(__('View'), ['controller' => 'ProductVariants', 'action' => 'view', $productVariant->id]) ?>
