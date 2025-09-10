@@ -8,16 +8,6 @@
 <?= $this->Form->create($product, ['type' => 'file', 'id' => 'productForm']) ?>
     <?php
     echo $this->Form->control('name');
-    echo $this->Form->control('product_type', [
-        'type' => 'select',
-        'options' => [
-            'coffee' => 'Coffee Beans',
-            'merchandise' => 'Merchandise'
-        ],
-        'empty' => 'Select Product Type',
-        'id' => 'productType',
-        'default' => $product->product_type ?? null
-    ]);
     echo $this->Form->control('category');
     echo $this->Form->control('description');
     echo $this->Form->control('product_images_files[]', [
@@ -73,6 +63,7 @@
     <div id="variantsWrapper">
         <?php $vIndex = 0; foreach ($product->product_variants as $variant): ?>
             <div class="variantGroup">
+                <?= "<h5>Variant " . ($vIndex + 1) . "</h5>" ?>
                 <?= $this->Form->hidden("product_variants.$vIndex.id", ['value' => $variant->id]) ?>
                 <?= $this->Form->control("product_variants.$vIndex.size", ['value' => $variant->size]) ?>
                 <?= $this->Form->control("product_variants.$vIndex.price", ['value' => $variant->price]) ?>

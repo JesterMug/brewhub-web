@@ -1,17 +1,15 @@
 <?php
 $this->disableAutoLayout();
-$imageUrl = 'https://dummyimage.com/600x700/dee2e6/6c757d.jpg';
-if (!empty($product->product_images)) {
-    $firstImage = $product->product_images[0]->image_file ?? null;
-    if ($firstImage) {
-        $imageUrl = $this->Url->image('products/' . $firstImage);
-    }
-}
 ?>
 <?= $this->Html->css('styles') ?>
 <?= $this->Html->css(['shop']) ?>
 <?= $this->element('navigation') ?>
 <header class="bg-dark py-5">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+          crossorigin="anonymous">
+
     <div class="container px-4 px-lg-5 my-5">
         <div class="text-center text-white">
             <h1 class="display-4 fw-bolder">Shop in style</h1>
@@ -23,7 +21,45 @@ if (!empty($product->product_images)) {
 <div class="container my-5">
     <div class="row gx-4 gx-lg-5 align-items-center">
         <div class="col-md-6">
-            <img class="card-img-top mb-5 mb-md-0" src="<?= h($imageUrl) ?>" alt="<?= h($product->name) ?>" />
+            <?php
+            $images = [];
+            if (!empty($product->product_images)) {
+                foreach ($product->product_images as $pi) {
+                    if (!empty($pi->image_file)) {
+                        $images[] = $this->Url->image('products/' . $pi->image_file);
+                    }
+                }
+            }
+            if (count($images) > 1):
+            ?>
+                <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        <?php foreach ($images as $idx => $_): ?>
+                            <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="<?= (int)$idx ?>" class="<?= $idx === 0 ? 'active' : '' ?>" aria-current="<?= $idx === 0 ? 'true' : 'false' ?>" aria-label="Slide <?= (int)($idx+1) ?>"></button>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="carousel-inner">
+                        <?php foreach ($images as $idx => $url): ?>
+                            <div class="carousel-item <?= $idx === 0 ? 'active' : '' ?>">
+                                <img src="<?= h($url) ?>" class="d-block w-100" alt="<?= h($product->name) ?> image <?= (int)($idx+1) ?>">
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            <?php else: ?>
+                <?php
+                $single = $images[0] ?? 'https://dummyimage.com/600x700/dee2e6/6c757d.jpg';
+                ?>
+                <img class="card-img-top mb-5 mb-md-0" src="<?= h($single) ?>" alt="<?= h($product->name) ?>" />
+            <?php endif; ?>
         </div>
         <div class="col-md-6">
             <h1 class="display-5 fw-bolder"><?= h($product->name) ?></h1>
@@ -52,4 +88,6 @@ if (!empty($product->product_images)) {
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    </body>
 </div>
