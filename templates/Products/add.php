@@ -61,11 +61,43 @@
 <?= $this->Form->end() ?>
 
 <script>
-    document.getElementById('productType').addEventListener('change', function() {
+    function setDisabled(container, disabled) {
+        if (!container) return;
+        const fields = container.querySelectorAll('input, select, textarea');
+        fields.forEach(el => {
+            if (disabled) {
+                // Clear value when disabling so no stale data remains
+                if (el.type === 'checkbox' || el.type === 'radio') {
+                    el.checked = false;
+                } else {
+                    el.value = '';
+                }
+            }
+            el.disabled = disabled;
+        });
+    }
+
+    function toggleTypeFields() {
+        const typeEl = document.getElementById('productType');
+        const type = typeEl ? typeEl.value : '';
         let coffee = document.getElementById('coffeeFields');
         let merch = document.getElementById('merchFields');
-        coffee.style.display = this.value === 'coffee' ? 'block' : 'none';
-        merch.style.display = this.value === 'merchandise' ? 'block' : 'none';
+        const isCoffee = type === 'coffee';
+        const isMerch = type === 'merchandise';
+        if (coffee) coffee.style.display = isCoffee ? 'block' : 'none';
+        if (merch) merch.style.display = isMerch ? 'block' : 'none';
+        // Disable the irrelevant group so the browser will ignore them on submit
+        setDisabled(coffee, !isCoffee);
+        setDisabled(merch, !isMerch);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const typeEl = document.getElementById('productType');
+        if (typeEl) {
+            typeEl.addEventListener('change', toggleTypeFields);
+        }
+        // Initialize state on load
+        toggleTypeFields();
     });
 
     // Variant add button
