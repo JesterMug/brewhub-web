@@ -36,7 +36,7 @@ $this->disableAutoLayout();
 <?= $this->element('navigation') ?>
 <!-- Masthead-->
 <header class="masthead">
-    <div class="container-fluid px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center">
+    <div class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center">
         <div class="d-flex justify-content-center">
             <div class="text-center">
                 <h1 class="mx-auto my-0 text-uppercase">Experience Reliable Premium Coffee now</h1>
@@ -54,12 +54,12 @@ $this->disableAutoLayout();
                 <h2 class="text-white mb-4">Experience our Blend of the Month!</h2>
                 <p class="text-white-50">
                     This month's premium coffee blend was developed by our special blend makers in South Jamaica.
-                   <!-- <a href="https://startbootstrap.com/theme/grayscale/">the preview page.</a> -->
+                    <!-- <a href="https://startbootstrap.com/theme/grayscale/">the preview page.</a> -->
                     With unique notes of Cinnamon and Soursop, try out our new speciality blend of the month. Stocks are limited.
                 </p>
             </div>
         </div>
-        <img class="img-fluid" src="assets/img/coffee-bg2.png" alt="..." style="opacity: 0.7; margin-bottom: 50px;" />
+        <img class="img-fluid" src="assets/img/coffee-bg2.png" alt="..." style="opacity: 0.7; width: 600px; height: 600px; margin-bottom: 50px;" />
 
     </div>
     <a class="btn btn-secondary mb-5" href="<?= $this->Url->Build(['controller' => 'shop', 'action' => 'view/30']) ?>"> Buy Now </a>
@@ -68,19 +68,30 @@ $this->disableAutoLayout();
 <section class="projects-section bg-light" id="projects">
     <div class="container px-4 px-lg-5">
         <!-- Featured Project Row-->
-        <div class="row gx-0 mb-4 mb-lg-5 align-items-center">
-            <div class="col-xl-8 col-lg-7"><img class="img-fluid mb-3 mb-lg-0" src="assets/img/coffee-bg3.png" alt="..."/></div>
-            <div class="col-xl-4 col-lg-5">
-                <div class="featured-text text-center text-lg-left">
-                    <h4>Premium Blends</h4>
-                    <p class="text-black-50 mb-0">Browse from our collection of premium hand-crafted beans, speciality blends and many more...</p>
+        <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
+            <div class="col-xl-6"><img class="img-fluid" src="assets/img/coffee-bg3.png" alt="..." style="width:650px; Height:600px" /></div>
+            <div class="col-xl-6 order-lg-first">
+
+
+                <div class="bg-black text-center h-100 project">
+                    <div class="d-flex h-100">
+                        <div class="project-text w-100 my-auto text-center text-lg-right">
+                            <h4 class="text-white">Premium Blend </h4>
+                            <p class="mb-0 text-white-50">Browse from our collection of premium hand-crafted beans, speciality blends and many more</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
+
+
         <!-- Project One Row-->
         <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
             <div class="col-lg-6"><img class="img-fluid" src="assets/img/coffee-bg4.jpg" alt="..." /></div>
             <div class="col-lg-6">
+
+
                 <div class="bg-black text-center h-100 project">
                     <div class="d-flex h-100">
                         <div class="project-text w-100 my-auto text-center text-lg-left">
@@ -100,7 +111,7 @@ $this->disableAutoLayout();
                         <div class="project-text w-100 my-auto text-center text-lg-right">
                             <h4 class="text-white">Subscription service</h4>
                             <p class="mb-0 text-white-50">Experience regular uncompromised delivery using our subscription based delivery service
-                            which can deliver at intervals of your choosing so you never have to wait (Only available for local Melbourne based customers)
+                                which can deliver at intervals of your choosing so you never have to wait (Only available for local Melbourne based customers)
 
 
                             </p>
@@ -134,17 +145,17 @@ $this->disableAutoLayout();
                 <!-- https://startbootstrap.com/solution/contact-forms-->
                 <!-- to get an API token!-->
                 <!--<form class="form-signup" id="contactForm" data-sb-form-api-token="API_TOKEN"> -->
-                    <!-- Email address input-->
+                <!-- Email address input-->
                 <!--   <div class="row input-group-newsletter">
                        <div class="col"><input class="form-control" id="emailAddress" type="email" placeholder="Enter email address..." aria-label="Enter email address..." data-sb-validations="required,email" /></div>
                        <div class="col-auto"><button class="btn btn-primary disabled" id="submitButton" type="submit">Notify Me!</button></div>
                    </div>
                    <div class="invalid-feedback mt-2" data-sb-feedback="emailAddress:required">An email is required.</div>
                    <div class="invalid-feedback mt-2" data-sb-feedback="emailAddress:email">Email is not valid.</div> -->
-                   <!-- Submit success message-->
-                    <!---->
-                    <!-- This is what your users will see when the form-->
-                    <!-- has successfully submitted-->
+                <!-- Submit success message-->
+                <!---->
+                <!-- This is what your users will see when the form-->
+                <!-- has successfully submitted-->
                 <!-- <div class="d-none" id="submitSuccessMessage">
                      <div class="text-center mb-3 mt-2 text-white">
                          <div class="fw-bolder">Form submission successful!</div>
@@ -153,10 +164,10 @@ $this->disableAutoLayout();
                          <a href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
                      </div>
                  </div> -->
-                 <!-- Submit error message-->
-                    <!---->
-                    <!-- This is what your users will see when there is-->
-                    <!-- an error submitting the form-->
+                <!-- Submit error message-->
+                <!---->
+                <!-- This is what your users will see when there is-->
+                <!-- an error submitting the form-->
                 <!--    <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3 mt-2">Error sending message!</div></div>-->
                 <!--   </form> -->
             </div>
@@ -210,9 +221,9 @@ $this->disableAutoLayout();
              <a class="mx-2" href="#!"><i class="fab fa-facebook-f"></i></a>
              <a class="mx-2" href="#!"><i class="fab fa-github"></i></a>
          </div> -->
-     </div>
- </section>
- <!-- Footer-->
+    </div>
+</section>
+<!-- Footer-->
 <footer class="footer bg-black small text-center text-white-50"><div class="container px-4 px-lg-5">Copyright &copy; 2025 BrewHub. All Rights Reserved.</div></footer>
 <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
