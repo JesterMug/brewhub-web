@@ -1,4 +1,5 @@
 <?php
+$user = $this->request->getAttribute('identity');
 ?>
 <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
     <div class="container px-4 px-lg-5">
@@ -10,20 +11,26 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ms-auto">
 
+                <?php if ($user): ?>
+                    <li class="nav-item">
+                        <span class="nav-link">Welcome, <?= h($user->first_name ?? $user->email) ?></span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= $this->Url->build(['controller' => 'Users', 'action' => 'logout']) ?>">Logout</a>
+                    </li>
+                <?php else: ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= $this->Url->build(['controller' => 'Users', 'action' => 'login']) ?>">Log in</a>
+                    </li>
+                <?php endif; ?>
+
                 <li class="nav-item">
-                <a class="nav-link" href="<?= $this->Url->build(['controller' => 'forms', 'action' => 'index']) ?>">Log in</a>
+                    <a class="nav-link" href="<?= $this->Url->build(['controller' => 'Shop', 'action' => 'index']) ?>">Shop</a>
                 </li>
 
-
                 <li class="nav-item">
-                <a class ="nav-link" href="<?= $this->Url->build(['controller' => 'forms', 'action' => 'add']) ?>">Shop</a>
+                    <a class="nav-link" href="<?= $this->Url->build(['controller' => 'Forms', 'action' => 'add']) ?>">Get in Touch</a>
                 </li>
-
-
-                <li class="nav-item">
-                    <a class ="nav-link" href="<?= $this->Url->build(['controller' => 'forms', 'action' => 'add']) ?>">Get in Touch</a>
-                </li>
-
 
             </ul>
         </div>
