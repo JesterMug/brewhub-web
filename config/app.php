@@ -175,7 +175,7 @@ return [
         'skipLog' => [],
         'log' => true,
         'trace' => true,
-        'ignoredDeprecationPaths' => ['vendor/cakephp/cakephp/src/ORM/Table.php', 'src/Controller/ShopController.php'],
+        'ignoredDeprecationPaths' => ['vendor/cakephp/cakephp/src/ORM/Table.php'],
     ],
 
     /*
