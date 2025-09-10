@@ -62,7 +62,7 @@ $this->disableAutoLayout();
         <img class="img-fluid" src="assets/img/coffee-bg2.png" alt="..." style="opacity: 0.7; width: 600px; height: 600px; margin-bottom: 50px;" />
 
     </div>
-    <a class="btn btn-secondary mb-5" href="#about"> Buy Now </a>
+    <a class="btn btn-secondary mb-5" href="<?= $this->Url->Build(['controller' => 'shop', 'action' => 'view/30']) ?>"> Buy Now </a>
 </section>
 <!-- Projects-->
 <section class="projects-section bg-light" id="projects">
