@@ -24,6 +24,17 @@ class ShopController extends AppController
             }, 'ProductVariants']
         ]);
 
+        // Segmented type filter (default to coffee)
+        $type = (string)$this->request->getQuery('type');
+        if (!in_array($type, ['coffee', 'merch'], true)) {
+            $type = 'coffee';
+        }
+        if ($type === 'coffee') {
+            $products->innerJoinWith('ProductCoffee');
+        } else {
+            $products->innerJoinWith('ProductMerchandise');
+        }
+
         // Apply search filter if provided
         $q = trim((string)$this->request->getQuery('q'));
         if ($q !== '') {
@@ -36,7 +47,7 @@ class ShopController extends AppController
             ]);
         }
 
-        $this->set(compact('products', 'q'));
+        $this->set(compact('products', 'q', 'type'));
         $this->viewBuilder()->setLayout('default'); // your user-facing layout
     }
 

@@ -52,10 +52,8 @@ class ProductsController extends AppController
             $uploadedFiles = $this->request->getData('product_images_files');
             unset($data['product_images_files']);
 
-            // Determine product type and normalize associated payloads
             $productType = $data['product_type'] ?? null;
 
-            // Normalize nested associated data from singular form fields to hasMany arrays
             if (!empty($data['product_coffee']) && is_array($data['product_coffee']) && (empty($data['product_coffee'][0]) || !is_array($data['product_coffee'][0]))) {
                 $data['product_coffee'] = [$data['product_coffee']];
             }
@@ -63,7 +61,6 @@ class ProductsController extends AppController
                 $data['product_merchandise'] = [$data['product_merchandise']];
             }
 
-            // Only keep the associated data relevant to the chosen product type
             $associated = ['ProductVariants'];
             if ($productType === 'coffee') {
                 unset($data['product_merchandise']);
