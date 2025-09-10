@@ -94,7 +94,6 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             // available as array through $request->getData()
             // https://book.cakephp.org/5/en/controllers/middleware.html#body-parser-middleware
             ->add(new BodyParserMiddleware())
-
             ->add(new AuthenticationMiddleware($this))
 
             // Cross Site Request Forgery (CSRF) Protection Middleware
@@ -121,7 +120,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
     {
         $authenticationService = new AuthenticationService([
             'unauthenticatedRedirect' => Router::url([
-                'controller' => 'Auth',
+                'controller' => 'Users',
                 'action' => 'login',
                 'plugin' => null,
                 'prefix' => null,
@@ -129,28 +128,26 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             'queryParam' => 'redirect',
         ]);
 
-        $authentication_fields = [
-            AbstractIdentifier::CREDENTIAL_USERNAME => 'email',
-            AbstractIdentifier::CREDENTIAL_PASSWORD => 'password',
-        ];
-
-        $passwordIdentifier = [
-            'Authentication.Password' => [
-                'fields' => $authentication_fields,
+        $authenticationService->loadIdentifier('Authentication.Password', [
+            'fields' => [
+                \Authentication\Identifier\AbstractIdentifier::CREDENTIAL_USERNAME => 'email',
+                \Authentication\Identifier\AbstractIdentifier::CREDENTIAL_PASSWORD => 'password',
             ],
-        ];
-
-        // Load the authenticators, you want session first
-        $authenticationService->loadAuthenticator('Authentication.Session', [
-            'identifier' => $passwordIdentifier,
+            'resolver' => [
+                'className' => 'Authentication.Orm',
+                'userModel' => 'Users',
+            ],
         ]);
 
-        // Configure form data check to pick email and password
+        $authenticationService->loadAuthenticator('Authentication.Session');
+
         $authenticationService->loadAuthenticator('Authentication.Form', [
-            'identifier' => $passwordIdentifier,
-            'fields' => $authentication_fields,
+            'fields' => [
+                'username' => 'email',
+                'password' => 'password',
+            ],
             'loginUrl' => Router::url([
-                'controller' => 'Auth',
+                'controller' => 'Users',
                 'action' => 'login',
                 'plugin' => null,
                 'prefix' => null,
@@ -158,6 +155,5 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         ]);
 
         return $authenticationService;
-
     }
 }
