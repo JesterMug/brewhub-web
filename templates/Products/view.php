@@ -3,9 +3,6 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Product $product
  */
-echo $this->Html->css('/vendor/datatables/dataTables.bootstrap4.min.css', ['block' => true]);
-echo $this->Html->script('/vendor/datatables/jquery.dataTables.min.js', ['block' => true]);
-echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['block' => true]);
 ?>
 <div class="row">
     <aside class="column">
@@ -20,7 +17,7 @@ echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['bl
     <div class="column column-80">
         <div class="products view content">
             <h3><?= h($product->name) ?></h3>
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <table class="table table-bordered table-sm" width="100%" cellspacing="0">
                 <tr>
                     <th><?= __('Name') ?></th>
                     <td><?= h($product->name) ?></td>
@@ -48,7 +45,7 @@ echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['bl
                 <?php if (!empty($product->product_coffee)) : ?>
                 <h4><?= __('Details') ?></h4>
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <table class="table table-bordered table-sm" width="100%" cellspacing="0">
                         <tr>
                             <th><?= __('Roast Level') ?></th>
                             <th><?= __('Brew Type') ?></th>
@@ -77,7 +74,7 @@ echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['bl
                 <?php if (!empty($product->product_images)) : ?>
                 <h4><?= __('Images') ?></h4>
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <table class="table table-bordered table-sm" width="100%" cellspacing="0">
                         <tr>
                             <th><?= __('Image File') ?></th>
                             <th class="actions"><?= __('Actions') ?></th>
@@ -106,7 +103,7 @@ echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['bl
                 <?php if (!empty($product->product_merchandise)) : ?>
                 <h4><?= __('Details') ?></h4>
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <table class="table table-bordered table-sm" width="100%" cellspacing="0">
                         <tr>
                             <th><?= __('Material') ?></th>
                             <th class="actions"><?= __('Actions') ?></th>
@@ -136,7 +133,7 @@ echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['bl
                 <?php if (!empty($product->product_variants)) : ?>
                 <h4><?= __('Variants') ?></h4>
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <table class="table table-bordered table-sm" width="100%" cellspacing="0">
                         <tr>
                             <th><?= __('Size') ?></th>
                             <th><?= __('Price') ?></th>
@@ -170,9 +167,4 @@ echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['bl
             </div>
         </div>
     </div>
-    <script>
-        $(document).ready(function() {
-            $('#dataTable').DataTable();
-        });
-    </script>
 </div>

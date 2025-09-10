@@ -5,6 +5,8 @@
  */
 ?>
 <h1 class="h3 mb-2 text-gray-800">Edit Product</h1>
+<div class="card shadow mb-4">
+    <div class="card-body">
 <?= $this->Form->create($product, ['type' => 'file', 'id' => 'productForm']) ?>
     <?php
     echo $this->Form->control('name');
@@ -86,6 +88,8 @@
 
 <?= $this->Form->button(__('Submit'), ['class' => 'btn btn-primary mt-3']) ?>
 <?= $this->Form->end() ?>
+    </div>
+</div>
 
 <script>
     function updateTypeVisibility(init=false) {
