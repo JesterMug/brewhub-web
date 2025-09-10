@@ -20,7 +20,7 @@ class ShopController extends AppController
         $productsTable = TableRegistry::getTableLocator()->get('Products');
         $products = $productsTable->find('all', [
             'contain' => ['ProductImages' => function($q) {
-                return $q->orderAsc('ProductImages.id'); // first image first
+                return $q->orderByAsc('ProductImages.id'); // first image first
             }, 'ProductVariants']
         ]);
 
@@ -59,7 +59,7 @@ class ShopController extends AppController
         }
 
         $productsTable = TableRegistry::getTableLocator()->get('Products');
-        $product = $productsTable->get($id, [
+        $product = $productsTable->get($id, finder: [
             'contain' => ['ProductImages', 'ProductVariants'],
         ]);
 
