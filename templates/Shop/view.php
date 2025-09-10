@@ -27,11 +27,10 @@ if (!empty($product->product_images)) {
         </div>
         <div class="col-md-6">
             <h1 class="display-5 fw-bolder"><?= h($product->name) ?></h1>
-            <p class="lead"><?= h($product->description) ?></p>
 
             <?php if (!empty($product->product_variants)): ?>
                 <div class="mb-3">
-                    <label for="variantSelect">Choose variant:</label>
+                    <label for="variantSelect">Selection</label>
                     <select id="variantSelect" class="form-select">
                         <?php foreach ($product->product_variants as $variant): ?>
                             <option value="<?= h($variant->id) ?>">
@@ -42,8 +41,10 @@ if (!empty($product->product_images)) {
                 </div>
             <?php endif; ?>
 
+            <p class="lead"><?= h($product->description) ?></p>
+
             <div class="d-flex">
-                <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1" style="max-width: 3rem" />
+                <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
                 <button class="btn btn-outline-dark flex-shrink-0" type="button">
                     <i class="bi-cart-fill me-1"></i>
                     Add to cart

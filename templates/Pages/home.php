@@ -41,7 +41,7 @@ $this->disableAutoLayout();
             <div class="text-center">
                 <h1 class="mx-auto my-0 text-uppercase">Experience Reliable Premium Coffee now</h1>
                 <h2 class="text-white-50 mx-auto mt-2 mb-5">Premium Coffee Blends and Merchandise from the Eastern Suburbs of Melbourne.</h2>
-                <a class="btn btn-primary" href="#about">Shop now</a>
+                <a class="btn btn-primary" href="<?= $this->Url->Build(['controller' => 'Shop', 'action' => 'index']) ?>">Shop now</a>
             </div>
         </div>
     </div>
