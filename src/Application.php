@@ -128,20 +128,21 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             'queryParam' => 'redirect',
         ]);
 
-        $authenticationService->loadIdentifier('Authentication.Password', [
-            'fields' => [
-                \Authentication\Identifier\AbstractIdentifier::CREDENTIAL_USERNAME => 'email',
-                \Authentication\Identifier\AbstractIdentifier::CREDENTIAL_PASSWORD => 'password',
-            ],
-            'resolver' => [
-                'className' => 'Authentication.Orm',
-                'userModel' => 'Users',
-            ],
-        ]);
-
         $authenticationService->loadAuthenticator('Authentication.Session');
 
         $authenticationService->loadAuthenticator('Authentication.Form', [
+            'identifier' => [
+                'Authentication.Password' => [
+                    'fields' => [
+                        \Authentication\Identifier\AbstractIdentifier::CREDENTIAL_USERNAME => 'email',
+                        \Authentication\Identifier\AbstractIdentifier::CREDENTIAL_PASSWORD => 'password',
+                    ],
+                    'resolver' => [
+                        'className' => 'Authentication.Orm',
+                        'userModel' => 'Users',
+                    ],
+                ],
+            ],
             'fields' => [
                 'username' => 'email',
                 'password' => 'password',
