@@ -90,7 +90,10 @@ if ($products === null) {
                             </div>
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                                 <div class="text-center">
-                                    <a class="btn btn-outline-dark mt-auto" href="<?= $this->Url->build(['controller' => 'Products', 'action' => 'view', $product->id]) ?>">View</a>
+                                    <a class="btn btn-outline-dark mt-auto"
+                                       href="<?= $this->Url->build(['controller' => 'Pages', 'action' => 'view', $product->id]) ?>">
+                                        View
+                                    </a>
                                 </div>
                             </div>
                         </div>
