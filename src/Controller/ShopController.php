@@ -24,7 +24,19 @@ class ShopController extends AppController
             }, 'ProductVariants']
         ]);
 
-        $this->set(compact('products'));
+        // Apply search filter if provided
+        $q = trim((string)$this->request->getQuery('q'));
+        if ($q !== '') {
+            $products->where([
+                'OR' => [
+                    'Products.name LIKE' => "%$q%",
+                    'Products.description LIKE' => "%$q%",
+                    'Products.category LIKE' => "%$q%",
+                ]
+            ]);
+        }
+
+        $this->set(compact('products', 'q'));
         $this->viewBuilder()->setLayout('default'); // your user-facing layout
     }
 

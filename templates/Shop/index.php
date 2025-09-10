@@ -13,6 +13,24 @@ $this->disableAutoLayout();
     </div>
 </header>
 <div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <?= $this->Form->create(null, ['type' => 'get', 'valueSources' => ['query'], 'templates' => ['inputContainer' => '{{content}}']]) ?>
+            <div class="input-group">
+                <?= $this->Form->control('q', [
+                    'label' => false,
+                    'placeholder' => 'Search products',
+                    'class' => 'form-control',
+                ]) ?>
+                <button class="btn btn-outline-secondary" type="submit">Search</button>
+                <?php if (!empty($this->request->getQuery('q'))): ?>
+                    <a class="btn btn-outline-danger" href="<?= $this->Url->build(['controller' => 'Shop', 'action' => 'index']) ?>">Clear</a>
+                <?php endif; ?>
+            </div>
+            <?= $this->Form->end() ?>
+        </div>
+    </div>
+
     <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
         <?php if (!empty($products)): ?>
             <?php foreach ($products as $product): ?>
@@ -58,7 +76,11 @@ $this->disableAutoLayout();
                 </div>
             <?php endforeach; ?>
         <?php else: ?>
-            <div class="col-12 text-center text-muted">No products available yet.</div>
+            <?php if (!empty($this->request->getQuery('q'))): ?>
+                <div class="col-12 text-center text-muted">No products match your search.</div>
+            <?php else: ?>
+                <div class="col-12 text-center text-muted">No products available yet.</div>
+            <?php endif; ?>
         <?php endif; ?>
     </div>
 </div>
