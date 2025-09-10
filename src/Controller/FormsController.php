@@ -104,4 +104,27 @@ class FormsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    public function mark(?string $id = null)
+    {
+        $form = $this->Forms->get($id);
+        if ($form->replied_status) {
+            $form->replied_status = false;
+            if ($this->Forms->save($form)) {
+                $this->Flash->success(__('The form has been unmarked.'));
+            } else {
+                $this->Flash->error(__('The form could not be unmarked. Please, try again.'));
+            }
+        } else {
+            $form->replied_status = true;
+            if ($this->Forms->save($form)) {
+                $this->Flash->success(__('The form has been marked.'));
+            } else {
+                $this->Flash->error(__('The form could not be marked. Please, try again.'));
+            }
+        }
+
+        return $this->redirect(['action' => 'view', $id]);
+    }
+
 }

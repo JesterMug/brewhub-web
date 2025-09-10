@@ -21,6 +21,7 @@ use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
 use Cake\View\Exception\MissingTemplateException;
+use Cake\ORM\TableRegistry;
 
 /**
  * Static content controller
@@ -43,6 +44,18 @@ class PagesController extends AppController
      *   be found and not in debug mode.
      * @throws \Cake\View\Exception\MissingTemplateException In debug mode.
      */
+
+
+    public function view($id = null)
+    {
+        $productsTable = TableRegistry::getTableLocator()->get('Products');
+
+        $product = $productsTable->get($id, [
+            'contain' => ['ProductImages', 'ProductVariants'],
+        ]);
+
+        $this->set(compact('product'));
+    }
 
     public function dashboard()
     {
