@@ -30,21 +30,21 @@ class User extends Entity
         return (new DefaultPasswordHasher())->hash($password);
     }
 
-    // 🔹 Automatically trim first name
+    // 🔹 Trim and clean first_name
     protected function _setFirstName(?string $firstName): ?string
     {
         return $firstName !== null ? trim($firstName) : null;
     }
 
-    // 🔹 Automatically trim last name
+    // 🔹 Trim and clean last_name
     protected function _setLastName(?string $lastName): ?string
     {
         return $lastName !== null ? trim($lastName) : null;
     }
 
-    // (Optional) 🔹 Also trim email to avoid spaces around it
+    // 🔹 Trim and lowercase email
     protected function _setEmail(?string $email): ?string
     {
-        return $email !== null ? trim($email) : null;
+        return $email !== null ? strtolower(trim($email)) : null;
     }
 }

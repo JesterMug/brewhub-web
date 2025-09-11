@@ -12,7 +12,7 @@ $appLocale = Configure::read('App.defaultLocale');
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,900" rel="stylesheet">
     <?= $this->Html->css([
         '/vendor/fontawesome-free/css/all.min.css',
-        '/css/sb-admin-2.min.css'
+        '/css/sb-admin-2.css'
     ]) ?>
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
