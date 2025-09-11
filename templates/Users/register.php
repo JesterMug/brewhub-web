@@ -19,10 +19,19 @@ $this->assign('title', 'Register');
                                 <?= $this->Form->create($user, ['class' => 'user']) ?>
 
                                 <div class="form-group">
-                                    <?= $this->Form->control('name', [
+                                    <?= $this->Form->control('first_name', [
                                         'label' => false,
                                         'class' => 'form-control form-control-user',
-                                        'placeholder' => 'Full Name',
+                                        'placeholder' => 'First Name',
+                                        'required' => true
+                                    ]) ?>
+                                </div>
+
+                                <div class="form-group">
+                                    <?= $this->Form->control('last_name', [
+                                        'label' => false,
+                                        'class' => 'form-control form-control-user',
+                                        'placeholder' => 'Last Name',
                                         'required' => true
                                     ]) ?>
                                 </div>
