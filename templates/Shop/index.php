@@ -2,8 +2,8 @@
 $this->disableAutoLayout();
 ?>
 <?= $this->Html->css('styles') ?>
-<?= $this->Html->css(['shop']) ?>
 <?= $this->element('navigation') ?>
+
 <header class="bg-dark py-5">
     <div class="container px-4 px-lg-5 my-5">
         <div class="text-center text-white">
@@ -11,6 +11,12 @@ $this->disableAutoLayout();
             <p class="lead fw-normal text-white-50 mb-0">Call our number to place your order: 0450764522</p>
         </div>
     </div>
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+
 </header>
 <div class="container mt-5">
     <div class="row mb-4">
