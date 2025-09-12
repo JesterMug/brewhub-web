@@ -4,7 +4,6 @@
  * @var \App\Model\Entity\Form $form
  */
 ?>
-<?= $this->Html->css('styles') ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +11,7 @@
     <title>BrewHub</title>
     <link rel="stylesheet" href="webroot/css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <?= $this->Html->css('forms_add') ?>
+    <?= $this->Html->css('styles') ?>
 </head>
 <body>
     <?= $this->element('navigation') ?>

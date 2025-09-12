@@ -22,7 +22,6 @@ $user = $this->request->getAttribute('identity');
 
     <!-- Custom styles for this template-->
     <?= $this->Html->css(['sb-admin-2']) ?>
-    <?= $this->Html->css(['admin-overrides']) ?>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
