@@ -412,6 +412,7 @@ return [
      */
     'Session' => [
         'defaults' => 'php',
+        'cookieSecure' => env('COOKIE_SECURE', false), //add .env variable: COOKIE_SECURE=false for this to function
     ],
 
     /**
