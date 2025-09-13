@@ -34,7 +34,7 @@
                         <div class="flex-grow-1 align-self-center overflow-hidden">
                             <div>
                                 <h5 class="text-truncate font-size-18">
-                                    <a href="<?= $this->Url->build(['controller' => 'Shop', 'action' => 'view', $product->id ?? null]) ?>" class="text-dark">
+                                    <a href="<?= $this->Url->build(['controller' => 'Shop', 'action' => 'view', $product->id ?? null]) ?>" class="text-white">
                                         <?= h($name) ?>
                                     </a>
                                 </h5>
@@ -73,11 +73,18 @@
                                 <div class="mt-3">
                                     <p class="text-muted mb-2">Quantity</p>
                                     <div class="d-inline-flex">
-                                        <select class="form-select form-select-sm w-xl" disabled>
-                                            <?php for ($i=1; $i<=8; $i++): ?>
-                                                <option value="<?= $i ?>" <?= $i === $qty ? 'selected' : '' ?>><?= $i ?></option>
-                                            <?php endfor; ?>
-                                        </select>
+                                        <?= $this->Form->create(null, ['url' => ['controller' => 'Shop', 'action' => 'updateCartQuantity'], 'class' => 'd-inline']) ?>
+                                            <?php if (!empty($item->id)): ?>
+                                                <?= $this->Form->hidden('cart_item_id', ['value' => (int)$item->id]) ?>
+                                            <?php else: ?>
+                                                <?= $this->Form->hidden('product_variant_id', ['value' => (int)($variant->id ?? 0)]) ?>
+                                            <?php endif; ?>
+                                            <?= $this->Form->select('quantity', array_combine(range(1,8), range(1,8)), [
+                                                'value' => $qty,
+                                                'class' => 'form-select form-select-sm w-xl',
+                                                'onchange' => 'this.form.submit()'
+                                            ]) ?>
+                                        <?= $this->Form->end() ?>
                                     </div>
                                 </div>
                             </div>

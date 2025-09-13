@@ -48,7 +48,6 @@ class PagesController extends AppController
     public function beforeFilter(\Cake\Event\EventInterface $event)
     {
         parent::beforeFilter($event);
-        $this->viewBuilder()->setLayout('frontend');
     }
 
     public function view($id = null)

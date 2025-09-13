@@ -12,7 +12,7 @@ class ShopController extends AppController
     {
         parent::beforeFilter($event);
         // Allow unauthenticated access to shop listing, product view, cart, and cart mutations
-        $this->Authentication->addUnauthenticatedActions(['index', 'view', 'cart', 'addToCart', 'removeFromCart']);
+        $this->Authentication->addUnauthenticatedActions(['index', 'view', 'cart', 'addToCart', 'removeFromCart', 'updateCartQuantity']);
         $this->viewBuilder()->setLayout('frontend');
     }
 
@@ -218,6 +218,53 @@ class ShopController extends AppController
         }
 
         $this->Flash->error('Invalid remove request.');
+        return $this->redirect(['action' => 'cart']);
+    }
+
+    // Update quantity (handles guest session and authenticated DB cart)
+    public function updateCartQuantity()
+    {
+        $this->request->allowMethod(['post']);
+
+        $qty = (int)$this->request->getData('quantity');
+        if ($qty < 1) { $qty = 1; }
+        if ($qty > 99) { $qty = 99; }
+
+        $identity = $this->request->getAttribute('identity');
+        $cartItemId = (int)$this->request->getData('cart_item_id');
+        $variantId = (int)$this->request->getData('product_variant_id');
+
+        // Authenticated user: update DB cart item if it belongs to the user
+        if ($cartItemId > 0 && $identity) {
+            $cartItemsTable = TableRegistry::getTableLocator()->get('CartItems');
+            $cartItem = $cartItemsTable->find()
+                ->where(['CartItems.id' => $cartItemId])
+                ->contain(['Carts'])
+                ->first();
+
+            if ($cartItem && (int)$cartItem->cart->user_id === (int)$identity->id) {
+                $cartItem->quantity = $qty;
+                if ($cartItemsTable->save($cartItem)) {
+                    $this->Flash->success('Cart updated.');
+                    return $this->redirect(['action' => 'cart']);
+                }
+                $this->Flash->error('Unable to update quantity. Please try again.');
+                return $this->redirect(['action' => 'cart']);
+            }
+            // Fall through to session as a safety net
+        }
+
+        // Guest/session cart: update by variant ID
+        if ($variantId > 0) {
+            $session = $this->request->getSession();
+            $guestCart = (array)$session->read('GuestCart');
+            $guestCart[$variantId] = $qty;
+            $session->write('GuestCart', $guestCart);
+            $this->Flash->success('Cart updated.');
+            return $this->redirect(['action' => 'cart']);
+        }
+
+        $this->Flash->error('Invalid update request.');
         return $this->redirect(['action' => 'cart']);
     }
 }
