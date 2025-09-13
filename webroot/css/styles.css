@@ -193,6 +193,10 @@ button:not(:disabled) { cursor: pointer; }
     align-items: stretch;
     width: 100%;
 }
+
+.form-control::placeholder {
+    color: #6c757d;
+}
 .input-group > .form-control { position: relative; flex: 1 1 auto; width: 1%; min-width: 0; }
 .input-group > :not(:last-child) { border-top-right-radius: 0; border-bottom-right-radius: 0; }
 .input-group > :not(:first-child) { margin-left: -1px; border-top-left-radius: 0; border-bottom-left-radius: 0; }

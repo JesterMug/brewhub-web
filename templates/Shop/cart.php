@@ -5,7 +5,14 @@
 <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
 <div class="shop-cart container-fluid">
-    <header class=" py-5">
+    <header class=" py-3">
+        <div class="py-4">
+        </div>
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">Shopping Cart</h1>
+            </div>
+        </div>
     </header>
     <div class="container">
     <?php if (!empty($cartItems)): ?>
