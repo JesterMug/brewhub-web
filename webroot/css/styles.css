@@ -27,6 +27,7 @@
     --bs-primary: var(--accent-teal);
     --bs-primary-rgb: 51, 198, 162;
     --bs-secondary: #a193c7;
+    --glass-bg: rgba(30, 30, 30, 0.75);
 }
 
 *,
@@ -339,24 +340,114 @@ input[type="button"].btn-block {
  * ===================================================================
  */
 
-/* Main Navigation */
-#mainNav { min-height: 3.5rem; transition: background-color .3s ease-in-out; }
-#mainNav .navbar-toggler { font-size: 80%; padding: .75rem; color: var(--accent-teal); border: 1px solid var(--accent-teal); }
-#mainNav .navbar-brand { font-weight: 400; font-size: 50px; padding: .9rem 0; color: #fff; }
+/* * ===================================================================
+ * III. NAVIGATION BAR - APPLE GLASS DESIGN (EXPAND/SHRINK)
+ * ===================================================================
+ */
+#mainNav {
+    min-height: 3.5rem;
+    border-bottom: 1px solid transparent;
+    /* Core transitions for the navbar background itself */
+    transition: background-color 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+#mainNav .navbar-brand {
+    font-family: var(--heading-font);
+    font-weight: 700;
+    color: #fff;
+    /* Transitions for the brand changing size/color */
+    transition: font-size 0.3s ease-in-out, color 0.3s ease-in-out, padding 0.3s ease-in-out;
+}
+
+#mainNav .navbar-toggler {
+    font-size: 80%;
+    padding: .75rem;
+    color: var(--text-secondary-dark);
+    border-color: var(--text-secondary-dark);
+}
+
+#mainNav .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28245, 245, 247, 0.7%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+#mainNav .navbar-nav .nav-link {
+    color: var(--text-secondary-dark);
+    font-weight: 500;
+    /* Transitions for the nav links changing size/color */
+    transition: color 0.2s ease, padding 0.3s ease-in-out;
+}
+#mainNav .navbar-nav .nav-link:hover,
+#mainNav .navbar-nav .nav-link.active {
+    color: var(--text-primary-dark);
+}
+
+/* Desktop Styles */
 @media (min-width: 992px) {
-    #mainNav { background-color: transparent; }
-    #mainNav .navbar-brand { padding: .5rem 0; color: var(--accent-gold); }
-    #mainNav .nav-link { transition: none; padding: 2rem 1.5rem; color: rgba(255,255,255,.8); }
-    #mainNav .nav-link:hover { color: #fff; }
-    #mainNav.navbar-shrink {
-        background-color: rgba(28, 28, 30, 0.85); /* Apple-esque frosted glass, maybe change? */
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+    /* 1. DEFAULT LARGER NAV */
+    #mainNav {
+        background-color: transparent;
+        border-color: transparent;
     }
-    #mainNav.navbar-shrink .navbar-brand { color: var(--accent-gold); }
-    #mainNav.navbar-shrink .nav-link { color: var(--text-primary-dark); padding: 1.5rem; border-bottom: .25rem solid transparent; }
-    #mainNav.navbar-shrink .nav-link:hover { color: #fff; }
-    #mainNav.navbar-shrink .nav-link.active { color: var(--accent-gold); border-bottom-color: var(--accent-gold); }
+    #mainNav .navbar-brand {
+        font-size: 2rem;
+        padding: 1rem 0;
+        color: var(--accent-gold);
+    }
+    #mainNav .navbar-nav .nav-link {
+        padding: 2rem 1.5rem;
+        color: rgba(255, 255, 255, .8);
+    }
+    #mainNav .navbar-nav .nav-link:hover {
+        color: #fff;
+    }
+
+    /* 2. SHRUNK NAV STATE On scroll */
+    #mainNav.navbar-shrink {
+        background-color: var(--glass-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    #mainNav.navbar-shrink .navbar-brand {
+        font-size: 1.5rem; /* LEAN brand text */
+        padding: 0.5rem 0;
+        color: var(--accent-gold);
+    }
+    #mainNav.navbar-shrink .navbar-nav .nav-link {
+        color: var(--text-primary-dark);
+        padding: 1.5rem 1.5rem; /* LEAN link padding */
+    }
+    #mainNav.navbar-shrink .navbar-nav .nav-link:hover {
+        color: #fff;
+    }
+    #mainNav.navbar-shrink .navbar-nav .nav-link.active {
+        color: var(--accent-gold);
+    }
+}
+
+/* Mobile Menu Styling */
+@media (max-width: 991.98px) {
+    #mainNav {
+        /* Mobile bar is always glass */
+        background-color: var(--glass-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    #mainNav .navbar-brand {
+        font-size: 1.5rem;
+        color: var(--accent-gold);
+    }
+    #mainNav .navbar-collapse {
+        margin-top: 1rem;
+        padding: 1rem;
+        border-radius: 1rem;
+        background-color: var(--dark-surface);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    #mainNav .navbar-nav .nav-link {
+        padding: .75rem .5rem;
+    }
 }
 
 /* Masthead (Hero Section) */
