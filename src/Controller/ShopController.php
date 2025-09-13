@@ -13,6 +13,7 @@ class ShopController extends AppController
         parent::beforeFilter($event);
         // Allow unauthenticated access to shop listing and product view
         $this->Authentication->addUnauthenticatedActions(['index', 'view']);
+        $this->viewBuilder()->setLayout('frontend');
     }
 
     public function index()
@@ -20,7 +21,7 @@ class ShopController extends AppController
         $productsTable = TableRegistry::getTableLocator()->get('Products');
         $products = $productsTable->find('all', [
             'contain' => ['ProductImages' => function($q) {
-                return $q->orderByAsc('ProductImages.id'); // first image first
+                return $q->orderByAsc('ProductImages.id');
             }, 'ProductVariants']
         ]);
 
@@ -48,7 +49,6 @@ class ShopController extends AppController
         }
 
         $this->set(compact('products', 'q', 'type'));
-        $this->viewBuilder()->setLayout('default'); // your user-facing layout
     }
 
     // Product details
@@ -64,6 +64,6 @@ class ShopController extends AppController
         ]);
 
         $this->set(compact('product'));
-        $this->viewBuilder()->setLayout('default'); // or 'shop' layout
+        $this->viewBuilder()->setLayout('frontend');
     }
 }
