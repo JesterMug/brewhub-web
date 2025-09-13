@@ -12,7 +12,7 @@
     --text-secondary-dark: #86868b;
     --border-dark: rgba(255, 255, 255, 0.15);
     --accent-gold: #f0b95b;
-    --accent-teal: #33c6a2; /* Brighter teal */
+    --accent-teal: #ffd289; /* Brighter teal */
 
     --bs-body-bg: var(--dark-bg);
     --bs-body-color: var(--text-primary-dark);
@@ -141,6 +141,13 @@ input[type="button"].btn-block {
     margin-right: auto;
     margin-left: auto;
 }
+
+.glassy-image-border {
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.07), 0 8px 30px rgba(0, 0, 0, 0.4);
+    opacity: 0.7; width: 600px; height: 600px; margin-bottom: 50px
+}
+
 @media (min-width: 768px) { .container { max-width: 720px; } }
 @media (min-width: 992px) { .container { max-width: 960px; } }
 @media (min-width: 1200px) { .container { max-width: 1140px; } }
@@ -341,7 +348,7 @@ input[type="button"].btn-block {
  */
 
 /* * ===================================================================
- * III. NAVIGATION BAR - APPLE GLASS DESIGN (EXPAND/SHRINK)
+ * III. NAVIGATION BAR
  * ===================================================================
  */
 #mainNav {
@@ -477,7 +484,7 @@ input[type="button"].btn-block {
 }
 .about-section p { margin-bottom: 5rem; }
 .projects-section {
-    padding: 10rem 0;
+    padding: 5rem 0;
     background-color: var(--dark-surface) !important;
 }
 .projects-section .project-text { padding: 3rem; font-size: 90%; }
