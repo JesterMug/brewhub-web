@@ -396,3 +396,56 @@ button:not(:disabled) { cursor: pointer; }
 .text-primary { color: var(--accent-teal) !important; }
 .bg-light { background-color: var(--dark-surface) !important; }
 .bg-black { background-color: #000 !important; }
+
+
+/* Shop Cart (Bootdey variant) styles – scoped to .shop-cart to avoid global overrides */
+.shop-cart {
+    margin-top: 20px;
+}
+
+.shop-cart .avatar-lg {
+    height: 5rem;
+    width: 5rem;
+}
+
+.shop-cart .font-size-18 {
+    font-size: 18px !important;
+}
+
+.shop-cart .text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.shop-cart a {
+    text-decoration: none !important;
+}
+
+.shop-cart .w-xl {
+    min-width: 160px;
+}
+
+/* Card appearance for cart items and summary */
+.shop-cart .card {
+    margin-bottom: 24px;
+    -webkit-box-shadow: 0 2px 3px #e4e8f0;
+    box-shadow: 0 2px 3px #e4e8f0;
+}
+
+.shop-cart .card {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid #eff0f2;
+    border-radius: 1rem;
+}
