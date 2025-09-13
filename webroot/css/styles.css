@@ -21,8 +21,8 @@
     --bs-dark-rgb: 0, 0, 0;
     --bs-border-color: var(--border-dark);
     --bs-border-color-translucent: rgba(255, 255, 255, 0.1);
-    --bs-link-color: var(--accent-teal);
-    --bs-link-hover-color: #ffffff;
+    --bs-link-color: #cfa15d;
+    --bs-link-hover-color: #976839;
     --heading-color: var(--text-primary-dark);
     --bs-primary: var(--accent-teal);
     --bs-primary-rgb: 51, 198, 162;
@@ -106,6 +106,30 @@ input, button, select, textarea {
 button:not(:disabled) { cursor: pointer; }
 [hidden] { display: none !important; }
 
+.form-group {
+    margin-bottom: 1rem;
+}
+
+form.user .btn-user {
+    font-size: 0.8rem;
+    border-radius: 10rem;
+    padding: 0.75rem 1rem;
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+.btn-block + .btn-block {
+    margin-top: 0.5rem;
+}
+
+input[type="submit"].btn-block,
+input[type="reset"].btn-block,
+input[type="button"].btn-block {
+    width: 100%;
+}
 
 /* Layout & Grid (Complete) */
 .container, .container-fluid, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
@@ -253,8 +277,8 @@ button:not(:disabled) { cursor: pointer; }
     background-color: #f1f1f1;
     border-color: #f1f1f1;
 }
-.btn-outline-primary { color: var(--accent-teal); border-color: var(--accent-teal); }
-.btn-outline-primary:hover, .btn-outline-primary.active { color: #fff; background-color: var(--accent-teal); border-color: var(--accent-teal); }
+.btn-outline-primary { color: var(--accent-gold); border-color: var(--accent-gold); }
+.btn-outline-primary:hover, .btn-outline-primary.active { color: white; background-color: var(--accent-gold); border-color: var(--accent-gold); }
 .btn-outline-secondary { color: var(--text-secondary-dark); border-color: var(--text-secondary-dark); }
 .btn-outline-secondary:hover { color: #fff; background-color: var(--text-secondary-dark); border-color: var(--text-secondary-dark); }
 .btn-outline-danger { color: #ff5252; border-color: #ff5252; }
@@ -444,4 +468,29 @@ button:not(:disabled) { cursor: pointer; }
     border: 1px solid var(--bs-border-color);
     border-radius: 0.75rem;
     box-shadow: none;
+}
+
+/* Slim top flash error card for frontend pages (pushes content down) */
+.message.error {
+    position: relative; /* participate in normal flow so it pushes content */
+    margin: 6px auto;  /* space from the very top and center horizontally */
+    background-color: var(--dark-surface);
+    color: var(--text-primary-dark);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 8px;
+    padding: 8px 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    max-width: 90vw;
+    min-width: 240px;
+    width: auto;
+    text-align: center;
+}
+.message.error a { color: var(--text-primary-dark); text-decoration: underline; }
+@media (max-width: 576px) {
+    .message.error { min-width: unset; width: calc(100vw - 24px); }
+}
+
+/* Ensure content appears below the fixed-top navbar on login layout */
+.has-fixed-navbar {
+    padding-top: 100px;
 }

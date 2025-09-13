@@ -10,20 +10,19 @@
     <meta charset="UTF-8">
     <title>BrewHub</title>
 </head>
-<header class="py-3">
-    <div class="py-4">
-    </div>
-    <div class="container px-4 px-lg-5 my-5">
-        <div class="text-center text-white">
-            <h1 class="display-4 fw-bolder">Contact Us</h1>
-        </div>
-    </div>
-</header>
 <body>
-<div class="container mt-5">
+<div class="container">
+    <header class="py-3">
+        <div class="py-4">
+        </div>
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">Contact Us</h1>
+            </div>
+        </div>
+    </header>
     <div class="row justify-content-center">
         <div class="col-lg-6">
-
             <div class="card shadow mb-4">
                 <div class="card-body">
                     <?= $this->Form->create($form) ?>
