@@ -68,13 +68,10 @@ class PagesController extends AppController
             $this->Flash->error('You are not authorized to access the admin dashboard.');
             return $this->redirect(['controller' => 'Auth', 'action' => 'login']);
         }
-
-        $this->viewBuilder()->setLayout('default');
     }
 
     public function display(string ...$path): ?Response
     {
-        $this->viewBuilder()->setLayout('frontend');
         if (!$path) {
             return $this->redirect('/');
         }

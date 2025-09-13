@@ -114,15 +114,15 @@ $user = $this->request->getAttribute('identity');
         </li>
 
         <!-- Divider -->
-        <hr class="sidebar-divider">
+<!--        <hr class="sidebar-divider">-->
 
         <!-- Heading -->
-        <div class="sidebar-heading">
+<!--        <div class="sidebar-heading">
             Addons
-        </div>
+        </div>-->
 
         <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item">
+<!--        <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                aria-expanded="true" aria-controls="collapsePages">
                 <i class="fas fa-fw fa-folder"></i>
@@ -141,21 +141,21 @@ $user = $this->request->getAttribute('identity');
                 </div>
             </div>
         </li>
-
+-->
         <!-- Nav Item - Charts -->
-        <li class="nav-item">
+<!--        <li class="nav-item">
             <a class="nav-link" href="charts.html">
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>Charts</span></a>
         </li>
-
+-->
         <!-- Nav Item - Tables -->
-        <li class="nav-item">
+<!--        <li class="nav-item">
             <a class="nav-link" href="tables.html">
                 <i class="fas fa-fw fa-table"></i>
                 <span>Tables</span></a>
         </li>
-
+-->
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
 
@@ -199,7 +199,7 @@ $user = $this->request->getAttribute('identity');
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                              aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="#">
+<!--                            <a class="dropdown-item" href="#">
                                 <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Profile
                             </a>
@@ -212,7 +212,7 @@ $user = $this->request->getAttribute('identity');
                                 Activity Log
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+-->                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Logout
                             </a>

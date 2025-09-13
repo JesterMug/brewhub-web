@@ -1,7 +1,7 @@
 <?php
 
 ?>
-<div class="shop-cart container-fluid">
+<header>
     <div class="py-4">
     </div>
     <div class="container px-4 px-lg-5 my-5">
@@ -9,7 +9,10 @@
             <h1 class="display-4 fw-bolder">Shopping Cart</h1>
         </div>
     </div>
-    <div class="container">
+</header>
+<div class="shop-cart container-fluid">
+    <?= $this->Flash->render() ?>
+    <div class="container py-1">
     <?php if (!empty($cartItems)): ?>
     <div class="row">
         <div class="col-xl-8">

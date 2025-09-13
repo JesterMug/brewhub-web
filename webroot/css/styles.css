@@ -562,7 +562,7 @@ input[type="button"].btn-block {
 }
 
 /* Slim top flash error card for frontend pages (pushes content down) */
-.message.error {
+.message.error  {
     position: relative; /* participate in normal flow so it pushes content */
     margin: 6px auto;  /* space from the very top and center horizontally */
     background-color: var(--dark-surface);
@@ -581,7 +581,27 @@ input[type="button"].btn-block {
     .message.error { min-width: unset; width: calc(100vw - 24px); }
 }
 
+/* Slim top flash normal message card for frontend pages (pushes content down) */
+.message  {
+    position: relative; /* participate in normal flow so it pushes content */
+    margin: 6px auto;  /* space from the very top and center horizontally */
+    background-color: var(--dark-surface);
+    color: var(--text-primary-dark);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 8px;
+    padding: 8px 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    max-width: 90vw;
+    min-width: 240px;
+    width: auto;
+    text-align: center;
+}
+.message a { color: var(--text-primary-dark); text-decoration: underline; }
+@media (max-width: 576px) {
+    .message { min-width: unset; width: calc(100vw - 24px); }
+}
+
 /* Ensure content appears below the fixed-top navbar on login layout */
 .has-fixed-navbar {
-    padding-top: 100px;
+    padding-top: 82px;
 }

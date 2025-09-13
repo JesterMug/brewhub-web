@@ -1,4 +1,5 @@
 <?php
+$this->setLayout('frontend');
 ?>
 <!DOCTYPE html>
 

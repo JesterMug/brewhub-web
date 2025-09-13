@@ -33,5 +33,9 @@ $appLocale = Configure::read('App.defaultLocale');
     '/js/sb-admin-2.min.js'
 ]) ?>
 <?= $this->fetch('footer_script') ?>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<?= $this->Html->script('scripts') ?>
+
+<?= $this->fetch('scripts') ?>
 </body>
 </html>
