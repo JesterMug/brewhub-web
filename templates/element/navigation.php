@@ -11,6 +11,16 @@ $user = $this->request->getAttribute('identity');
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ms-auto">
 
+                <li class="nav-item">
+                    <a class="nav-link" title="Cart" href="<?= $this->Url->build(['controller' => 'Shop', 'action' => 'cart']) ?>">
+                        <i class="fas fa-shopping-cart"></i>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= $this->Url->build(['controller' => 'Shop', 'action' => 'index']) ?>">Shop</a>
+                </li>
+
                 <?php if ($user): ?>
                     <li class="nav-item">
                         <span class="nav-link">Welcome, <?= h($user->first_name ?? $user->email) ?></span>
@@ -25,17 +35,7 @@ $user = $this->request->getAttribute('identity');
                 <?php endif; ?>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="<?= $this->Url->build(['controller' => 'Shop', 'action' => 'index']) ?>">Shop</a>
-                </li>
-
-                <li class="nav-item">
                     <a class="nav-link" href="<?= $this->Url->build(['controller' => 'Forms', 'action' => 'add']) ?>">Get in Touch</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" title="Cart" href="<?= $this->Url->build(['controller' => 'Shop', 'action' => 'cart']) ?>">
-                        <i class="fas fa-shopping-cart"></i>
-                    </a>
                 </li>
 
             </ul>
