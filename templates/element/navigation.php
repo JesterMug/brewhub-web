@@ -32,6 +32,12 @@ $user = $this->request->getAttribute('identity');
                     <a class="nav-link" href="<?= $this->Url->build(['controller' => 'Forms', 'action' => 'add']) ?>">Get in Touch</a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" title="Cart" href="<?= $this->Url->build(['controller' => 'Shop', 'action' => 'cart']) ?>">
+                        <i class="fas fa-shopping-cart"></i>
+                    </a>
+                </li>
+
             </ul>
         </div>
     </div>

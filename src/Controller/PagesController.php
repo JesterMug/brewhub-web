@@ -45,6 +45,10 @@ class PagesController extends AppController
      * @throws \Cake\View\Exception\MissingTemplateException In debug mode.
      */
 
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+    }
 
     public function view($id = null)
     {
