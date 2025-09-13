@@ -9,20 +9,22 @@
 <head>
     <meta charset="UTF-8">
     <title>BrewHub</title>
-    <link rel="stylesheet" href="webroot/css/styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <?= $this->Html->css('styles') ?>
 </head>
+<header class="py-3">
+    <div class="py-4">
+    </div>
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Contact Us</h1>
+        </div>
+    </div>
+</header>
 <body>
-    <?= $this->element('navigation') ?>
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-lg-6">
 
             <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h4 class="m-0 font-weight-bold text-primary"><?= __('Contact Us') ?></h4>
-                </div>
                 <div class="card-body">
                     <?= $this->Form->create($form) ?>
 

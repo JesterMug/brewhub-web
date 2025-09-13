@@ -55,11 +55,12 @@ class FormsController extends AppController
             $form = $this->Forms->patchEntity($form, $this->request->getData());
             if ($this->Forms->save($form)) {
                 $this->Flash->success(__('Thank you for your message. We will get back to you shortly.'));
-                return $this->redirect($this->referer());
+                return $this->redirect(['controller' => 'Pages', 'action' => 'display', 'home']);
             }
             $this->Flash->error(__('Your message could not be sent. Please, try again.'));
         }
         $this->set(compact('form'));
+        $this->viewBuilder()->setLayout('frontend');
     }
 
     /**

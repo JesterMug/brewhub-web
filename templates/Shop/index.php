@@ -1,7 +1,7 @@
 <?php
 ?>
 
-<header class="bg-dark py-3">
+<header class="py-3">
     <div class="py-4">
     </div>
     <div class="container px-4 px-lg-5 my-5">
@@ -11,18 +11,9 @@
         </div>
     </div>
 </header>
-<div class="container mt-5">
+<div class="container">
     <div class="row mb-4">
         <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center flex-wrap mb-2">
-                <div class="btn-group" role="group" aria-label="Product type">
-                    <a class="btn btn-outline-primary <?= ($type ?? 'coffee') === 'coffee' ? 'active' : '' ?>"
-                       href="<?= $this->Url->build(['controller' => 'Shop', 'action' => 'index', '?' => ['type' => 'coffee', 'q' => $this->request->getQuery('q')]]) ?>">Coffee</a>
-                    <a class="btn btn-outline-primary <?= ($type ?? 'coffee') === 'merch' ? 'active' : '' ?>"
-                       href="<?= $this->Url->build(['controller' => 'Shop', 'action' => 'index', '?' => ['type' => 'merch', 'q' => $this->request->getQuery('q')]]) ?>">Merchandise</a>
-                </div>
-            </div>
-
             <?= $this->Form->create(null, ['type' => 'get', 'valueSources' => ['query'], 'templates' => ['inputContainer' => '{{content}}']]) ?>
             <?= $this->Form->hidden('type', ['value' => $type ?? 'coffee']) ?>
             <div class="input-group">
@@ -37,6 +28,14 @@
                 <?php endif; ?>
             </div>
             <?= $this->Form->end() ?>
+        </div>
+        <div class="d-flex justify-content-between align-items-center flex-wrap mb-2 mt-4">
+            <div class="btn-group" role="group" aria-label="Product type">
+                <a class="btn btn-outline-primary <?= ($type ?? 'coffee') === 'coffee' ? 'active' : '' ?>"
+                   href="<?= $this->Url->build(['controller' => 'Shop', 'action' => 'index', '?' => ['type' => 'coffee', 'q' => $this->request->getQuery('q')]]) ?>">Coffee</a>
+                <a class="btn btn-outline-primary <?= ($type ?? 'coffee') === 'merch' ? 'active' : '' ?>"
+                   href="<?= $this->Url->build(['controller' => 'Shop', 'action' => 'index', '?' => ['type' => 'merch', 'q' => $this->request->getQuery('q')]]) ?>">Merchandise</a>
+            </div>
         </div>
     </div>
 
