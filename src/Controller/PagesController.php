@@ -69,12 +69,22 @@ class PagesController extends AppController
             return $this->redirect(['controller' => 'Auth', 'action' => 'login']);
         }
 
+        $productsTable = $this->fetchTable('Products');
+        $usersTable = $this->fetchTable('Users');
+        $formsTable = $this->fetchTable('Forms');
+
+        $productsCount = $productsTable->find()->count();
+        $usersCount = $usersTable->find()->count();
+        $newMessagesCount = $formsTable->find()->where(['replied_status' => false])->count();
+        $totalRevenue = 0;
+
+        $this->set(compact('productsCount', 'usersCount', 'newMessagesCount', 'totalRevenue'));
+
         $this->viewBuilder()->setLayout('default');
     }
 
     public function display(string ...$path): ?Response
     {
-        $this->viewBuilder()->setLayout('frontend');
         if (!$path) {
             return $this->redirect('/');
         }

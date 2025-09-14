@@ -33,23 +33,11 @@ $this->assign('title', 'Login');
                                         'value' => ''
                                     ]) ?>
                                 </div>
-                                <div class="form-group">
-                                    <div class="custom-control custom-checkbox small">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck">
-                                        <label class="custom-control-label" for="customCheck">Remember Me</label>
-                                    </div>
-                                </div>
                                 <?= $this->Form->button('Login', ['class' => 'btn btn-primary btn-user btn-block']) ?>
                                 <?= $this->Form->end() ?>
                                 <hr>
                                 <div class="text-center">
-                                    <?= $this->Html->link('Forgot Password?', ['action' => 'forgetPassword'], ['class' => 'small']) ?>
-                                </div>
-                                <div class="text-center">
-                                    <?= $this->Html->link('Create an Account!', ['controller' => 'Users', 'action' => 'register'], ['class' => 'small']) ?>
-                                </div>
-                                <div class="text-center">
-                                    <?= $this->Html->link('Go to Homepage', '/', ['class' => 'small']) ?>
+                                    <?= $this->Html->link('Create an Account', ['controller' => 'Users', 'action' => 'register'], ['class' => 'small']) ?>
                                 </div>
                             </div>
                         </div>

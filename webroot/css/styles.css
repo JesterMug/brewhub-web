@@ -12,7 +12,7 @@
     --text-secondary-dark: #86868b;
     --border-dark: rgba(255, 255, 255, 0.15);
     --accent-gold: #f0b95b;
-    --accent-teal: #33c6a2; /* Brighter teal */
+    --accent-teal: #ffd289; /* Brighter teal */
 
     --bs-body-bg: var(--dark-bg);
     --bs-body-color: var(--text-primary-dark);
@@ -21,12 +21,13 @@
     --bs-dark-rgb: 0, 0, 0;
     --bs-border-color: var(--border-dark);
     --bs-border-color-translucent: rgba(255, 255, 255, 0.1);
-    --bs-link-color: var(--accent-teal);
-    --bs-link-hover-color: #ffffff;
+    --bs-link-color: #cfa15d;
+    --bs-link-hover-color: #976839;
     --heading-color: var(--text-primary-dark);
     --bs-primary: var(--accent-teal);
     --bs-primary-rgb: 51, 198, 162;
     --bs-secondary: #a193c7;
+    --glass-bg: rgba(30, 30, 30, 0.75);
 }
 
 *,
@@ -106,6 +107,30 @@ input, button, select, textarea {
 button:not(:disabled) { cursor: pointer; }
 [hidden] { display: none !important; }
 
+.form-group {
+    margin-bottom: 1rem;
+}
+
+form.user .btn-user {
+    font-size: 0.8rem;
+    border-radius: 10rem;
+    padding: 0.75rem 1rem;
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+.btn-block + .btn-block {
+    margin-top: 0.5rem;
+}
+
+input[type="submit"].btn-block,
+input[type="reset"].btn-block,
+input[type="button"].btn-block {
+    width: 100%;
+}
 
 /* Layout & Grid (Complete) */
 .container, .container-fluid, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
@@ -116,6 +141,13 @@ button:not(:disabled) { cursor: pointer; }
     margin-right: auto;
     margin-left: auto;
 }
+
+.glassy-image-border {
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.07), 0 8px 30px rgba(0, 0, 0, 0.4);
+    opacity: 0.7; width: 600px; height: 600px; margin-bottom: 50px
+}
+
 @media (min-width: 768px) { .container { max-width: 720px; } }
 @media (min-width: 992px) { .container { max-width: 960px; } }
 @media (min-width: 1200px) { .container { max-width: 1140px; } }
@@ -253,8 +285,8 @@ button:not(:disabled) { cursor: pointer; }
     background-color: #f1f1f1;
     border-color: #f1f1f1;
 }
-.btn-outline-primary { color: var(--accent-teal); border-color: var(--accent-teal); }
-.btn-outline-primary:hover, .btn-outline-primary.active { color: #fff; background-color: var(--accent-teal); border-color: var(--accent-teal); }
+.btn-outline-primary { color: var(--accent-gold); border-color: var(--accent-gold); }
+.btn-outline-primary:hover, .btn-outline-primary.active { color: white; background-color: var(--accent-gold); border-color: var(--accent-gold); }
 .btn-outline-secondary { color: var(--text-secondary-dark); border-color: var(--text-secondary-dark); }
 .btn-outline-secondary:hover { color: #fff; background-color: var(--text-secondary-dark); border-color: var(--text-secondary-dark); }
 .btn-outline-danger { color: #ff5252; border-color: #ff5252; }
@@ -315,24 +347,114 @@ button:not(:disabled) { cursor: pointer; }
  * ===================================================================
  */
 
-/* Main Navigation */
-#mainNav { min-height: 3.5rem; transition: background-color .3s ease-in-out; }
-#mainNav .navbar-toggler { font-size: 80%; padding: .75rem; color: var(--accent-teal); border: 1px solid var(--accent-teal); }
-#mainNav .navbar-brand { font-weight: 400; font-size: 50px; padding: .9rem 0; color: #fff; }
+/* * ===================================================================
+ * III. NAVIGATION BAR
+ * ===================================================================
+ */
+#mainNav {
+    min-height: 3.5rem;
+    border-bottom: 1px solid transparent;
+    /* Core transitions for the navbar background itself */
+    transition: background-color 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+#mainNav .navbar-brand {
+    font-family: var(--heading-font);
+    font-weight: 700;
+    color: #fff;
+    /* Transitions for the brand changing size/color */
+    transition: font-size 0.3s ease-in-out, color 0.3s ease-in-out, padding 0.3s ease-in-out;
+}
+
+#mainNav .navbar-toggler {
+    font-size: 80%;
+    padding: .75rem;
+    color: var(--text-secondary-dark);
+    border-color: var(--text-secondary-dark);
+}
+
+#mainNav .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28245, 245, 247, 0.7%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+#mainNav .navbar-nav .nav-link {
+    color: var(--text-secondary-dark);
+    font-weight: 500;
+    /* Transitions for the nav links changing size/color */
+    transition: color 0.2s ease, padding 0.3s ease-in-out;
+}
+#mainNav .navbar-nav .nav-link:hover,
+#mainNav .navbar-nav .nav-link.active {
+    color: var(--text-primary-dark);
+}
+
+/* Desktop Styles */
 @media (min-width: 992px) {
-    #mainNav { background-color: transparent; }
-    #mainNav .navbar-brand { padding: .5rem 0; color: var(--accent-gold); }
-    #mainNav .nav-link { transition: none; padding: 2rem 1.5rem; color: rgba(255,255,255,.8); }
-    #mainNav .nav-link:hover { color: #fff; }
-    #mainNav.navbar-shrink {
-        background-color: rgba(28, 28, 30, 0.85); /* Apple-esque frosted glass, maybe change? */
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+    /* 1. DEFAULT LARGER NAV */
+    #mainNav {
+        background-color: transparent;
+        border-color: transparent;
     }
-    #mainNav.navbar-shrink .navbar-brand { color: var(--accent-gold); }
-    #mainNav.navbar-shrink .nav-link { color: var(--text-primary-dark); padding: 1.5rem; border-bottom: .25rem solid transparent; }
-    #mainNav.navbar-shrink .nav-link:hover { color: #fff; }
-    #mainNav.navbar-shrink .nav-link.active { color: var(--accent-gold); border-bottom-color: var(--accent-gold); }
+    #mainNav .navbar-brand {
+        font-size: 2rem;
+        padding: 1rem 0;
+        color: var(--accent-gold);
+    }
+    #mainNav .navbar-nav .nav-link {
+        padding: 2rem 1.5rem;
+        color: rgba(255, 255, 255, .8);
+    }
+    #mainNav .navbar-nav .nav-link:hover {
+        color: #fff;
+    }
+
+    /* 2. SHRUNK NAV STATE On scroll */
+    #mainNav.navbar-shrink {
+        background-color: var(--glass-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    #mainNav.navbar-shrink .navbar-brand {
+        font-size: 1.5rem; /* LEAN brand text */
+        padding: 0.5rem 0;
+        color: var(--accent-gold);
+    }
+    #mainNav.navbar-shrink .navbar-nav .nav-link {
+        color: var(--text-primary-dark);
+        padding: 1.5rem 1.5rem; /* LEAN link padding */
+    }
+    #mainNav.navbar-shrink .navbar-nav .nav-link:hover {
+        color: #fff;
+    }
+    #mainNav.navbar-shrink .navbar-nav .nav-link.active {
+        color: var(--accent-gold);
+    }
+}
+
+/* Mobile Menu Styling */
+@media (max-width: 991.98px) {
+    #mainNav {
+        /* Mobile bar is always glass */
+        background-color: var(--glass-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    #mainNav .navbar-brand {
+        font-size: 1.5rem;
+        color: var(--accent-gold);
+    }
+    #mainNav .navbar-collapse {
+        margin-top: 1rem;
+        padding: 1rem;
+        border-radius: 1rem;
+        background-color: var(--dark-surface);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    #mainNav .navbar-nav .nav-link {
+        padding: .75rem .5rem;
+    }
 }
 
 /* Masthead (Hero Section) */
@@ -362,7 +484,7 @@ button:not(:disabled) { cursor: pointer; }
 }
 .about-section p { margin-bottom: 5rem; }
 .projects-section {
-    padding: 10rem 0;
+    padding: 5rem 0;
     background-color: var(--dark-surface) !important;
 }
 .projects-section .project-text { padding: 3rem; font-size: 90%; }
@@ -444,4 +566,49 @@ button:not(:disabled) { cursor: pointer; }
     border: 1px solid var(--bs-border-color);
     border-radius: 0.75rem;
     box-shadow: none;
+}
+
+/* Slim top flash error card for frontend pages (pushes content down) */
+.message.error  {
+    position: relative; /* participate in normal flow so it pushes content */
+    margin: 6px auto;  /* space from the very top and center horizontally */
+    background-color: var(--dark-surface);
+    color: var(--text-primary-dark);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 8px;
+    padding: 8px 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    max-width: 90vw;
+    min-width: 240px;
+    width: auto;
+    text-align: center;
+}
+.message.error a { color: var(--text-primary-dark); text-decoration: underline; }
+@media (max-width: 576px) {
+    .message.error { min-width: unset; width: calc(100vw - 24px); }
+}
+
+/* Slim top flash normal message card for frontend pages (pushes content down) */
+.message  {
+    position: relative; /* participate in normal flow so it pushes content */
+    margin: 6px auto;  /* space from the very top and center horizontally */
+    background-color: var(--dark-surface);
+    color: var(--text-primary-dark);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 8px;
+    padding: 8px 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    max-width: 90vw;
+    min-width: 240px;
+    width: auto;
+    text-align: center;
+}
+.message a { color: var(--text-primary-dark); text-decoration: underline; }
+@media (max-width: 576px) {
+    .message { min-width: unset; width: calc(100vw - 24px); }
+}
+
+/* Ensure content appears below the fixed-top navbar on login layout */
+.has-fixed-navbar {
+    padding-top: 82px;
 }

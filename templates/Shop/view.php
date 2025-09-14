@@ -1,6 +1,10 @@
 <?php
 ?>
-<header class=" py-5">
+<header>
+    <div class="py-5">
+    </div>
+    <div class="container px-4 px-lg-5 my-5">
+    </div>
 </header>
 <div class="container my-5">
     <div class="row gx-4 gx-lg-5 align-items-center">

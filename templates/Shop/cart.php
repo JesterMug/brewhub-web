@@ -1,20 +1,18 @@
 <?php
 
 ?>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.css" integrity="sha256-NAxhqDvtY0l4xn+YVa6WjAcmd94NNfttjNsDmNatFVc=" crossorigin="anonymous" />
-<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
+<header>
+    <div class="py-4">
+    </div>
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Shopping Cart</h1>
+        </div>
+    </div>
+</header>
 <div class="shop-cart container-fluid">
-    <header class=" py-3">
-        <div class="py-4">
-        </div>
-        <div class="container px-4 px-lg-5 my-5">
-            <div class="text-center text-white">
-                <h1 class="display-4 fw-bolder">Shopping Cart</h1>
-            </div>
-        </div>
-    </header>
-    <div class="container">
+    <?= $this->Flash->render() ?>
+    <div class="container py-1">
     <?php if (!empty($cartItems)): ?>
     <div class="row">
         <div class="col-xl-8">
@@ -60,7 +58,7 @@
                                             <?= $this->Form->hidden('product_variant_id', ['value' => (int)($variant->id ?? 0)]) ?>
                                         <?php endif; ?>
                                         <button type="submit" class="btn btn-sm btn-link text-muted px-1" title="Remove">
-                                            <i class="mdi mdi-trash-can-outline"></i>
+                                            <i class="fas fa-trash-alt"></i>
                                         </button>
                                     <?= $this->Form->end() ?>
                                 </li>
@@ -76,7 +74,7 @@
                                     <h5 class="mb-0 mt-2">$<?= number_format($price, 2) ?></h5>
                                 </div>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-4">
                                 <div class="mt-3">
                                     <p class="text-muted mb-2">Quantity</p>
                                     <div class="d-inline-flex">
@@ -86,7 +84,7 @@
                                             <?php else: ?>
                                                 <?= $this->Form->hidden('product_variant_id', ['value' => (int)($variant->id ?? 0)]) ?>
                                             <?php endif; ?>
-                                            <?= $this->Form->select('quantity', array_combine(range(1,8), range(1,8)), [
+                                            <?= $this->Form->select('quantity', array_combine(range(1,6), range(1,6)), [
                                                 'value' => $qty,
                                                 'class' => 'form-select form-select-sm w-xl',
                                                 'onchange' => 'this.form.submit()'
@@ -95,7 +93,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="mt-3">
                                     <p class="text-muted mb-2">Total</p>
                                     <h5>$<?= number_format($lineTotal, 2) ?></h5>

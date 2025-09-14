@@ -54,7 +54,7 @@ class ProductImagesController extends AppController
             }
             $this->Flash->error(__('The product image could not be saved. Please, try again.'));
         }
-        $products = $this->ProductImages->Products->find('list', limit: 200)->all();
+        $products = $this->ProductImages->Products->find('list', limit: 20)->all();
         $this->set(compact('productImage', 'products'));
     }
 
@@ -92,6 +92,17 @@ class ProductImagesController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $productImage = $this->ProductImages->get($id);
+
+        // Remove the file from disk if present
+        $basename = basename((string)$productImage->image_file);
+        if ($basename) {
+            $dir = WWW_ROOT . 'img' . DIRECTORY_SEPARATOR . 'products' . DIRECTORY_SEPARATOR;
+            $path = $dir . $basename;
+            if (is_file($path)) {
+                @unlink($path);
+            }
+        }
+
         if ($this->ProductImages->delete($productImage)) {
             $this->Flash->success(__('The product image has been deleted.'));
         } else {
