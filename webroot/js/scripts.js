@@ -5,7 +5,7 @@
 */
 //
 // Scripts
-// 
+//
 
 window.addEventListener('DOMContentLoaded', event => {
 
@@ -15,15 +15,20 @@ window.addEventListener('DOMContentLoaded', event => {
         if (!navbarCollapsible) {
             return;
         }
-        if (window.scrollY === 0) {
-            navbarCollapsible.classList.remove('navbar-shrink')
+
+        // Check if on any page with a masthead
+        const masthead = document.body.querySelector('.masthead');
+
+        // This keeps the navbar solid on all content pages, but transparent on the homepage's top.
+        if (window.scrollY > 0 || !masthead) {
+            navbarCollapsible.classList.add('navbar-shrink');
         } else {
-            navbarCollapsible.classList.add('navbar-shrink')
+            navbarCollapsible.classList.remove('navbar-shrink');
         }
 
     };
 
-    // Shrink the navbar 
+    // Shrink the navbar
     navbarShrink();
 
     // Shrink the navbar when page is scrolled

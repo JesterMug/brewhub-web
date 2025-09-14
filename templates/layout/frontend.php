@@ -1,6 +1,6 @@
 <?php
 /**
- * Frontend Layout for BrewHub
+ * Frontend Layout for BrewHub (Corrected Script Loading)
  * @var \App\View\AppView $this
  */
 ?>
@@ -11,19 +11,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>
-        BrewHub
-        <?= $this->fetch('title') ?>
+        BrewHub - <?= $this->fetch('title') ?>
     </title>
+
     <?= $this->Html->meta('icon', 'assets/favicon.ico') ?>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <?= $this->Html->css('https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css') ?>
 
-    <!-- Font Awesome icons (free version)-->
-    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <!-- Google fonts-->
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,900" rel="stylesheet">
+    <?= $this->Html->script('https://use.fontawesome.com/releases/v6.3.0/js/all.js', [
+        'crossorigin' => 'anonymous',
+        'block' => 'script'
+    ]) ?>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+
     <?= $this->Html->css(['styles']) ?>
 
     <?= $this->fetch('meta') ?>
@@ -35,8 +39,8 @@
 <?= $this->element('navigation') ?>
 
 <main>
-
-    <?= $this->fetch('content') ?>
+    <?= $this->Flash->render() ?>
+    <?= $this->fetch('content') // This is where home.php, view.php, etc. are injected ?>
 </main>
 
 <footer class="footer bg-black small text-center text-white-50">
@@ -44,8 +48,9 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
 <?= $this->Html->script('scripts') ?>
 
-<?= $this->fetch('scripts') ?>
+<?= $this->fetch('script') ?>
 </body>
 </html>

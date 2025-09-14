@@ -5,32 +5,7 @@
 $this->setLayout('frontend');
 $this->assign('title', 'Home');
 ?>
-<!DOCTYPE html>
 
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>BrewHub</title>
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-    <!-- Font Awesome icons (free version)-->
-    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-
-    <!-- Google fonts-->
-    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
-
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-    <!-- Core theme custom CSS (Grayscale overrides + site styles) -->
-    <link href="css/styles.css" rel="stylesheet" />
-
-</head>
-<body id="page-top">
-<!-- Masthead-->
 <header class="masthead">
     <div class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center">
         <div class="d-flex justify-content-center">
@@ -56,7 +31,6 @@ $this->assign('title', 'Home');
             </div>
         </div>
         <img class="img-fluid rounded-4 glassy-image-border" src="assets/img/coffee-bg2.png" alt="..." />
-
     </div>
     <a class="btn btn-secondary mb-5" href="<?= $this->Url->Build(['controller' => 'shop', 'action' => 'view/30']) ?>"> Buy Now </a>
 </section>
@@ -67,8 +41,6 @@ $this->assign('title', 'Home');
         <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
             <div class="col-xl-6"><img class="img-fluid" src="assets/img/coffee-bg3.png" alt="..." style="width:650px; Height:600px" /></div>
             <div class="col-xl-6 order-lg-first">
-
-
                 <div class="bg-black text-center h-100 project">
                     <div class="d-flex h-100">
                         <div class="project-text w-100 my-auto text-center text-lg-right">
@@ -80,14 +52,10 @@ $this->assign('title', 'Home');
             </div>
         </div>
 
-
-
         <!-- Project One Row-->
         <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
             <div class="col-lg-6"><img class="img-fluid" src="assets/img/coffee-bg4.jpg" alt="..." /></div>
             <div class="col-lg-6">
-
-
                 <div class="bg-black text-center h-100 project">
                     <div class="d-flex h-100">
                         <div class="project-text w-100 my-auto text-center text-lg-left">
@@ -116,14 +84,3 @@ $this->assign('title', 'Home');
         </div>
     </div>
 </section>
-<!-- Bootstrap core JS-->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Core theme JS-->
-<script src="js/scripts.js"></script>
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-<!-- * *                               SB Forms JS                               * *-->
-<!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-<script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
-</body>
-</html>
