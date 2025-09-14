@@ -51,7 +51,6 @@ class CartsTable extends Table
         ]);
         $this->belongsTo('Addresses', [
             'foreignKey' => 'address_id',
-            'joinType' => 'INNER',
         ]);
         $this->hasMany('CartItems', [
             'foreignKey' => 'cart_id',
@@ -72,7 +71,7 @@ class CartsTable extends Table
 
         $validator
             ->integer('address_id')
-            ->notEmptyString('address_id');
+            ->allowEmptyString('address_id');
 
         $validator
             ->scalar('status')

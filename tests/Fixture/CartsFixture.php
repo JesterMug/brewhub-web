@@ -23,8 +23,8 @@ class CartsFixture extends TestFixture
                 'user_id' => 1,
                 'address_id' => 1,
                 'status' => 'Lorem ipsum dolor sit amet',
-                'date_created' => '2025-09-04 13:34:48',
-                'date_modified' => '2025-09-04 13:34:48',
+                'date_created' => '2025-09-14 09:44:02',
+                'date_modified' => '2025-09-14 09:44:02',
             ],
         ];
         parent::init();
