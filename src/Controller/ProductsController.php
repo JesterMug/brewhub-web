@@ -174,7 +174,7 @@ class ProductsController extends AppController
     }
 
     /**
-     * Process an uploaded image: center-crop to square and save as JPEG.
+     * Process an uploaded image: center-crop to a 1:1 square and save as JPEG.
      * Returns the saved filename (basename) on success, or null on failure.
      */
     private function processUploadedImage(UploadedFileInterface $file): ?string
@@ -210,12 +210,13 @@ class ProductsController extends AppController
                 return null;
             }
 
+            //Cropping Logic
             $size = min($w, $h);
             $srcX = (int)floor(($w - $size) / 2);
             $srcY = (int)floor(($h - $size) / 2);
 
             $dst = imagecreatetruecolor($size, $size);
-            // Fill background white to avoid black for PNGs with transparency when saving as JPEG
+
             $white = imagecolorallocate($dst, 255, 255, 255);
             imagefill($dst, 0, 0, $white);
 
@@ -227,15 +228,15 @@ class ProductsController extends AppController
                 @mkdir($dir, 0775, true);
             }
 
-            // Save as JPEG with good quality
+            // Save the newly cropped square image as a JPEG with 90% quality.
             imagejpeg($dst, $dir . $uniqueName, 90);
 
+            // Clean up memory by destroying the image resources.
             imagedestroy($dst);
             imagedestroy($src);
 
             return $uniqueName;
         } catch (\Throwable $e) {
-            // Swallow processing errors and signal failure
             return null;
         }
     }
@@ -251,7 +252,7 @@ class ProductsController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
 
-        // Load product with associated images so we can delete files from disk
+        // Load product with associated images to delete files from disk
         $product = $this->Products->get($id, contain: ['ProductImages']);
 
         // Attempt to remove image files from webroot/img/products
@@ -279,7 +280,7 @@ class ProductsController extends AppController
         if (!$basename) {
             return;
         }
-        // Ensure we only work with a basename (no directories)
+        // Ensure it only work with a basename (no directories)
         $basename = basename($basename);
         $dir = WWW_ROOT . 'img' . DIRECTORY_SEPARATOR . 'products' . DIRECTORY_SEPARATOR;
         $path = $dir . $basename;
