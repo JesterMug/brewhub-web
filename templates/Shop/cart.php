@@ -113,11 +113,25 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="text-sm-end mt-2 mt-sm-0">
-                        <a href="#" class="btn btn-success">
+                        <a href="#" id="checkoutBtn" class="btn btn-success">
                             <i class="mdi mdi-cart-outline me-1"></i> Checkout </a>
                     </div>
                 </div>
             </div>
+            <div id="checkoutMessage" class="alert bg-dark text-white mt-3" style="display:none;">
+                <h2>Online checkout coming soon!</h2>
+                <p>Until then, please call us directly on 0404 040 404 to place your order:</p>
+                <a href="tel:+61404040404" class="btn btn-primary">
+                    Call Us
+                </a>
+                <p class="mt-3">Mon–Fri: 9am–6pm <br>1 Example Road, Melbourne, 3000</p>
+            </div>
+            <script>
+                document.getElementById("checkoutBtn").addEventListener("click", function(event) {
+                    event.preventDefault(); // stop the default link action
+                    document.getElementById("checkoutMessage").style.display = "block";
+                });
+            </script>
         </div>
 
 
