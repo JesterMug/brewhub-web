@@ -171,7 +171,7 @@ class ShopController extends AppController
             $session->write('GuestCart', $guestCart);
         }
 
-        $this->Flash->success('Item added to your shopping list.');
+        $this->Flash->success('Item added to your cart.');
         return $this->redirect(['action' => 'cart']);
     }
 

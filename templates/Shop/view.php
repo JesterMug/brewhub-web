@@ -77,7 +77,7 @@
                     <input type="hidden" name="product_variant_id" id="hiddenVariantId" value="<?= h($firstVariantId) ?>" />
                     <button class="btn btn-outline-dark flex-shrink-0" type="submit">
                         <i class="bi-cart-fill me-1"></i>
-                        Add to Shopping List
+                        Add to Cart
                     </button>
                 <?= $this->Form->end() ?>
             </div>
