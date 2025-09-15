@@ -81,12 +81,13 @@ class UsersController extends AppController
                 $this->Authentication->setIdentity($user);
                 return $this->redirect('/');
             }
-            foreach ($user->getErrors() as $field => $messages) {
-                foreach ($messages as $msg) {
-                    $this->Flash->error(__(ucfirst($field) . ': ' . $msg));
-                }
+            if ($this->Users->save($user)) {
+                $this->Authentication->setIdentity($user);
+                return $this->redirect('/');
             }
-            $this->Flash->error(__('The user could not be registered. Please, try again.'));
+
+            $this->Flash->error(__('The user could not be registered. Please correct the errors below.'));
+
         }
         $this->set(compact('user'));
     }

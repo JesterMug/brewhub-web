@@ -68,19 +68,22 @@ class UsersTable extends Table
             ->scalar('first_name')
             ->maxLength('first_name', 63)
             ->requirePresence('first_name', 'create')
+            ->regex('first_name', "/^[\p{L}\s'\-]+$/u", "Only letters, spaces, hyphens, and apostrophes allowed")
             ->notEmptyString('first_name');
 
         $validator
             ->scalar('last_name')
             ->maxLength('last_name', 63)
             ->requirePresence('last_name', 'create')
+            ->regex('last_name', "/^[\p{L}\s'\-]+$/u", "Only letters, spaces, hyphens, and apostrophes allowed")
             ->notEmptyString('last_name');
 
         $validator
             ->email('email')
             ->requirePresence('email', 'create')
             ->notEmptyString('email')
-            ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+            ->maxLength('email', 254)
+            ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table', 'message' => 'Email already exists.']);
 
         $validator
             ->scalar('password')
