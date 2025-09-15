@@ -140,12 +140,16 @@ input[type="button"].btn-block {
     padding-left: calc(var(--bs-gutter-x) * .5);
     margin-right: auto;
     margin-left: auto;
+
+    justify-content: center;
+
+
 }
 
 .glassy-image-border {
     border: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 0 0 25px rgba(255, 255, 255, 0.07), 0 8px 30px rgba(0, 0, 0, 0.4);
-    opacity: 0.7; width: 600px; height: 600px; margin-bottom: 50px
+    opacity: 0.7; margin-bottom: 50px;
 }
 
 @media (min-width: 768px) { .container { max-width: 720px; } }
@@ -183,6 +187,7 @@ input[type="button"].btn-block {
     .col-lg-6 { flex: 0 0 auto; width: 50%; }
     .col-lg-8 { flex: 0 0 auto; width: 66.666667%; }
     .order-lg-first { order: -1 !important; }
+
 }
 @media (min-width: 1200px) {
     .row-cols-xl-4 > * { flex: 0 0 auto; width: 25%; }
@@ -307,7 +312,14 @@ input[type="button"].btn-block {
     transition: transform .3s ease, box-shadow .3s ease;
 }
 .card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-.card-body { flex: 1 1 auto; padding: 1.5rem; }
+.card-body { flex: 1 1 auto; padding: 1.5rem;
+
+}
+
+
+
+
+
 .card-img-top { width: 100%; border-top-left-radius: 1rem; border-top-right-radius: 1rem; }
 .card-footer { padding: 1rem 1.5rem; background-color: transparent; border-top: 1px solid var(--border-dark); }
 
@@ -469,7 +481,7 @@ input[type="button"].btn-block {
     background-attachment: scroll;
     background-size: cover;
 }
-.masthead h1 { font-family: "Varela Round", sans-serif; font-size: 2rem; line-height: 1rem; letter-spacing: .5rem; background: linear-gradient(rgba(255,255,255,.9),rgba(255,255,255,.9)); -webkit-text-fill-color: transparent; background-clip: text; -webkit-background-clip: text; }
+.masthead h1 { font-family: "Varela Round", sans-serif; font-size: 2rem; line-height: 1.2; letter-spacing: .4rem; background: linear-gradient(rgba(255,255,255,.9),rgba(255,255,255,.9)); -webkit-text-fill-color: transparent; background-clip: text; -webkit-background-clip: text;}
 .masthead h2 { max-width: 20rem; font-size: 1rem; }
 @media (min-width: 992px) {
     .masthead { height: 100vh; padding: 0; }
