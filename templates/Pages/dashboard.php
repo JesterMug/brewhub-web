@@ -17,19 +17,21 @@ $this->assign('title', 'Admin Dashboard');
 <div class="row">
 
     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">New Messages</div>
-                        <div class="h5 mb-0 font-weight-bold"><?= (int)$newMessagesCount ?></div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-envelope fa-2x text-gray-300" style="color: var(--text-secondary-dark) !important;"></i>
+        <a href="<?= $this->Url->build(['controller' => 'forms', 'action' => 'index']) ?>" class="text-decoration-none">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">New Enquiries</div>
+                            <div class="h5 mb-0 font-weight-bold"><?= (int)$newMessagesCount ?></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-comment fa-2x text-gray-300" style="color: var(--text-secondary-dark) !important;"></i>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </a>
     </div>
 
     <div class="col-xl-3 col-md-6 mb-4">
@@ -49,34 +51,38 @@ $this->assign('title', 'Admin Dashboard');
     </div>
 
     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-info shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Products</div>
-                        <div class="h5 mb-0 font-weight-bold"><?= (int)$productsCount ?></div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-coffee fa-2x text-gray-300" style="color: var(--text-secondary-dark) !important;"></i>
+        <a href="<?= $this->Url->build(['controller' => 'products', 'action' => 'index']) ?>" class="text-decoration-none">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Products</div>
+                            <div class="h5 mb-0 font-weight-bold"><?= (int)$productsCount ?></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-box-open fa-2x text-gray-300" style="color: var(--text-secondary-dark) !important;"></i>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </a>
     </div>
 
     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-warning shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Users</div>
-                        <div class="h5 mb-0 font-weight-bold"><?= (int)$usersCount ?></div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-users fa-2x text-gray-300" style="color: var(--text-secondary-dark) !important;"></i>
+        <a href="<?= $this->Url->build(['controller' => 'users', 'action' => 'index']) ?>" class="text-decoration-none">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Users</div>
+                            <div class="h5 mb-0 font-weight-bold"><?= (int)$usersCount ?></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-users fa-2x text-gray-300" style="color: var(--text-secondary-dark) !important;"></i>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </a>
     </div>
 </div>

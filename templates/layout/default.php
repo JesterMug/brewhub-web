@@ -72,7 +72,7 @@ $user = $this->request->getAttribute('identity');
 
         <li class="nav-item">
             <a class="nav-link" href="<?= $this->Url->build(['controller' => 'users', 'action' => 'index']) ?>">
-                <i class="fas fa-fw fa-user"></i>
+                <i class="fas fa-fw fa-users"></i>
                 <span>Users</span>
             </a>
         </li>
@@ -80,14 +80,14 @@ $user = $this->request->getAttribute('identity');
 
         <li class="nav-item">
             <a class="nav-link" href="<?= $this->Url->build(['controller' => 'forms', 'action' => 'index']) ?>">
-                <i class="fas fa-fw fa-user"></i>
+                <i class="fas fa-fw fa-comment"></i>
                 <span>Enquiries</span>
             </a>
         </li>
 
         <li class="nav-item">
             <a class="nav-link" href="<?= $this->Url->build(['controller' => 'products', 'action' => 'index']) ?>">
-                <i class="fas fa-fw fa-user"></i>
+                <i class="fas fa-fw fa-box-open"></i>
                 <span>Products</span>
             </a>
         </li>
