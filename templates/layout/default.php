@@ -88,12 +88,12 @@ $user = $this->request->getAttribute('identity');
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseForms"
                aria-expanded="true" aria-controls="collapseTwo">
                 <i class="fas fa-fw fa-user"></i>
-                <span>Contact Forms</span>
+                <span>Enquiries</span>
             </a>
             <div id="collapseForms" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Contact Form Functions:</h6>
-                    <a class="collapse-item" href="<?= $this->Url->build(['controller' => 'forms', 'action' => 'index']) ?>">List all contact forms</a>
+                    <h6 class="collapse-header">Enquiry Functions:</h6>
+                    <a class="collapse-item" href="<?= $this->Url->build(['controller' => 'forms', 'action' => 'index']) ?>">List all enquiries</a>
                 </div>
             </div>
         </li>
