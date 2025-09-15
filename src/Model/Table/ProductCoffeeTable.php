@@ -63,7 +63,8 @@ class ProductCoffeeTable extends Table
 
         $validator
             ->scalar('roast_level')
-            ->maxLength('roast_level', 50)
+            ->greaterThanOrEqual('roast_level', 1, 'Roast level must be between 1 and 9')
+            ->lessThanOrEqual('roast_level', 9, 'Roast level must be between 1 and 9')
             ->requirePresence('roast_level', 'create')
             ->notEmptyString('roast_level');
 
@@ -73,21 +74,27 @@ class ProductCoffeeTable extends Table
             ->requirePresence('brew_type', 'create')
             ->notEmptyString('brew_type');
 
+        $validBeans = ['Arabica', 'Robusta', 'Liberica', 'Excelsa'];
+
         $validator
             ->scalar('bean_type')
-            ->maxLength('bean_type', 50)
             ->requirePresence('bean_type', 'create')
+            ->inList('bean_type', $validBeans, 'Please select a valid bean type')
             ->notEmptyString('bean_type');
+
+        $validProcess = ['Washed', 'Natural', 'Honey'];
 
         $validator
             ->scalar('processing_method')
-            ->maxLength('processing_method', 50)
+            ->inList('processing_method', $validProcess, 'Please select a valid processing method')
             ->requirePresence('processing_method', 'create')
             ->notEmptyString('processing_method');
 
+        $validCaffeine = ['Low', 'Medium', 'High', 'Decaf'];
+
         $validator
             ->scalar('caffeine_level')
-            ->maxLength('caffeine_level', 50)
+            ->inList('caffeine_level', $validCaffeine, 'Please select a valid caffeine level')
             ->requirePresence('caffeine_level', 'create')
             ->notEmptyString('caffeine_level');
 
@@ -97,11 +104,14 @@ class ProductCoffeeTable extends Table
             ->requirePresence('origin_country', 'create')
             ->notEmptyString('origin_country');
 
+        $validCertification = ['Fair Trade', 'Rainforest Alliance', 'UTZ', 'Specialty Coffee Association', 'Organic', 'Shade-grown', 'Bird-Friendly', 'Direct Trade'];
+
         $validator
             ->scalar('certifications')
             ->maxLength('certifications', 255)
+            ->inList('certifications', $validCertification, 'Please select a valid certification')
             ->requirePresence('certifications', 'create')
-            ->notEmptyString('certifications');
+            ->allowEmptyString('certifications');
 
         return $validator;
     }

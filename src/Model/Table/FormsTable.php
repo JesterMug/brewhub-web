@@ -54,22 +54,32 @@ class FormsTable extends Table
             ->scalar('first_name')
             ->maxLength('first_name', 63)
             ->requirePresence('first_name', 'create')
+            ->regex('first_name', "/^[\p{L}\s'\-]+$/u", "Only letters, spaces, hyphens, and apostrophes allowed")
             ->notEmptyString('first_name');
 
         $validator
             ->scalar('last_name')
             ->maxLength('last_name', 63)
             ->requirePresence('last_name', 'create')
+            ->regex('last_name', "/^[\p{L}\s'\-]+$/u", "Only letters, spaces, hyphens, and apostrophes allowed")
             ->notEmptyString('last_name');
 
         $validator
             ->email('email')
             ->requirePresence('email', 'create')
+            ->maxLength('email', 254)
             ->notEmptyString('email');
 
         $validator
             ->scalar('message')
             ->requirePresence('message', 'create')
+            ->maxLength('message', 500)
+            ->add('message', 'noHtml', [
+                'rule' => function ($value) {
+                    return strip_tags($value) === $value;
+                },
+                'message' => 'HTML is not allowed'
+            ])
             ->notEmptyString('message');
 
         $validator
