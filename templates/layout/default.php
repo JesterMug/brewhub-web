@@ -69,48 +69,66 @@ $user = $this->request->getAttribute('identity');
         </div>
 
         <!-- Nav Item - Pages Collapse Menu -->
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"-->
+<!--               aria-expanded="true" aria-controls="collapseTwo">-->
+<!--                <i class="fas fa-fw fa-user"></i>-->
+<!--                <span>Users</span>-->
+<!--            </a>-->
+<!--            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">-->
+<!--                <div class="bg-white py-2 collapse-inner rounded">-->
+<!--                    <h6 class="collapse-header">User Functions:</h6>-->
+<!--                    <a class="collapse-item" href="--><?php //= $this->Url->build(['controller' => 'users', 'action' => 'index']) ?><!--">List all users</a>-->
+<!--                    <a class="collapse-item" href="--><?php //= $this->Url->build(['controller' => 'users', 'action' => 'add']) ?><!--">Add new user</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </li>-->
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-               aria-expanded="true" aria-controls="collapseTwo">
+            <a class="nav-link" href="<?= $this->Url->build(['controller' => 'users', 'action' => 'index']) ?>">
                 <i class="fas fa-fw fa-user"></i>
                 <span>Users</span>
             </a>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">User Functions:</h6>
-                    <a class="collapse-item" href="<?= $this->Url->build(['controller' => 'users', 'action' => 'index']) ?>">List all users</a>
-                    <a class="collapse-item" href="<?= $this->Url->build(['controller' => 'users', 'action' => 'add']) ?>">Add new user</a>
-                </div>
-            </div>
         </li>
 
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseForms"-->
+<!--               aria-expanded="true" aria-controls="collapseTwo">-->
+<!--                <i class="fas fa-fw fa-user"></i>-->
+<!--                <span>Enquiries</span>-->
+<!--            </a>-->
+<!--            <div id="collapseForms" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">-->
+<!--                <div class="bg-white py-2 collapse-inner rounded">-->
+<!--                    <h6 class="collapse-header">Enquiry Functions:</h6>-->
+<!--                    <a class="collapse-item" href="--><?php //= $this->Url->build(['controller' => 'forms', 'action' => 'index']) ?><!--">List all enquiries</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </li>-->
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseForms"
-               aria-expanded="true" aria-controls="collapseTwo">
+            <a class="nav-link" href="<?= $this->Url->build(['controller' => 'forms', 'action' => 'index']) ?>">
                 <i class="fas fa-fw fa-user"></i>
                 <span>Enquiries</span>
             </a>
-            <div id="collapseForms" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Enquiry Functions:</h6>
-                    <a class="collapse-item" href="<?= $this->Url->build(['controller' => 'forms', 'action' => 'index']) ?>">List all enquiries</a>
-                </div>
-            </div>
         </li>
-
+<!--        -->
+<!--        <li class="nav-item">-->
+<!--            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProducts"-->
+<!--               aria-expanded="true" aria-controls="collapseTwo">-->
+<!--                <i class="fas fa-fw fa-user"></i>-->
+<!--                <span>Products</span>-->
+<!--            </a>-->
+<!--            <div id="collapseProducts" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">-->
+<!--                <div class="bg-white py-2 collapse-inner rounded">-->
+<!--                    <h6 class="collapse-header">Product Functions:</h6>-->
+<!--                    <a class="collapse-item" href="--><?php //= $this->Url->build(['controller' => 'products', 'action' => 'index']) ?><!--">List all products</a>-->
+<!--                    <a class="collapse-item" href="--><?php //= $this->Url->build(['controller' => 'products', 'action' => 'add']) ?><!--">Add new product</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </li>-->
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProducts"
-               aria-expanded="true" aria-controls="collapseTwo">
+            <a class="nav-link" href="<?= $this->Url->build(['controller' => 'products', 'action' => 'index']) ?>">
                 <i class="fas fa-fw fa-user"></i>
                 <span>Products</span>
             </a>
-            <div id="collapseProducts" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Product Functions:</h6>
-                    <a class="collapse-item" href="<?= $this->Url->build(['controller' => 'products', 'action' => 'index']) ?>">List all products</a>
-                    <a class="collapse-item" href="<?= $this->Url->build(['controller' => 'products', 'action' => 'add']) ?>">Add new product</a>
-                </div>
-            </div>
         </li>
 
         <!-- Divider -->
