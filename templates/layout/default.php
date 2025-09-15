@@ -43,12 +43,12 @@ $user = $this->request->getAttribute('identity');
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?= $this->Url->build('') ?>">
+        <div class="sidebar-brand d-flex align-items-center justify-content-center" href="<?= $this->Url->build('') ?>">
             <div class="sidebar-brand-icon">
                 <i class="fas fa-mug-hot"></i>
             </div>
             <div class="sidebar-brand-text mx-3">Admin</div>
-        </a>
+        </div>
 
         <!-- Divider -->
         <hr class="sidebar-divider my-0">
@@ -69,48 +69,27 @@ $user = $this->request->getAttribute('identity');
         </div>
 
         <!-- Nav Item - Pages Collapse Menu -->
+
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-               aria-expanded="true" aria-controls="collapseTwo">
-                <i class="fas fa-fw fa-user"></i>
+            <a class="nav-link" href="<?= $this->Url->build(['controller' => 'users', 'action' => 'index']) ?>">
+                <i class="fas fa-fw fa-users"></i>
                 <span>Users</span>
             </a>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">User Functions:</h6>
-                    <a class="collapse-item" href="<?= $this->Url->build(['controller' => 'users', 'action' => 'index']) ?>">List all users</a>
-                    <a class="collapse-item" href="<?= $this->Url->build(['controller' => 'users', 'action' => 'add']) ?>">Add new user</a>
-                </div>
-            </div>
         </li>
 
+
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseForms"
-               aria-expanded="true" aria-controls="collapseTwo">
-                <i class="fas fa-fw fa-user"></i>
-                <span>Contact Forms</span>
+            <a class="nav-link" href="<?= $this->Url->build(['controller' => 'forms', 'action' => 'index']) ?>">
+                <i class="fas fa-fw fa-comment"></i>
+                <span>Enquiries</span>
             </a>
-            <div id="collapseForms" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Contact Form Functions:</h6>
-                    <a class="collapse-item" href="<?= $this->Url->build(['controller' => 'forms', 'action' => 'index']) ?>">List all contact forms</a>
-                </div>
-            </div>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProducts"
-               aria-expanded="true" aria-controls="collapseTwo">
-                <i class="fas fa-fw fa-user"></i>
+            <a class="nav-link" href="<?= $this->Url->build(['controller' => 'products', 'action' => 'index']) ?>">
+                <i class="fas fa-fw fa-box-open"></i>
                 <span>Products</span>
             </a>
-            <div id="collapseProducts" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Product Functions:</h6>
-                    <a class="collapse-item" href="<?= $this->Url->build(['controller' => 'products', 'action' => 'index']) ?>">List all products</a>
-                    <a class="collapse-item" href="<?= $this->Url->build(['controller' => 'products', 'action' => 'add']) ?>">Add new product</a>
-                </div>
-            </div>
         </li>
 
         <!-- Divider -->
