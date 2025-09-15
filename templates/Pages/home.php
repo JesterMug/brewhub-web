@@ -39,12 +39,12 @@ $this->assign('title', 'Home');
     <div class="container px-4 px-lg-5">
         <!-- Featured Project Row-->
         <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
-            <div class="col-xl-6"><img class="img-fluid" src="assets/img/coffee-bg3.png" alt="..." style="width:650px; Height:600px" /></div>
+            <div class="col-xl-6"><img class="img-fluid" src="assets/img/coffee-bg6.jpg" alt="..." /></div>
             <div class="col-xl-6 order-lg-first">
                 <div class="bg-black text-center h-100 project">
                     <div class="d-flex h-100">
                         <div class="project-text w-100 my-auto text-center text-lg-right">
-                            <h4 class="text-white">Premium Blend </h4>
+                            <h4 class="text-white">Premium Blends </h4>
                             <p class="mb-0 text-white-50">Browse from our collection of premium hand-crafted beans, speciality blends and many more</p>
                         </div>
                     </div>
@@ -73,9 +73,9 @@ $this->assign('title', 'Home');
                 <div class="bg-black text-center h-100 project">
                     <div class="d-flex h-100">
                         <div class="project-text w-100 my-auto text-center text-lg-right">
-                            <h4 class="text-white">Subscription service</h4>
-                            <p class="mb-0 text-white-50">Experience regular uncompromised delivery using our subscription based delivery service
-                                which can deliver at intervals of your choosing so you never have to wait (Only available for local Melbourne based customers)
+                            <h4 class="text-white">Reliable Delivery</h4>
+                            <p class="mb-0 text-white-50">Experience same day delivery for local customers or simply
+                                use our worldwide delivery service powered by StarTrack.
                             </p>
                         </div>
                     </div>
