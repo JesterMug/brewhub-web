@@ -10,7 +10,7 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property int $user_id
- * @property int $address_id
+ * @property int|null $address_id
  * @property string $status
  * @property \Cake\I18n\DateTime $date_created
  * @property \Cake\I18n\DateTime $date_modified

@@ -20,7 +20,7 @@ window.addEventListener('DOMContentLoaded', event => {
         const masthead = document.body.querySelector('.masthead');
 
         // This keeps the navbar solid on all content pages, but transparent on the homepage's top.
-        if (window.scrollY > 0 || !masthead) {
+        if (window.scrollY > 0 /*|| !masthead*/) {
             navbarCollapsible.classList.add('navbar-shrink');
         } else {
             navbarCollapsible.classList.remove('navbar-shrink');
