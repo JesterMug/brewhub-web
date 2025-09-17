@@ -9,6 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <title>BrewHub</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
 <div class="container">
@@ -60,7 +61,9 @@
                             'placeholder' => 'Type your message here...'
                         ]) ?>
                     </div>
-
+                    <div class="form-group">
+                        <div class="g-recaptcha" data-sitekey="6LeMd8wrAAAAAMJUYNsJZX7Ka3IQ9920tDY92F_7"></div>
+                    </div>
                     <div class="text-right">
                         <?= $this->Form->button(__('Submit'), ['class' => 'btn btn-primary']) ?>
                     </div>
