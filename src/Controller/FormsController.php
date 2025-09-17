@@ -53,17 +53,32 @@ class FormsController extends AppController
     public function add()
     {
         $form = $this->Forms->newEmptyEntity();
+
         if ($this->request->is('post')) {
-            $form = $this->Forms->patchEntity($form, $this->request->getData());
-            if ($this->Forms->save($form)) {
-                $this->Flash->success(__('Thank you for your message. We will get back to you shortly.'));
-                return $this->redirect(['controller' => 'Pages', 'action' => 'display', 'home']);
+            $data = $this->request->getData();
+
+            $recaptcha = $this->request->getData('g-recaptcha-response');
+            $secretKey = '6LeMd8wrAAAAALLcsGv7eo-4fSQRaNzF1tBAoybc';
+
+            $url = 'https://www.google.com/recaptcha/api/siteverify';
+            $response = file_get_contents($url . '?secret=' . $secretKey . '&response=' . $recaptcha);
+            $responseKeys = json_decode($response, true);
+
+            if (isset($responseKeys['success']) && $responseKeys['success'] == true) {
+                $form = $this->Forms->patchEntity($form, $data);
+                if ($this->Forms->save($form)) {
+                    $this->Flash->success(__('Thank you for your message. We will get back to you shortly.'));
+                    return $this->redirect(['controller' => 'Pages', 'action' => 'display', 'home']);
+                }
+                $this->Flash->error(__('Your message could not be sent. Please, try again.'));
+            } else {
+                $this->Flash->error(__('Captcha verification failed. Please try again.'));
             }
-            $this->Flash->error(__('Your message could not be sent. Please, try again.'));
         }
         $this->set(compact('form'));
         $this->viewBuilder()->setLayout('frontend');
     }
+
 
     /**
      * Edit method
