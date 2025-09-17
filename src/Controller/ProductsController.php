@@ -12,6 +12,13 @@ use Psr\Http\Message\UploadedFileInterface;
  */
 class ProductsController extends AppController
 {
+
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->checkAdminAuth();
+    }
+
     /**
      * Index method
      *

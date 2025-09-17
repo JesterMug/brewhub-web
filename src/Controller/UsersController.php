@@ -13,7 +13,7 @@ class UsersController extends AppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->Authentication->allowUnauthenticated(['login','register']);
+        $this->checkAdminAuth();
     }
 
     public function index()
@@ -31,6 +31,7 @@ class UsersController extends AppController
 
     public function add()
     {
+        $this->checkSuperuserAuth();
         $user = $this->Users->newEmptyEntity();
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
@@ -59,6 +60,7 @@ class UsersController extends AppController
 
     public function delete($id = null)
     {
+        $this->checkSuperuserAuth();
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);
         if ($this->Users->delete($user)) {
@@ -67,29 +69,6 @@ class UsersController extends AppController
             $this->Flash->error(__('The user could not be deleted. Please, try again.'));
         }
         return $this->redirect(['action' => 'index']);
-    }
-
-    public function register()
-    {
-        $user = $this->Users->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            if (empty($user->user_type)) {
-                $user->user_type = 'customer';
-            }
-            if ($this->Users->save($user)) {
-                $this->Authentication->setIdentity($user);
-                return $this->redirect('/');
-            }
-            if ($this->Users->save($user)) {
-                $this->Authentication->setIdentity($user);
-                return $this->redirect('/');
-            }
-
-            $this->Flash->error(__('The user could not be registered. Please correct the errors below.'));
-
-        }
-        $this->set(compact('user'));
     }
 
 

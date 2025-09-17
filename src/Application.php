@@ -120,7 +120,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
     {
         $authenticationService = new AuthenticationService([
             'unauthenticatedRedirect' => Router::url([
-                'controller' => 'Users',
+                'controller' => 'Auth',
                 'action' => 'login',
                 'plugin' => null,
                 'prefix' => null,
@@ -148,7 +148,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                 'password' => 'password',
             ],
             'loginUrl' => Router::url([
-                'controller' => 'Users',
+                'controller' => 'Auth',
                 'action' => 'login',
                 'plugin' => null,
                 'prefix' => null,
