@@ -89,6 +89,7 @@ class ProductVariantsTable extends Table
             ->decimal('price')
             ->requirePresence('price', 'create')
             ->greaterThanOrEqual('price', 0, 'Price must be zero or higher')
+            ->lessThanOrEqual('price', 9999.99, 'Price cannot exceed 9999.99')
             ->notEmptyString('price');
 
         $validator
