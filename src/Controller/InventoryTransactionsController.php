@@ -22,6 +22,7 @@ class InventoryTransactionsController extends AppController
         $inventoryTransactions = $this->paginate($query);
 
         $this->set(compact('inventoryTransactions'));
+        $this->checkAdminAuth();
     }
 
     /**

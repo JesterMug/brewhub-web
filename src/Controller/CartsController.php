@@ -17,6 +17,7 @@ class CartsController extends AppController
      */
     public function index()
     {
+        $this->checkAdminAuth();
         $query = $this->Carts->find()
             ->contain(['Users', 'Addresses']);
         $carts = $this->paginate($query);
