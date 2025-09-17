@@ -73,16 +73,29 @@ class ProductsTable extends Table
             ->minLength('name', 5)
             ->maxLength('name', 255)
             ->requirePresence('name', 'create')
+            ->add('name', 'validName', [
+                'rule' => ['custom', "/^[\p{L}\p{N}\s\-'\.,]+$/u"],
+                'message' => "Only letters, numbers, spaces, hyphens (-), apostrophes ('), periods (.), and commas (,) are allowed."
+            ])
             ->notEmptyString('name');
 
         $validator
             ->scalar('category')
             ->maxLength('category', 50)
             ->requirePresence('category', 'create')
+            ->add('category', 'validCat', [
+                'rule' => ['custom', "/^[\p{L}\p{N}\s\-'\.,]+$/u"],
+                'message' => "Only letters, numbers, spaces, hyphens (-), apostrophes ('), periods (.), and commas (,) are allowed."
+            ])
             ->notEmptyString('category');
 
         $validator
             ->scalar('description')
+            ->maxlength('description', 500)
+            ->add('description', 'validDesc', [
+                'rule' => ['custom', "/^[\p{L}\p{N}\s\-'\.,]+$/u"],
+                'message' => "Only letters, numbers, spaces, hyphens (-), apostrophes ('), periods (.), and commas (,) are allowed."
+            ])
             ->allowEmptyString('description');
 
         $validator

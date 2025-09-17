@@ -49,6 +49,14 @@ class ProductsController extends AppController
 
         if ($this->request->is('post')) {
             $data = $this->request->getData();
+            // Merge size_value + size_unit into size string for variants
+            if (!empty($data['product_variants']) && is_array($data['product_variants'])) {
+                foreach ($data['product_variants'] as &$variant) {
+                    if (!empty($variant['size_value']) && !empty($variant['size_unit'])) {
+                        $variant['size'] = $variant['size_value'] . $variant['size_unit'];
+                    }
+                }
+            }
 
             // Extract uploaded files
             $uploadedFiles = $this->request->getData('product_images_files');
@@ -120,6 +128,15 @@ class ProductsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
 
+            // Merge size_value + size_unit into size string for variants
+            if (!empty($data['product_variants']) && is_array($data['product_variants'])) {
+                foreach ($data['product_variants'] as &$variant) {
+                    if (!empty($variant['size_value']) && !empty($variant['size_unit'])) {
+                        $variant['size'] = $variant['size_value'] . $variant['size_unit'];
+                    }
+                }
+            }
+
             // Extract uploaded files (additional images)
             $uploadedFiles = $this->request->getData('product_images_files');
             unset($data['product_images_files']);
@@ -148,6 +165,16 @@ class ProductsController extends AppController
             $product = $this->Products->patchEntity($product, $data, [
                 'associated' => $associated,
             ]);
+
+            // Split existing size into value + unit for the form
+            foreach ($product->product_variants as $variant) {
+                if (!empty($variant->size)) {
+                    if (preg_match('/^([\d\.]+)\s*(\w+)$/', $variant->size, $matches)) {
+                        $variant->size_value = $matches[1];
+                        $variant->size_unit = $matches[2];
+                    }
+                }
+            }
 
             if ($this->Products->save($product)) {
                 // Handle image uploads (crop to square and convert to JPEG)

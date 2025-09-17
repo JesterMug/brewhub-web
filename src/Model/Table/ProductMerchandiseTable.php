@@ -63,6 +63,7 @@ class ProductMerchandiseTable extends Table
 
         $validator
             ->scalar('material')
+            ->regex('last_name', "/^[\p{L}\s'\-]+$/u", "Only letters, spaces, hyphens, and apostrophes allowed")
             ->maxLength('material', 100)
             ->allowEmptyString('material');
 

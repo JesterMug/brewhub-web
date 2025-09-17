@@ -74,18 +74,26 @@ class ProductVariantsTable extends Table
             ->notEmptyString('product_id');
 
         $validator
-            ->scalar('size')
-            ->maxLength('size', 16)
-            ->requirePresence('size', 'create')
-            ->notEmptyString('size');
+            ->decimal('size_value')
+            ->greaterThan('size_value', 0, 'Size must be greater than zero')
+            ->requirePresence('size_value', 'create')
+            ->notEmptyString('size_value');
+
+        $validator
+            ->scalar('size_unit')
+            ->inList('size_unit', ['g', 'kg', 'oz', 'ml'], 'Please select a valid unit')
+            ->requirePresence('size_unit', 'create')
+            ->notEmptyString('size_unit');
 
         $validator
             ->decimal('price')
             ->requirePresence('price', 'create')
+            ->greaterThanOrEqual('price', 0, 'Price must be zero or higher')
             ->notEmptyString('price');
 
         $validator
             ->integer('stock')
+            ->greaterThanOrEqual('stock', 0, 'Stock must be zero or higher')
             ->requirePresence('stock', 'create')
             ->notEmptyString('stock');
 
@@ -99,9 +107,13 @@ class ProductVariantsTable extends Table
 
         $validator
             ->scalar('sku')
-            ->maxLength('sku', 100)
+            ->maxLength('sku', 50)
             ->requirePresence('sku', 'create')
-            ->notEmptyString('sku');
+            ->notEmptyString('sku')
+            ->add('sku', 'validSKU', [
+                'rule' => ['custom', "/^[A-Za-z0-9\-_]+$/"],
+                'message' => "SKU may only contain letters, numbers, hyphens, and underscores."
+            ]);
 
         return $validator;
     }
