@@ -36,12 +36,12 @@ $user = $this->request->getAttribute('identity');
                                 <li><a class="dropdown-item" href="<?= $this->Url->build(['controller' => 'Pages', 'action' => 'dashboard']) ?>">Admin Dashboard</a></li>
                                 <li><hr class="dropdown-divider"></li>
                             <?php endif; ?>
-                            <li><a class="dropdown-item" href="<?= $this->Url->build(['controller' => 'Users', 'action' => 'logout']) ?>">Logout</a></li>
+                            <li><a class="dropdown-item" href="<?= $this->Url->build(['controller' => 'Auth', 'action' => 'logout']) ?>">Logout</a></li>
                         </ul>
                     </li>
                 <?php else: ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= $this->Url->build(['controller' => 'Users', 'action' => 'login']) ?>">Log In</a>
+                        <a class="nav-link" href="<?= $this->Url->build(['controller' => 'Auth', 'action' => 'login']) ?>">Log In</a>
                     </li>
                 <?php endif; ?>
 
