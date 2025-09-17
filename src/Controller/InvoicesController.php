@@ -44,6 +44,7 @@ class InvoicesController extends AppController
      */
     public function add()
     {
+        $this->checkAdminAuth();
         $invoice = $this->Invoices->newEmptyEntity();
         if ($this->request->is('post')) {
             $invoice = $this->Invoices->patchEntity($invoice, $this->request->getData());
