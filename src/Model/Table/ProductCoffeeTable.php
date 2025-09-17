@@ -68,9 +68,11 @@ class ProductCoffeeTable extends Table
             ->requirePresence('roast_level', 'create')
             ->notEmptyString('roast_level');
 
+        $validBrews = ['Drip', 'French Press', 'Espresso', 'Pour Over', 'Cold Brew', 'Aeropress', 'Percolate', 'Vacuum'];
+
         $validator
             ->scalar('brew_type')
-            ->maxLength('brew_type', 50)
+            ->inList('brew_type', $validBrews, 'Please select a valid brew type')
             ->requirePresence('brew_type', 'create')
             ->notEmptyString('brew_type');
 

@@ -30,13 +30,40 @@
 <!-- Coffee -->
 <div id="coffeeFields" style="display:none;">
     <h3>Coffee Details</h3>
-    <?= $this->Form->control('product_coffee.roast_level') ?>
-    <?= $this->Form->control('product_coffee.brew_type') ?>
-    <?= $this->Form->control('product_coffee.bean_type') ?>
-    <?= $this->Form->control('product_coffee.processing_method') ?>
-    <?= $this->Form->control('product_coffee.caffeine_level') ?>
-    <?= $this->Form->control('product_coffee.origin_country') ?>
-    <?= $this->Form->control('product_coffee.certifications') ?>
+    <?= $this->Form->control('roast_level', [
+        'type' => 'select',
+        'options' => range(1, 9),
+        'empty' => 'Select Roast Level'
+    ]); ?>
+    <?= $this->Form->control('brew_type', [
+        'type' => 'select',
+        //'multiple' => 'checkbox',
+        'options' => ['Drip', 'French Press', 'Espresso', 'Pour Over', 'Cold Brew', 'Aeropress', 'Percolate', 'Vacuum'],
+        'empty' => 'Select Brew Type'
+    ]); ?>
+    <?= $this->Form->control('bean_type', [
+        'ty[e' => 'select',
+        //'multiple' => 'checkbox',
+        'options' => ['Arabica', 'Robusta', 'Liberica', 'Excelsa'],
+        'empty' => 'Select Bean Type'
+    ]); ?>
+    <?= $this->Form->control('processing_method', [
+        'type' => 'select',
+        'options' => ['Washed', 'Natural', 'Honey'],
+        'empty' => 'Select Processing Method'
+    ]); ?>
+    <?= $this->Form->control('caffeine_level', [
+        'type' => 'select',
+        'options' => ['Low', 'Medium', 'High', 'Decaf'],
+        'empty' => 'Select Caffeine Level'
+    ]); ?>
+    <?= $this->Form->control('origin_country') ?>
+    <?= $this->Form->control('certifications', [
+        'type' => 'select',
+        //'multiple' => 'checkbox',
+        'options' => ['Fair Trade', 'Rainforest Alliance', 'UTZ', 'Specialty Coffee Association', 'Organic', 'Shade-grown', 'Bird-Friendly', 'Direct Trade'],
+        'empty' => 'Select Certifications'
+    ]); ?>
 </div>
 
 <!-- Merchandise -->
