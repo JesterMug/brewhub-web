@@ -46,7 +46,7 @@ class ProductsTable extends Table
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
 
-        $this->hasMany('ProductCoffee', [
+        $this->hasOne('ProductCoffee', [
             'foreignKey' => 'product_id',
         ]);
         $this->hasMany('ProductImages', [
