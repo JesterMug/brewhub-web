@@ -42,32 +42,30 @@
                 </blockquote>
             </div>
             <div class="related">
-                <?php if (!empty($product->product_coffee)) : ?>
-                <h4><?= __('Details') ?></h4>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-sm" width="100%" cellspacing="0">
-                        <tr>
-                            <th><?= __('Roast Level') ?></th>
-                            <th><?= __('Brew Type') ?></th>
-                            <th><?= __('Bean Type') ?></th>
-                            <th><?= __('Processing Method') ?></th>
-                            <th><?= __('Caffeine Level') ?></th>
-                            <th><?= __('Origin Country') ?></th>
-                            <th><?= __('Certifications') ?></th>
-                        </tr>
-                        <?php foreach ($product->product_coffee as $productCoffee) : ?>
-                        <tr>
-                            <td><?= h($productCoffee->roast_level) ?></td>
-                            <td><?= h($productCoffee->brew_type) ?></td>
-                            <td><?= h($productCoffee->bean_type) ?></td>
-                            <td><?= h($productCoffee->processing_method) ?></td>
-                            <td><?= h($productCoffee->caffeine_level) ?></td>
-                            <td><?= h($productCoffee->origin_country) ?></td>
-                            <td><?= h($productCoffee->certifications) ?></td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </table>
-                </div>
+                <?php if ($product->product_coffee) : ?>
+                    <h4><?= __('Details') ?></h4>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm" width="100%" cellspacing="0">
+                            <tr>
+                                <th><?= __('Roast Level') ?></th>
+                                <th><?= __('Brew Type') ?></th>
+                                <th><?= __('Bean Type') ?></th>
+                                <th><?= __('Processing Method') ?></th>
+                                <th><?= __('Caffeine Level') ?></th>
+                                <th><?= __('Origin Country') ?></th>
+                                <th><?= __('Certifications') ?></th>
+                            </tr>
+                            <tr>
+                                <td><?= h($product->product_coffee->roast_level) ?></td>
+                                <td><?= h($product->product_coffee->brew_type) ?></td>
+                                <td><?= h($product->product_coffee->bean_type) ?></td>
+                                <td><?= h($product->product_coffee->processing_method) ?></td>
+                                <td><?= h($product->product_coffee->caffeine_level) ?></td>
+                                <td><?= h($product->product_coffee->origin_country) ?></td>
+                                <td><?= h($product->product_coffee->certifications) ?></td>
+                            </tr>
+                        </table>
+                    </div>
                 <?php endif; ?>
             </div>
             <div class="related">

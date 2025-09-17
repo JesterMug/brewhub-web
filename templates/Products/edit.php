@@ -37,15 +37,17 @@
 <div id="coffeeFields" style="display:none;">
     <h3>Coffee Details</h3>
     <?php
-        $coffee = $product->product_coffee[0] ?? null;
-        echo $this->Form->hidden('product_coffee.0.id', ['value' => $coffee->id ?? null]);
-        echo $this->Form->control('product_coffee.0.roast_level', ['value' => $coffee->roast_level ?? null]);
-        echo $this->Form->control('product_coffee.0.brew_type', ['value' => $coffee->brew_type ?? null]);
-        echo $this->Form->control('product_coffee.0.bean_type', ['value' => $coffee->bean_type ?? null]);
-        echo $this->Form->control('product_coffee.0.processing_method', ['value' => $coffee->processing_method ?? null]);
-        echo $this->Form->control('product_coffee.0.caffeine_level', ['value' => $coffee->caffeine_level ?? null]);
-        echo $this->Form->control('product_coffee.0.origin_country', ['value' => $coffee->origin_country ?? null]);
-        echo $this->Form->control('product_coffee.0.certifications', ['value' => $coffee->certifications ?? null]);
+    $coffee = $product->product_coffee ?? null;
+    if ($coffee) {
+        echo $this->Form->hidden('product_coffee.id', ['value' => $coffee->id]);
+        echo $this->Form->control('product_coffee.roast_level', ['value' => $coffee->roast_level]);
+        echo $this->Form->control('product_coffee.brew_type', ['value' => $coffee->brew_type]);
+        echo $this->Form->control('product_coffee.bean_type', ['value' => $coffee->bean_type]);
+        echo $this->Form->control('product_coffee.processing_method', ['value' => $coffee->processing_method]);
+        echo $this->Form->control('product_coffee.caffeine_level', ['value' => $coffee->caffeine_level]);
+        echo $this->Form->control('product_coffee.origin_country', ['value' => $coffee->origin_country]);
+        echo $this->Form->control('product_coffee.certifications', ['value' => $coffee->certifications]);
+    }
     ?>
 </div>
 
