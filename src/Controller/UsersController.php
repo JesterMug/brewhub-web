@@ -13,7 +13,7 @@ class UsersController extends AppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->Authentication->allowUnauthenticated(['login','register']);
+        $this->checkAdminAuth();
     }
 
     public function index()
@@ -31,6 +31,7 @@ class UsersController extends AppController
 
     public function add()
     {
+        $this->checkSuperuserAuth();
         $user = $this->Users->newEmptyEntity();
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
@@ -59,6 +60,7 @@ class UsersController extends AppController
 
     public function delete($id = null)
     {
+        $this->checkSuperuserAuth();
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);
         if ($this->Users->delete($user)) {

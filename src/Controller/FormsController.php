@@ -24,6 +24,7 @@ class FormsController extends AppController
 
     public function index()
     {
+        $this->checkAdminAuth();
         $query = $this->Forms->find();
         $forms = $this->paginate($query);
 
@@ -39,6 +40,7 @@ class FormsController extends AppController
      */
     public function view($id = null)
     {
+        $this->checkAdminAuth();
         $form = $this->Forms->get($id, contain: []);
         $this->set(compact('form'));
     }
@@ -72,6 +74,7 @@ class FormsController extends AppController
      */
     public function edit($id = null)
     {
+        $this->checkAdminAuth();
         $form = $this->Forms->get($id, contain: []);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $form = $this->Forms->patchEntity($form, $this->request->getData());
@@ -94,6 +97,7 @@ class FormsController extends AppController
      */
     public function delete($id = null)
     {
+        $this->checkAdminAuth();
         $this->request->allowMethod(['post', 'delete']);
         $form = $this->Forms->get($id);
         if ($this->Forms->delete($form)) {
@@ -107,6 +111,7 @@ class FormsController extends AppController
 
     public function mark(?string $id = null)
     {
+        $this->checkAdminAuth();
         $form = $this->Forms->get($id);
         if ($form->replied_status) {
             $form->replied_status = false;

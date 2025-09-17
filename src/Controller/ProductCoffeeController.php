@@ -10,6 +10,13 @@ namespace App\Controller;
  */
 class ProductCoffeeController extends AppController
 {
+
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->checkAdminAuth();
+    }
+
     /**
      * Index method
      *

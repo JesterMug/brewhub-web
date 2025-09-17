@@ -58,4 +58,49 @@ class AppController extends Controller
         // actions public, skipping the authentication check
         $this->Authentication->addUnauthenticatedActions(['display']);
     }
+
+    /**
+     * Authorization check for Admin OR Superuser.
+     * Call this at the start of any action that requires admin rights.
+     * Returns the Redirect object if auth fails, or TRUE if it passes.
+     *
+     * @return bool|\Cake\Http\Response|null
+     */
+    protected function checkAdminAuth()
+    {
+        $identity = $this->request->getAttribute('identity');
+        if (!$identity) {
+            $this->Flash->error('You must be logged in.');
+            return $this->redirect(['controller' => 'Auth', 'action' => 'login']);
+        }
+
+        if (!in_array($identity->user_type, ['admin', 'superuser'])) {
+            $this->Flash->error('You are not authorised to access that page.');
+            return $this->redirect('/'); // Redirect customers to homepage
+        }
+
+        // User is 'admin' or 'superuser', allow access
+        return true;
+    }
+
+    /**
+     * Authorization check for Superuser ONLY.
+     * Call this for actions only a superuser can perform (like deleting other admins).
+     * @return bool|\Cake\Http\Response|null
+     */
+    protected function checkSuperuserAuth()
+    {
+        $identity = $this->request->getAttribute('identity');
+        if (!$identity) {
+            $this->Flash->error('You must be logged in.');
+            return $this->redirect(['controller' => 'Auth', 'action' => 'login']);
+        }
+
+        if ($identity->user_type !== 'superuser') {
+            $this->Flash->error('You are not authorised to access that page.');
+            return $this->redirect(['controller' => 'Pages', 'action' => 'dashboard']);
+        }
+
+        return true;
+    }
 }
