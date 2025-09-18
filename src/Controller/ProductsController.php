@@ -71,9 +71,13 @@ class ProductsController extends AppController
 
             $productType = $data['product_type'] ?? null;
 
+            //Seems to cause issues with uploading images.
+/*            if (!empty($data['product_coffee']) && is_array($data['product_coffee']) && (empty($data['product_coffee'][0]) || !is_array($data['product_coffee'][0]))) {
+                $data['product_coffee'] = [$data['product_coffee']];
+            }
             if (!empty($data['product_merchandise']) && is_array($data['product_merchandise']) && (empty($data['product_merchandise'][0]) || !is_array($data['product_merchandise'][0]))) {
                 $data['product_merchandise'] = [$data['product_merchandise']];
-            }
+            }*/
 
             $associated = ['ProductVariants'];
             if ($productType === 'coffee') {
