@@ -18,7 +18,21 @@ class ShopController extends AppController
 
     public function index()
     {
-        $productsTable = TableRegistry::getTableLocator()->get('Products');
+        $productsTable = $this->fetchTable('Products');
+
+        // Fetch a distinct list of categories to display as filters
+        $categoriesQuery = $productsTable->find('list', [
+            'keyField' => 'category',
+            'valueField' => 'category'
+        ])
+            ->distinct(['category'])
+            ->where(['category IS NOT NULL', 'category !=' => '']);
+        $categories = $categoriesQuery->toArray();
+
+        $selectedCategory = $this->request->getQuery('category');
+
+        // $productsTable = TableRegistry::getTableLocator()->get('Products');
+
         $products = $productsTable->find('all', [
             'contain' => ['ProductImages' => function($q) {
                 return $q->orderByAsc('ProductImages.id');
@@ -43,12 +57,15 @@ class ShopController extends AppController
                 'OR' => [
                     'Products.name LIKE' => "%$q%",
                     'Products.description LIKE' => "%$q%",
-                    'Products.category LIKE' => "%$q%",
                 ]
             ]);
         }
 
-        $this->set(compact('products', 'q', 'type'));
+        if (!empty($selectedCategory)) {
+            $products->where(['Products.category' => $selectedCategory]);
+        }
+
+        $this->set(compact('products', 'q', 'type', 'categories', 'selectedCategory'));
     }
 
     // Product details

@@ -39,6 +39,26 @@
         </div>
     </div>
 
+    <?php if (!empty($categories)): ?>
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="text-center">
+                    <a href="<?= $this->Url->build(['?' => ['type' => $type, 'q' => $q]]) ?>"
+                       class="btn btn-sm rounded-pill me-2 mb-2 <?= empty($selectedCategory) ? 'btn-primary' : 'btn-outline-primary' ?>">
+                        All
+                    </a>
+
+                    <?php foreach ($categories as $category): ?>
+                        <a href="<?= $this->Url->build(['?' => ['type' => $type, 'q' => $q, 'category' => $category]]) ?>"
+                           class="btn btn-sm rounded-pill me-2 mb-2 <?= ($selectedCategory === $category) ? 'btn-primary' : 'btn-outline-primary' ?>">
+                            <?= h($category) ?>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+
     <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
         <?php if (!empty($products)): ?>
             <?php foreach ($products as $product): ?>
