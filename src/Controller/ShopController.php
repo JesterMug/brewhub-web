@@ -18,18 +18,42 @@ class ShopController extends AppController
 
     public function index()
     {
-        $productsTable = TableRegistry::getTableLocator()->get('Products');
+        $productsTable = $this->fetchTable('Products');
+
+        $type = (string)$this->request->getQuery('type');
+        if (!in_array($type, ['coffee', 'merch'], true)) {
+            $type = 'coffee';
+        }
+
+        // Find products of the selected type
+        $categorySubQuery = $productsTable->find();
+        if ($type === 'coffee') {
+            $categorySubQuery->innerJoinWith('ProductCoffee');
+        } else {
+            $categorySubQuery->innerJoinWith('ProductMerchandise');
+        }
+
+        // List of categories from the subset of products
+        $categories = $productsTable->find('list', [
+            'keyField' => 'category',
+            'valueField' => 'category'
+        ])
+            ->distinct(['category'])
+            ->where([
+                'category IS NOT NULL',
+                'category !=' => '',
+                'Products.id IN' => $categorySubQuery->select(['Products.id'])
+            ])
+            ->toArray();
+
+        $selectedCategory = $this->request->getQuery('category');
+
         $products = $productsTable->find('all', [
             'contain' => ['ProductImages' => function($q) {
                 return $q->orderByAsc('ProductImages.id');
             }, 'ProductVariants']
         ]);
 
-        // Segmented type filter (default to coffee)
-        $type = (string)$this->request->getQuery('type');
-        if (!in_array($type, ['coffee', 'merch'], true)) {
-            $type = 'coffee';
-        }
         if ($type === 'coffee') {
             $products->innerJoinWith('ProductCoffee');
         } else {
@@ -43,12 +67,19 @@ class ShopController extends AppController
                 'OR' => [
                     'Products.name LIKE' => "%$q%",
                     'Products.description LIKE' => "%$q%",
-                    'Products.category LIKE' => "%$q%",
                 ]
             ]);
         }
 
-        $this->set(compact('products', 'q', 'type'));
+        if (!empty($selectedCategory)) {
+            $products->where(['Products.category' => $selectedCategory]);
+        }
+
+        $paginatedProducts = $this->paginate($products);
+
+        $this->set(compact('paginatedProducts', 'q', 'type', 'categories', 'selectedCategory'));
+
+        $this->set('products', $paginatedProducts);
     }
 
     // Product details
