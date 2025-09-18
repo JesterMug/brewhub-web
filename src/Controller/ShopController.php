@@ -20,18 +20,33 @@ class ShopController extends AppController
     {
         $productsTable = $this->fetchTable('Products');
 
-        // Fetch a distinct list of categories to display as filters
-        $categoriesQuery = $productsTable->find('list', [
+        $type = (string)$this->request->getQuery('type');
+        if (!in_array($type, ['coffee', 'merch'], true)) {
+            $type = 'coffee';
+        }
+
+        // Find products of the selected type
+        $categorySubQuery = $productsTable->find();
+        if ($type === 'coffee') {
+            $categorySubQuery->innerJoinWith('ProductCoffee');
+        } else {
+            $categorySubQuery->innerJoinWith('ProductMerchandise');
+        }
+
+        // List of categories from the subset of products
+        $categories = $productsTable->find('list', [
             'keyField' => 'category',
             'valueField' => 'category'
         ])
             ->distinct(['category'])
-            ->where(['category IS NOT NULL', 'category !=' => '']);
-        $categories = $categoriesQuery->toArray();
+            ->where([
+                'category IS NOT NULL',
+                'category !=' => '',
+                'Products.id IN' => $categorySubQuery->select(['Products.id'])
+            ])
+            ->toArray();
 
         $selectedCategory = $this->request->getQuery('category');
-
-        // $productsTable = TableRegistry::getTableLocator()->get('Products');
 
         $products = $productsTable->find('all', [
             'contain' => ['ProductImages' => function($q) {
@@ -39,11 +54,6 @@ class ShopController extends AppController
             }, 'ProductVariants']
         ]);
 
-        // Segmented type filter (default to coffee)
-        $type = (string)$this->request->getQuery('type');
-        if (!in_array($type, ['coffee', 'merch'], true)) {
-            $type = 'coffee';
-        }
         if ($type === 'coffee') {
             $products->innerJoinWith('ProductCoffee');
         } else {
@@ -65,7 +75,11 @@ class ShopController extends AppController
             $products->where(['Products.category' => $selectedCategory]);
         }
 
-        $this->set(compact('products', 'q', 'type', 'categories', 'selectedCategory'));
+        $paginatedProducts = $this->paginate($products);
+
+        $this->set(compact('paginatedProducts', 'q', 'type', 'categories', 'selectedCategory'));
+
+        $this->set('products', $paginatedProducts);
     }
 
     // Product details
