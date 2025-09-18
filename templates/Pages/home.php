@@ -10,9 +10,9 @@ $this->assign('title', 'Home');
     <div class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center">
         <div class="d-flex justify-content-center">
             <div class="text-center">
-                <h1 class="mx-auto my-0 text-uppercase">Experience Reliable Premium Coffee now</h1>
-                <h2 class="text-white-50 mx-auto mt-2 mb-5">Premium Coffee Blends and Merchandise from the Eastern Suburbs of Melbourne.</h2>
-                <a class="btn btn-primary" href="<?= $this->Url->Build(['controller' => 'Shop', 'action' => 'index']) ?>">Shop now</a>
+                <h1 class="mx-auto my-0 text-uppercase"><?= $this->ContentBlock->text('home_hero_title') ?></h1>
+                <h2 class="text-white-50 mx-auto mt-2 mb-5"><?= $this->ContentBlock->text('home_hero_subtitle') ?></h2>
+                <a class="btn btn-primary" href="<?= $this->Url->Build(['controller' => 'Shop', 'action' => 'index']) ?>"><?= $this->ContentBlock->text('home_hero_call_to_action') ?></a>
             </div>
         </div>
     </div>
@@ -22,17 +22,15 @@ $this->assign('title', 'Home');
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-lg-8">
-                <h2 class="text-white mb-4">Experience our Blend of the Month!</h2>
+                <h2 class="text-white mb-4"><?= $this->ContentBlock->text('home_promo_heading') ?></h2>
                 <p class="text-white-50">
-                    This month's premium coffee blend was developed by our special blend makers in South Jamaica.
-                    <!-- <a href="https://startbootstrap.com/theme/grayscale/">the preview page.</a> -->
-                    With unique notes of Cinnamon and Soursop, try out our new speciality blend of the month. Stocks are limited.
+                    <?= $this->ContentBlock->text('home_promo_desc') ?>
                 </p>
             </div>
         </div>
         <img class="img-fluid rounded-4 glassy-image-border" src="assets/img/coffee-bg2.png" alt="..." />
     </div>
-    <a class="btn btn-secondary mb-5" href="<?= $this->Url->Build(['controller' => 'shop', 'action' => 'view/30']) ?>"> Buy Now </a>
+    <a class="btn btn-secondary mb-5" href="<?= $this->Url->Build(['controller' => 'shop', 'action' => 'view/30']) ?>"><?= $this->ContentBlock->text('home_promo_call_to_action') ?></a>
 </section>
 <!-- Projects-->
 <section class="projects-section bg-light" id="projects">
@@ -44,8 +42,8 @@ $this->assign('title', 'Home');
                 <div class="bg-black text-center h-100 project">
                     <div class="d-flex h-100">
                         <div class="project-text w-100 my-auto text-center text-lg-right">
-                            <h4 class="text-white">Premium Blends </h4>
-                            <p class="mb-0 text-white-50">Browse from our collection of premium hand-crafted beans, speciality blends and many more</p>
+                            <h4 class="text-white"><?= $this->ContentBlock->text('home_p1_heading') ?></h4>
+                            <p class="mb-0 text-white-50"><?= $this->ContentBlock->text('home_p1_desc') ?></p>
                         </div>
                     </div>
                 </div>
@@ -59,8 +57,8 @@ $this->assign('title', 'Home');
                 <div class="bg-black text-center h-100 project">
                     <div class="d-flex h-100">
                         <div class="project-text w-100 my-auto text-center text-lg-left">
-                            <h4 class="text-white">Straight from the source</h4>
-                            <p class="mb-0 text-white-50">Experience fresh premium blends supplied straight from local farmers around the globe</p>
+                            <h4 class="text-white"><?= $this->ContentBlock->text('home_p2_heading') ?></h4>
+                            <p class="mb-0 text-white-50"><?= $this->ContentBlock->text('home_p2_desc') ?></p>
                         </div>
                     </div>
                 </div>
@@ -73,10 +71,8 @@ $this->assign('title', 'Home');
                 <div class="bg-black text-center h-100 project">
                     <div class="d-flex h-100">
                         <div class="project-text w-100 my-auto text-center text-lg-right">
-                            <h4 class="text-white">Reliable Delivery</h4>
-                            <p class="mb-0 text-white-50">Experience same day delivery for local customers or simply
-                                use our worldwide delivery service powered by StarTrack.
-                            </p>
+                            <h4 class="text-white"><?= $this->ContentBlock->text('home_p3_heading') ?></h4>
+                            <p class="mb-0 text-white-50"><?= $this->ContentBlock->text('home_p3_desc') ?></p>
                         </div>
                     </div>
                 </div>
