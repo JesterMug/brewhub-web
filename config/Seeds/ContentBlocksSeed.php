@@ -36,6 +36,14 @@ class ContentBlocksSeed extends AbstractSeed
                 'type' => 'text',
                 'value' => 'Shop now',
             ],
+//            [
+//                'parent' => 'home',
+//                'label' => 'Hero Image',
+//                'description' => 'Background image in the hero section.',
+//                'slug' => 'home_hero_image',
+//                'type' => 'image',
+//                'value' => 'assets/img/coffee-bg1.jpg',
+//            ],
             //Promotional section
             [
                 'parent' => 'home',
@@ -61,6 +69,7 @@ class ContentBlocksSeed extends AbstractSeed
                 'type' => 'text',
                 'value' => 'Buy now',
             ],
+            //Project One Section
             [
                 'parent' => 'home',
                 'label' => 'Project One Heading',
@@ -79,6 +88,15 @@ class ContentBlocksSeed extends AbstractSeed
             ],
             [
                 'parent' => 'home',
+                'label' => 'Project One Image',
+                'description' => 'An image for project one.',
+                'slug'  => 'home_p1_image',
+                'type'  => 'image',
+                //'value' => '/assets/img/coffee-bg6.jpg',
+            ],
+            //Project Two Section
+            [
+                'parent' => 'home',
                 'label' => 'Project Two Heading',
                 'description' => 'A heading for project two.',
                 'slug' => 'home_p2_heading',
@@ -95,6 +113,15 @@ class ContentBlocksSeed extends AbstractSeed
             ],
             [
                 'parent' => 'home',
+                'label' => 'Project Two Image',
+                'description' => 'An image for project two.',
+                'slug'  => 'home_p2_image',
+                'type'  => 'image',
+                //'value' => '/assets/img/coffee-bg4.jpg',
+            ],
+            //Project Three Section
+            [
+                'parent' => 'home',
                 'label' => 'Project Three Heading',
                 'description' => 'A heading for project three.',
                 'slug' => 'home_p3_heading',
@@ -108,6 +135,14 @@ class ContentBlocksSeed extends AbstractSeed
                 'slug' => 'home_p3_desc',
                 'type' => 'text',
                 'value' => 'Experience same-day-delivery for local customers or simply use our worldwide delivery service powered by StarTrack.',
+            ],
+            [
+                'parent' => 'home',
+                'label' => 'Project Three Image',
+                'description' => 'An image for project three.',
+                'slug'  => 'home_p3_image',
+                'type'  => 'image',
+                //'value' => '/assets/img/coffee-bg5.jpg',
             ],
         ];
 
