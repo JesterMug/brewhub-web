@@ -32,7 +32,7 @@
     <h3>Coffee Details</h3>
     <?= $this->Form->control('product_coffee.roast_level', [
         'type' => 'select',
-        'options' => range(1, 9),
+        'options' => array_combine(range(1, 9), range(1, 9)),
         'empty' => 'Select Roast Level'
     ]); ?>
     <?= $this->Form->control('product_coffee.brew_type', [
