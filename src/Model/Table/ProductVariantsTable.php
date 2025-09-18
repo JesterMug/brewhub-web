@@ -76,6 +76,7 @@ class ProductVariantsTable extends Table
         $validator
             ->decimal('size_value')
             ->greaterThan('size_value', 0, 'Size must be greater than zero')
+            ->maxLength('size_value', 4, 'Size cannot exceed 9999')
             ->requirePresence('size_value', 'create')
             ->notEmptyString('size_value');
 
@@ -95,6 +96,7 @@ class ProductVariantsTable extends Table
         $validator
             ->integer('stock')
             ->greaterThanOrEqual('stock', 0, 'Stock must be zero or higher')
+            ->maxLength('stock', 4, 'Stock cannot exceed 9999')
             ->requirePresence('stock', 'create')
             ->notEmptyString('stock');
 
@@ -108,7 +110,7 @@ class ProductVariantsTable extends Table
 
         $validator
             ->scalar('sku')
-            ->maxLength('sku', 50)
+            ->maxLength('sku', 50, 'Sku must be less than 50 characters')
             ->requirePresence('sku', 'create')
             ->notEmptyString('sku')
             ->add('sku', 'validSKU', [
