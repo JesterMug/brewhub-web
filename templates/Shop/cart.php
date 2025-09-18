@@ -120,8 +120,8 @@
             </div>
             <div id="checkoutMessage" class="alert bg-dark text-white mt-3" style="display:none;">
                 <h2>Online checkout coming soon!</h2>
-                <p>Until then, please call us directly on 0404 040 404 to place your order:</p>
-                <a href="tel:+61404040404" class="btn btn-primary">
+                <p>Until then, please call us directly on <?= $this->ContentBlock->text('phone') ?> to place your order:</p>
+                <a href="tel:+61<?= ltrim(preg_replace('/\s+/', '', $this->ContentBlock->text('phone')), '0') ?>" class="btn btn-primary">
                     Call Us
                 </a>
                 <p class="mt-3">Mon–Fri: 9am–6pm <br>1 Example Road, Melbourne, 3000</p>

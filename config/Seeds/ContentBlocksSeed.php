@@ -11,6 +11,15 @@ class ContentBlocksSeed extends AbstractSeed
         $table = $this->table('content_blocks');
         $table->truncate();   // clears existing rows
         $data = [
+            //Global attributes
+            [
+                'parent' => 'global',
+                'label' => 'Phone Number',
+                'description' => 'Phone number that customer can use to reach BrewHub.',
+                'slug' => 'phone',
+                'type' => 'text',
+                'value' => '0404040404',
+            ],
             // Hero Section
             [
                 'parent' => 'home',

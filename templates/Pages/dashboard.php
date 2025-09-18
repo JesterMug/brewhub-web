@@ -86,3 +86,5 @@ $this->assign('title', 'Admin Dashboard');
         </a>
     </div>
 </div>
+
+<?= $this->Html->link('Content Blocks', ['plugin' => 'ContentBlocks', 'controller' => 'ContentBlocks', 'action' => 'index']) ?>
