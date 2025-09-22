@@ -119,12 +119,11 @@
                 </div>
             </div>
             <div id="checkoutMessage" class="alert bg-dark text-white mt-3" style="display:none;">
-                <h2>Online checkout coming soon!</h2>
-                <p>Until then, please call us directly on <?= $this->ContentBlock->text('phone') ?> to place your order:</p>
+                <h2>Please call us directly on <?= $this->ContentBlock->text('phone') ?> to finalise your order:</h2>
                 <a href="tel:+61<?= ltrim(preg_replace('/\s+/', '', $this->ContentBlock->text('phone')), '0') ?>" class="btn btn-primary">
                     Call Us
                 </a>
-                <p class="mt-3">Mon–Fri: 9am–6pm <br>1 Example Road, Melbourne, 3000</p>
+                <p class="mt-3"><?= $this->ContentBlock->text('opening_hours') ?> <br><?= $this->ContentBlock->text('address') ?></p>
             </div>
             <script>
                 document.getElementById("checkoutBtn").addEventListener("click", function(event) {

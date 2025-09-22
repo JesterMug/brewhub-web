@@ -20,6 +20,22 @@ class ContentBlocksSeed extends AbstractSeed
                 'type' => 'text',
                 'value' => '0404040404',
             ],
+            [
+                'parent' => 'global',
+                'label' => 'Address',
+                'description' => 'The address of the BrewHub retail store.',
+                'slug' => 'address',
+                'type' => 'text',
+                'value' => '1 Example Road, Melbourne, 3000',
+            ],
+            [
+                'parent' => 'global',
+                'label' => 'Opening Hours',
+                'description' => 'The opening hours of the BrewHub retail store.',
+                'slug' => 'opening_hours',
+                'type' => 'text',
+                'value' => 'Mon–Fri: 9am–6pm',
+            ],
             // Hero Section
             [
                 'parent' => 'home',
