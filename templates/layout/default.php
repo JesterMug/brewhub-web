@@ -1,5 +1,6 @@
 <?php
 $user = $this->request->getAttribute('identity');
+$currentController = $this->request->getParam('controller');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,7 +39,7 @@ $user = $this->request->getAttribute('identity');
 
     <?php endif; ?>
 
-    <?php if ($user && ($user->user_type === 'admin' || $user->user_type === 'superuser')) : ?>
+    <?php if ($user && ($user->user_type === 'admin' || $user->user_type === 'superuser') && !($currentController === 'ContentBlocks')) : ?>
     <!-- Sidebar -->
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
