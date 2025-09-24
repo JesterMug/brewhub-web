@@ -1,5 +1,6 @@
 <?php
 $user = $this->request->getAttribute('identity');
+$currentController = $this->request->getParam('controller');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,7 +39,7 @@ $user = $this->request->getAttribute('identity');
 
     <?php endif; ?>
 
-    <?php if ($user && ($user->user_type === 'admin' || $user->user_type === 'superuser')) : ?>
+    <?php if ($user && ($user->user_type === 'admin' || $user->user_type === 'superuser') && !($currentController === 'ContentBlocks')) : ?>
     <!-- Sidebar -->
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
@@ -89,6 +90,13 @@ $user = $this->request->getAttribute('identity');
             <a class="nav-link" href="<?= $this->Url->build(['controller' => 'products', 'action' => 'index']) ?>">
                 <i class="fas fa-fw fa-box-open"></i>
                 <span>Products</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="<?= $this->Url->build(['plugin' => 'ContentBlocks', 'controller' => 'ContentBlocks', 'action' => 'index']) ?>">
+                <i class="fas fa-fw fa-edit"></i>
+                <span>Content</span>
             </a>
         </li>
 
@@ -153,7 +161,7 @@ $user = $this->request->getAttribute('identity');
 
         <!-- Main Content -->
         <div id="content">
-            <?php if ($user && ($user->user_type === 'admin' || $user->user_type === 'superuser')) : ?>
+            <?php if ($user && ($user->user_type === 'admin' || $user->user_type === 'superuser')): ?>
 
             <!-- Topbar -->
             <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
@@ -164,10 +172,23 @@ $user = $this->request->getAttribute('identity');
                 </button>
 
                 <!-- Topbar Navbar -->
+                <ul class="navbar-nav mr-auto"> <!-- left-aligned -->
+                    <?php if ($currentController === 'ContentBlocks'): ?>
+                        <?php
+                        $referer = $this->request->referer();
+                        $target = $referer ?: $this->Url->build(['controller' => 'Pages', 'action' => 'dashboard']);
+                        ?>
+                        <li class="nav-item">
+                            <a href="javascript:history.back()" class="btn btn-primary mb-3">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </a>
+                        </li>
+                    <?php endif; ?>
+                </ul>
                 <ul class="navbar-nav ml-auto">
-
+                    <?php if(!($currentController === 'ContentBlocks')): ?>
                     <!-- Nav Item - User Information -->
-                    <li class="nav-item dropdown no-arrow">
+                        <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="mr-2 d-none d-lg-inline text-gray-600 small">
@@ -197,6 +218,7 @@ $user = $this->request->getAttribute('identity');
                             </a>
                         </div>
                     </li>
+                    <?php endif; ?>
 
                 </ul>
 
