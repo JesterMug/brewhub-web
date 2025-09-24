@@ -154,7 +154,7 @@ $currentController = $this->request->getParam('controller');
 
         <!-- Main Content -->
         <div id="content">
-            <?php if ($user && ($user->user_type === 'admin' || $user->user_type === 'superuser') && !($currentController === 'ContentBlocks')): ?>
+            <?php if ($user && ($user->user_type === 'admin' || $user->user_type === 'superuser')): ?>
 
             <!-- Topbar -->
             <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
@@ -165,10 +165,23 @@ $currentController = $this->request->getParam('controller');
                 </button>
 
                 <!-- Topbar Navbar -->
+                <ul class="navbar-nav mr-auto"> <!-- left-aligned -->
+                    <?php if ($currentController === 'ContentBlocks'): ?>
+                        <?php
+                        $referer = $this->request->referer();
+                        $target = $referer ?: $this->Url->build(['controller' => 'Pages', 'action' => 'dashboard']);
+                        ?>
+                        <li class="nav-item">
+                            <a href="javascript:history.back()" class="btn btn-primary mb-3">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </a>
+                        </li>
+                    <?php endif; ?>
+                </ul>
                 <ul class="navbar-nav ml-auto">
-
+                    <?php if(!($currentController === 'ContentBlocks')): ?>
                     <!-- Nav Item - User Information -->
-                    <li class="nav-item dropdown no-arrow">
+                        <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="mr-2 d-none d-lg-inline text-gray-600 small">
@@ -198,6 +211,7 @@ $currentController = $this->request->getParam('controller');
                             </a>
                         </div>
                     </li>
+                    <?php endif; ?>
 
                 </ul>
 
