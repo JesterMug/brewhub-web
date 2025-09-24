@@ -93,6 +93,13 @@ $currentController = $this->request->getParam('controller');
             </a>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link" href="<?= $this->Url->build(['plugin' => 'ContentBlocks', 'controller' => 'ContentBlocks', 'action' => 'index']) ?>">
+                <i class="fas fa-fw fa-edit"></i>
+                <span>Content</span>
+            </a>
+        </li>
+
         <!-- Divider -->
 <!--        <hr class="sidebar-divider">-->
 
