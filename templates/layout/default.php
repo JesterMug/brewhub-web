@@ -154,7 +154,7 @@ $currentController = $this->request->getParam('controller');
 
         <!-- Main Content -->
         <div id="content">
-            <?php if ($user && ($user->user_type === 'admin' || $user->user_type === 'superuser')) : ?>
+            <?php if ($user && ($user->user_type === 'admin' || $user->user_type === 'superuser') && !($currentController === 'ContentBlocks')): ?>
 
             <!-- Topbar -->
             <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
