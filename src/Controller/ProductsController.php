@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Psr\Http\Message\UploadedFileInterface;
+use Throwable;
 
 /**
  * Products Controller
@@ -12,7 +13,6 @@ use Psr\Http\Message\UploadedFileInterface;
  */
 class ProductsController extends AppController
 {
-
     public function initialize(): void
     {
         parent::initialize();
@@ -39,7 +39,7 @@ class ProductsController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(?string $id = null)
     {
         $product = $this->Products->get($id, contain: ['ProductCoffee', 'ProductImages', 'ProductMerchandise', 'ProductVariants']);
         $this->set(compact('product'));
@@ -116,6 +116,7 @@ class ProductsController extends AppController
                 }
 
                 $this->Flash->success(__('The product has been saved.'));
+
                 return $this->redirect(['action' => 'index']);
             }
 
@@ -132,7 +133,7 @@ class ProductsController extends AppController
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null)
     {
         $product = $this->Products->get($id, contain: ['ProductCoffee', 'ProductImages', 'ProductMerchandise', 'ProductVariants']);
         if ($this->request->is(['patch', 'post', 'put'])) {
@@ -203,6 +204,7 @@ class ProductsController extends AppController
                 }
 
                 $this->Flash->success(__('The product has been saved.'));
+
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The product could not be saved. Please, try again.'));
@@ -244,6 +246,7 @@ class ProductsController extends AppController
             $h = imagesy($src);
             if ($w <= 0 || $h <= 0) {
                 imagedestroy($src);
+
                 return null;
             }
 
@@ -273,7 +276,7 @@ class ProductsController extends AppController
             imagedestroy($src);
 
             return $uniqueName;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return null;
         }
     }
@@ -285,7 +288,7 @@ class ProductsController extends AppController
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
 
@@ -304,6 +307,21 @@ class ProductsController extends AppController
         } else {
             $this->Flash->error(__('The product could not be deleted. Please, try again.'));
         }
+
+        return $this->redirect(['action' => 'index']);
+    }
+
+    /**
+     * Feature method
+     */
+    public function feature(?string $id = null)
+    {
+        $this->request->allowMethod(['post', 'feature']);
+
+        $this->Products->updateAll(['is_featured' => 0], []);
+
+        $product = $this->Products->get($id);
+        $product->is_featured = 1;
 
         return $this->redirect(['action' => 'index']);
     }
