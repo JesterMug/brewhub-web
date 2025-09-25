@@ -39,7 +39,7 @@ $currentController = $this->request->getParam('controller');
 
     <?php endif; ?>
 
-    <?php if ($user && ($user->user_type === 'admin' || $user->user_type === 'superuser') && !($currentController === 'ContentBlocks')) : ?>
+    <?php if ($user && ($user->user_type === 'admin' || $user->user_type === 'superuser')) : ?>
     <!-- Sidebar -->
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
@@ -56,7 +56,7 @@ $currentController = $this->request->getParam('controller');
 
         <!-- Nav Item - Admin Dashboard -->
         <li class="nav-item">
-            <a class="nav-link" href="<?= $this->Url->build(['controller' => 'Pages', 'action' => 'dashboard']) ?>">
+            <a class="nav-link" href="<?= $this->Url->build(['plugin' => null, 'controller' => 'Pages', 'action' => 'dashboard']) ?>">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Dashboard</span></a>
         </li>
@@ -72,7 +72,7 @@ $currentController = $this->request->getParam('controller');
         <!-- Nav Item - Pages Collapse Menu -->
 
         <li class="nav-item">
-            <a class="nav-link" href="<?= $this->Url->build(['controller' => 'users', 'action' => 'index']) ?>">
+            <a class="nav-link" href="<?= $this->Url->build(['plugin' => null, 'controller' => 'users', 'action' => 'index']) ?>">
                 <i class="fas fa-fw fa-users"></i>
                 <span>Users</span>
             </a>
@@ -80,14 +80,14 @@ $currentController = $this->request->getParam('controller');
 
 
         <li class="nav-item">
-            <a class="nav-link" href="<?= $this->Url->build(['controller' => 'forms', 'action' => 'index']) ?>">
+            <a class="nav-link" href="<?= $this->Url->build(['plugin' => null, 'controller' => 'forms', 'action' => 'index']) ?>">
                 <i class="fas fa-fw fa-comment"></i>
                 <span>Enquiries</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="<?= $this->Url->build(['controller' => 'products', 'action' => 'index']) ?>">
+            <a class="nav-link" href="<?= $this->Url->build(['plugin' => null, 'controller' => 'products', 'action' => 'index']) ?>">
                 <i class="fas fa-fw fa-box-open"></i>
                 <span>Products</span>
             </a>
@@ -173,21 +173,7 @@ $currentController = $this->request->getParam('controller');
                 </button>
 
                 <!-- Topbar Navbar -->
-                <ul class="navbar-nav mr-auto"> <!-- left-aligned -->
-                    <?php if ($currentController === 'ContentBlocks'): ?>
-                        <?php
-                        $referer = $this->request->referer();
-                        $target = $referer ?: $this->Url->build(['controller' => 'Pages', 'action' => 'dashboard']);
-                        ?>
-                        <li class="nav-item">
-                            <a href="javascript:history.back()" class="btn btn-primary mb-3">
-                                <i class="fas fa-arrow-left"></i> Back
-                            </a>
-                        </li>
-                    <?php endif; ?>
-                </ul>
                 <ul class="navbar-nav ml-auto">
-                    <?php if(!($currentController === 'ContentBlocks')): ?>
                     <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
@@ -219,8 +205,6 @@ $currentController = $this->request->getParam('controller');
                             </a>
                         </div>
                     </li>
-                    <?php endif; ?>
-
                 </ul>
 
             </nav>
@@ -272,7 +256,7 @@ $currentController = $this->request->getParam('controller');
             <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="<?= $this->Url->build(['controller' => 'Auth', 'action' => 'logout']) ?>">Logout</a>
+                <a class="btn btn-primary" href="<?= $this->Url->build(['plugin' => null, 'controller' => 'Auth', 'action' => 'logout']) ?>">Logout</a>
             </div>
         </div>
     </div>
