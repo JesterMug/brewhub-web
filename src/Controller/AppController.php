@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Controller\Controller;
+use Cake\Datasource\ModelAwareTrait;
 
 /**
  * Application Controller
@@ -37,6 +38,8 @@ class AppController extends Controller
      *
      * @return void
      */
+
+    use ModelAwareTrait; // Allows PageController.php to use loadModel
     public function initialize(): void
     {
         parent::initialize();

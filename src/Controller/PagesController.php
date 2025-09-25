@@ -17,11 +17,12 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Core\Configure;
+use Cake\Event\EventInterface;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
-use Cake\View\Exception\MissingTemplateException;
 use Cake\ORM\TableRegistry;
+use Cake\View\Exception\MissingTemplateException;
 
 /**
  * Static content controller
@@ -45,7 +46,7 @@ class PagesController extends AppController
      * @throws \Cake\View\Exception\MissingTemplateException In debug mode.
      */
 
-    public function beforeFilter(\Cake\Event\EventInterface $event)
+    public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
     }
@@ -66,6 +67,7 @@ class PagesController extends AppController
         $user = $this->request->getAttribute('identity');
         if (!$user || !in_array($user->user_type ?? null, ['admin', 'superuser'], true)) {
             $this->Flash->error('You are not authorized to access the admin dashboard.');
+
             return $this->redirect(['controller' => 'Auth', 'action' => 'login']);
         }
 
@@ -100,6 +102,22 @@ class PagesController extends AppController
             $subpage = $path[1];
         }
         $this->set(compact('page', 'subpage'));
+
+        // Home page featured products
+         {
+            $productsTable = $this->fetchTable('Products');
+
+            $featuredProduct = $productsTable->find()
+                ->where(['is_featured' => 1])
+                ->contain(['ProductImages'])
+                ->first();
+
+            $this->set(compact('featuredProduct'));
+            $this->render($page);
+        }
+
+        // Home page featured products
+
 
         try {
             return $this->render(implode('/', $path));

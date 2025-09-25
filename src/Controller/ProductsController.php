@@ -323,6 +323,12 @@ class ProductsController extends AppController
         $product = $this->Products->get($id);
         $product->is_featured = 1;
 
+        if ($this->Products->save($product)) {
+            $this->Flash->success(__('{0} is featured now', $product->name));
+        } else {
+            $this->Flash->error(__('{0} could not be featured.', $product->name));
+        }
+
         return $this->redirect(['action' => 'index']);
     }
 
