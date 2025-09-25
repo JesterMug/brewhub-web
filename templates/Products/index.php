@@ -24,7 +24,7 @@ echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['bl
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($products as $product): ?>
+                <?php foreach ($products as $product) : ?>
                 <tr>
                     <td><?= h($product->name) ?></td>
                     <td><?= h($product->category) ?></td>
@@ -37,8 +37,14 @@ echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['bl
                             [
                                 'method' => 'delete',
                                 'confirm' => __('Are you sure you want to delete {0}? This will delete all associated product variants and images.', $product->name),
-                            ]
+                            ],
                         ) ?>
+
+                        <?= $this->Form->postLink(
+                            __('Feature'),
+                            ['controller' => 'products', 'action' => 'feature', $product->id],
+                        ) ?>
+
                     </td>
                 </tr>
                 <?php endforeach; ?>

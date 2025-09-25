@@ -28,7 +28,8 @@ $this->assign('title', 'Home');
                 </p>
             </div>
         </div>
-        <img class="img-fluid rounded-4 glassy-image-border" src="assets/img/coffee-bg2.png" alt="..." />
+        <img class="img-fluid"
+             src="<?= $this->Url->build(!empty($featuredProduct->product_images[0]) ? '/img/products/' . $featuredProduct->product_images[0]->image_file : '/assets/img/featureddefault.png') ?>"
     </div>
     <a class="btn btn-secondary mb-5" href="<?= $this->Url->Build(['controller' => 'shop', 'action' => 'view/30']) ?>"><?= $this->ContentBlock->text('home_promo_call_to_action') ?></a>
 </section>
