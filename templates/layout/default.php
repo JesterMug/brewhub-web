@@ -93,13 +93,14 @@ $currentController = $this->request->getParam('controller');
             </a>
         </li>
 
+        <?php if ($user && $user->user_type === 'superuser') : ?>
         <li class="nav-item">
             <a class="nav-link" href="<?= $this->Url->build(['plugin' => 'ContentBlocks', 'controller' => 'ContentBlocks', 'action' => 'index']) ?>">
                 <i class="fas fa-fw fa-edit"></i>
                 <span>Content</span>
             </a>
         </li>
-
+        <?php endif;?>
         <!-- Divider -->
 <!--        <hr class="sidebar-divider">-->
 
