@@ -1,4 +1,8 @@
 <?php
+/**
+ * @var \App\View\AppView $this
+ * @var \App\Model\Entity\Product $product
+ */
 ?>
 <header>
     <div class="py-5">
@@ -57,8 +61,11 @@
                     <label for="variantSelect">Selection</label>
                     <select id="variantSelect" class="form-select">
                         <?php foreach ($product->product_variants as $variant): ?>
-                            <option value="<?= h($variant->id) ?>">
-                                <?= h($variant->size) ?> - $<?= number_format($variant->price,2) ?>
+                            <option value="<?= h($variant->id) ?>" data-stock="<?= (int)$variant->stock ?>">
+                                <?= h($variant->size) ?> - $<?= number_format($variant->price, 2) ?>
+                                <?php if ($variant->stock <= 0): ?>
+                                    (Out of Stock)
+                                <?php endif; ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -74,24 +81,49 @@
                         // Default to first variant if available
                         $firstVariantId = !empty($product->product_variants) ? ($product->product_variants[0]->id ?? null) : null;
                     ?>
-                    <input type="hidden" name="product_variant_id" id="hiddenVariantId" value="<?= h($firstVariantId) ?>" />
-                    <button class="btn btn-outline-dark flex-shrink-0" type="submit">
+                <input type="hidden" name="product_variant_id" id="hiddenVariantId" value="<?= h($firstVariantId) ?>" />
+
+                <input type="hidden" name="is_preorder" id="isPreorder" value="0" />
+                    <button class="btn btn-outline-dark flex-shrink-0" type="submit" id="addToCartBtn">
                         <i class="bi-cart-fill me-1"></i>
-                        Add to Cart
+                        <span id="btnText">Add to Cart</span>
                     </button>
                 <?= $this->Form->end() ?>
             </div>
 
             <script>
                 (function(){
-                    var select = document.getElementById('variantSelect');
-                    var hidden = document.getElementById('hiddenVariantId');
-                    if (select && hidden) {
-                        // Initialize hidden field in case default select differs
-                        hidden.value = select.value || hidden.value;
+                    const select = document.getElementById('variantSelect');
+                    const hiddenVariantId = document.getElementById('hiddenVariantId');
+                    const isPreorderInput = document.getElementById('isPreorder');
+                    const btnText = document.getElementById('btnText');
+                    const quantityInput = document.getElementById('inputQuantity');
+
+                    function updateButtonState() {
+                        if (!select) return;
+
+                        const selectedOption = select.options[select.selectedIndex];
+                        const stock = parseInt(selectedOption.dataset.stock, 10);
+
+                        if (stock > 0) {
+                            btnText.textContent = 'Add to Cart';
+                            isPreorderInput.value = '0';
+                            quantityInput.disabled = false;
+                        } else {
+                            btnText.textContent = 'Pre-Order';
+                            isPreorderInput.value = '1';
+                            quantityInput.disabled = false;
+                        }
+                    }
+
+                    if (select && hiddenVariantId) {
                         select.addEventListener('change', function(){
-                            hidden.value = this.value;
+                            hiddenVariantId.value = this.value;
+                            updateButtonState();
                         });
+
+                        hiddenVariantId.value = select.value || hiddenVariantId.value;
+                        updateButtonState();
                     }
                 })();
             </script>

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
 use Cake\Http\Exception\NotFoundException;
+use Cake\Database\Exception\QueryException;
 
 class ShopController extends AppController
 {
@@ -142,7 +143,7 @@ class ShopController extends AppController
         } else {
             // Guest cart via session
             $session = $this->request->getSession();
-            $guestCart = (array)$session->read('GuestCart'); // [variantId => qty]
+            $guestCart = (array)$session->read('GuestCart');
             if (!empty($guestCart)) {
                 $variantIds = array_keys($guestCart);
                 $variantsTable = TableRegistry::getTableLocator()->get('ProductVariants');
@@ -153,20 +154,19 @@ class ShopController extends AppController
                     ->indexBy('id')
                     ->toArray();
 
-                foreach ($guestCart as $vid => $qty) {
+                foreach ($guestCart as $vid => $itemData) {
                     if (!isset($variants[$vid])) {
                         continue;
                     }
-                    $variant = $variants[$vid];
                     $item = (object) [
-                        'product_variant' => $variant,
-                        'quantity' => (int)$qty,
+                        'product_variant' => $variants[$vid],
+                        'quantity' => (int)$itemData['quantity'],
+                        'is_preorder' => (bool)$itemData['is_preorder'],
                     ];
                     $cartItems[] = $item;
-                    $price = (float)($variant->price ?? 0);
-                    $totals['subtotal'] += $price * (int)$qty;
                 }
             }
+
         }
 
         // Simple total calc (no business rules yet)
@@ -181,6 +181,7 @@ class ShopController extends AppController
         $this->request->allowMethod(['post']);
         $variantId = (int)$this->request->getData('product_variant_id');
         $qty = (int)max(1, (int)$this->request->getData('quantity'));
+        $isPreorder = (bool)$this->request->getData('is_preorder', false);
 
         if ($variantId <= 0) {
             $this->Flash->error('Invalid product selection.');
@@ -210,28 +211,29 @@ class ShopController extends AppController
             $currentQtyInCart = $cartItem ? $cartItem->quantity : 0;
             $newTotalQty = $currentQtyInCart + $qty;
 
-            if ($variant->stock == 0) {
-                $this->Flash->error(__('Out of stock'));
-                return $this->redirect($this->referer() ?: ['action' => 'index']);
-            }
-            else if ($newTotalQty > $variant->stock) {
-                $this->Flash->error(__('Could not add to cart. Only {0} items are available and you already have {1} in your cart.', $variant->stock, $currentQtyInCart));
-                return $this->redirect($this->referer() ?: ['action' => 'index']);
+            if (!$isPreorder) {
+                if ($newTotalQty > $variant->stock) {
+                    $this->Flash->error(__('Could not add to cart. Only {0} items are available and you already have {1} in your cart.', $variant->stock, $currentQtyInCart));
+                    return $this->redirect($this->referer() ?: ['action' => 'index']);
+                }
             }
 
             if ($cartItem) {
                 $cartItem->quantity = $newTotalQty;
+                if ($isPreorder) {
+                    $cartItem->is_preorder = true;
+                }
             } else {
                 $cartItem = $cartItemsTable->newEntity([
                     'cart_id' => $cart->id,
                     'product_variant_id' => $variantId,
-                    'quantity' => $newTotalQty,
-                    'is_preorder' => false,
+                    'quantity' => $qty,
+                    'is_preorder' => $isPreorder,
                 ]);
             }
 
             if ($cartItemsTable->save($cartItem)) {
-                $this->Flash->success('Item added to your cart.');
+                $this->Flash->success($isPreorder ? 'Item pre-ordered and added to your cart.' : 'Item added to your cart.');
             } else {
                 $this->Flash->error('Could not add the item to your cart. Please try again.');
             }
@@ -239,21 +241,22 @@ class ShopController extends AppController
             $session = $this->request->getSession();
             $guestCart = (array)$session->read('GuestCart');
 
-            $currentQtyInCart = $guestCart[$variantId] ?? 0;
-            $newTotalQty = $currentQtyInCart + $qty;
+            $currentItemData = $guestCart[$variantId] ?? ['quantity' => 0, 'is_preorder' => false];
+            $newTotalQty = $currentItemData['quantity'] + $qty;
 
-            if ($variant->stock == 0) {
-                $this->Flash->error(__('Out of stock'));
-                return $this->redirect($this->referer() ?: ['action' => 'index']);
-            }
-            else if ($newTotalQty > $variant->stock) {
-                $this->Flash->error(__('Could not add to cart. Only {0} items are available and you already have {1} in your cart.', $variant->stock, $currentQtyInCart));
-                return $this->redirect($this->referer() ?: ['action' => 'index']);
+            if (!$isPreorder && !$currentItemData['is_preorder']) {
+                if ($newTotalQty > $variant->stock) {
+                    $this->Flash->error(__('Could not add to cart. Only {0} items are available and you already have {1} in your cart.', $variant->stock, $currentItemData['quantity']));
+                    return $this->redirect($this->referer() ?: ['action' => 'index']);
+                }
             }
 
-            $guestCart[$variantId] = $newTotalQty;
+            $guestCart[$variantId] = [
+                'quantity' => $newTotalQty,
+                'is_preorder' => $currentItemData['is_preorder'] || $isPreorder,
+            ];
             $session->write('GuestCart', $guestCart);
-            $this->Flash->success('Item added to your cart.');
+            $this->Flash->success($isPreorder ? 'Item pre-ordered and added to your cart.' : 'Item added to your cart.');
         }
         return $this->redirect(['action' => 'cart']);
     }
@@ -306,8 +309,7 @@ class ShopController extends AppController
     public function updateCartQuantity()
     {
         $this->request->allowMethod(['post']);
-
-        $qty = (int)$this->request->getData('quantity');
+        $qty = (int)max(1, (int)$this->request->getData('quantity'));
         if ($qty < 1) { $qty = 1; }
         if ($qty > 99) { $qty = 99; }
 
@@ -324,46 +326,60 @@ class ShopController extends AppController
                 ->first();
 
             if ($cartItem && (int)$cartItem->cart->user_id === (int)$identity->id) {
-                $variantsTable = $this->fetchTable('ProductVariants');
-                $variant = $variantsTable->get($cartItem->product_variant_id);
+                if (!$cartItem->is_preorder) {
+                    $variantsTable = $this->fetchTable('ProductVariants');
+                    $variant = $variantsTable->get($cartItem->product_variant_id);
 
-                if ($variant->stock == 0) {
-                    $this->Flash->error('Out of stock.');
-                    return $this->redirect(['action' => 'cart']);
+                    if ($qty > $variant->stock) {
+                        $this->Flash->error(__('Could not update quantity. Only {0} items are in stock.', $variant->stock));
+                        return $this->redirect(['action' => 'cart']);
+                    }
                 }
-                if ($qty > $variant->stock) {
-                    $this->Flash->error(__('Could not update quantity. Only {0} items are in stock.', $variant->stock));
-                    return $this->redirect(['action' => 'cart']);
-                }
+
                 $cartItem->quantity = $qty;
-                if ($cartItemsTable->save($cartItem)) {
-                    $this->Flash->success('Cart updated.');
-                    return $this->redirect(['action' => 'cart']);
+
+                try {
+                    if ($cartItemsTable->save($cartItem)) {
+                        $this->Flash->success('Cart updated.');
+                    } else {
+                        $this->Flash->error('Unable to update quantity. Please try again.');
+                    }
+                } catch (QueryException $e) {
+                    if (str_contains($e->getMessage(), 'Not enough stock')) {
+                        $variantsTable = $this->fetchTable('ProductVariants');
+                        $latestVariant = $variantsTable->get($cartItem->product_variant_id);
+                        $this->Flash->error(__('Could not update. Stock changed. Only {0} items are available.', $latestVariant->stock));
+                    } else {
+                        $this->Flash->error('A database error occurred. Please try again.');
+                    }
                 }
-                $this->Flash->error('Unable to update quantity. Please try again.');
                 return $this->redirect(['action' => 'cart']);
 
             }
         }
 
         // Guest/session cart: update by variant ID
-        if ($variantId > 0) {
-            $variantsTable = $this->fetchTable('ProductVariants');
-            $variant = $variantsTable->get($variantId);
-
-            if ($qty > $variant->stock) {
-                $this->Flash->error(__('Could not update quantity. Only {0} items are in stock.', $variant->stock));
-                return $this->redirect(['action' => 'cart']);
-            }
+        elseif ($variantId > 0) {
             $session = $this->request->getSession();
             $guestCart = (array)$session->read('GuestCart');
-            $guestCart[$variantId] = $qty;
-            $session->write('GuestCart', $guestCart);
-            $this->Flash->success('Cart updated.');
-            return $this->redirect(['action' => 'cart']);
-        }
 
-        $this->Flash->error('Invalid update request.');
+            if (isset($guestCart[$variantId])) {
+                $variantsTable = $this->fetchTable('ProductVariants');
+                $variant = $variantsTable->get($variantId);
+
+                if ($variant->stock > 0 && !$guestCart[$variantId]['is_preorder']) {
+                    if ($qty > $variant->stock) {
+                        $this->Flash->error(__('Could not update quantity. Only {0} items are in stock.', $variant->stock));
+                        return $this->redirect(['action' => 'cart']);
+                    }
+                }
+                $guestCart[$variantId]['quantity'] = $qty;
+                $session->write('GuestCart', $guestCart);
+                $this->Flash->success('Cart updated.');
+            }
+        } else {
+            $this->Flash->error('Invalid update request.');
+        }
         return $this->redirect(['action' => 'cart']);
     }
 }

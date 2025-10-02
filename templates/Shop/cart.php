@@ -46,6 +46,9 @@
                                 <?php if ($size !== ''): ?>
                                     <p class="mb-0 mt-1">Size : <span class="fw-medium"><?= h($size) ?></span></p>
                                 <?php endif; ?>
+                                <?php if (!empty($item->is_preorder)): ?>
+                                    <p class="mb-0 mt-1"><span class="badge bg-info">Pre-Order</span></p>
+                                <?php endif; ?>
                             </div>
                         </div>
                         <div class="flex-shrink-0 ms-2">
