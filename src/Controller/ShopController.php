@@ -175,7 +175,7 @@ class ShopController extends AppController
         $this->set(compact('cart', 'cartItems', 'totals'));
     }
 
-    // Add to cart (handles guest carts via session)
+    // Add to cart (handles guest carts via session and logged in user carts)
     public function addToCart()
     {
         $this->request->allowMethod(['post']);
@@ -187,22 +187,74 @@ class ShopController extends AppController
             return $this->redirect($this->referer() ?: ['action' => 'index']);
         }
 
+        $variantsTable = $this->fetchTable('ProductVariants');
+        $variant = $variantsTable->get($variantId);
+
         $identity = $this->request->getAttribute('identity');
         if ($identity) {
-            // For now, store in session as well (DB requires address/user linkage to create a Cart)
-            $session = $this->request->getSession();
-            $guestCart = (array)$session->read('GuestCart');
-            $guestCart[$variantId] = ($guestCart[$variantId] ?? 0) + $qty;
-            $session->write('GuestCart', $guestCart);
-        } else {
-            // Guest: store in session
-            $session = $this->request->getSession();
-            $guestCart = (array)$session->read('GuestCart');
-            $guestCart[$variantId] = ($guestCart[$variantId] ?? 0) + $qty;
-            $session->write('GuestCart', $guestCart);
-        }
+            $cartsTable = $this->fetchTable('Carts');
+            $cartItemsTable = $this->fetchTable('CartItems');
 
-        $this->Flash->success('Item added to your cart.');
+            $cart = $cartsTable->findOrCreate(
+                ['user_id' => $identity->id, 'status' => 'active'],
+                function ($cart) use ($identity) {
+                    $cart->user_id = $identity->id;
+                    $cart->status = 'active';
+                }
+            );
+
+            $cartItem = $cartItemsTable->find()
+                ->where(['cart_id' => $cart->id, 'product_variant_id' => $variantId])
+                ->first();
+
+            $currentQtyInCart = $cartItem ? $cartItem->quantity : 0;
+            $newTotalQty = $currentQtyInCart + $qty;
+
+            if ($variant->stock == 0) {
+                $this->Flash->error(__('Out of stock'));
+                return $this->redirect($this->referer() ?: ['action' => 'index']);
+            }
+            else if ($newTotalQty > $variant->stock) {
+                $this->Flash->error(__('Could not add to cart. Only {0} items are available and you already have {1} in your cart.', $variant->stock, $currentQtyInCart));
+                return $this->redirect($this->referer() ?: ['action' => 'index']);
+            }
+
+            if ($cartItem) {
+                $cartItem->quantity = $newTotalQty;
+            } else {
+                $cartItem = $cartItemsTable->newEntity([
+                    'cart_id' => $cart->id,
+                    'product_variant_id' => $variantId,
+                    'quantity' => $newTotalQty,
+                    'is_preorder' => false,
+                ]);
+            }
+
+            if ($cartItemsTable->save($cartItem)) {
+                $this->Flash->success('Item added to your cart.');
+            } else {
+                $this->Flash->error('Could not add the item to your cart. Please try again.');
+            }
+        } else {
+            $session = $this->request->getSession();
+            $guestCart = (array)$session->read('GuestCart');
+
+            $currentQtyInCart = $guestCart[$variantId] ?? 0;
+            $newTotalQty = $currentQtyInCart + $qty;
+
+            if ($variant->stock == 0) {
+                $this->Flash->error(__('Out of stock'));
+                return $this->redirect($this->referer() ?: ['action' => 'index']);
+            }
+            else if ($newTotalQty > $variant->stock) {
+                $this->Flash->error(__('Could not add to cart. Only {0} items are available and you already have {1} in your cart.', $variant->stock, $currentQtyInCart));
+                return $this->redirect($this->referer() ?: ['action' => 'index']);
+            }
+
+            $guestCart[$variantId] = $newTotalQty;
+            $session->write('GuestCart', $guestCart);
+            $this->Flash->success('Item added to your cart.');
+        }
         return $this->redirect(['action' => 'cart']);
     }
 
@@ -215,7 +267,6 @@ class ShopController extends AppController
         $cartItemId = (int)$this->request->getData('cart_item_id');
         $variantId = (int)$this->request->getData('product_variant_id');
 
-        // If a CartItem ID is provided and a user is authenticated, try DB deletion
         if ($cartItemId > 0 && $identity) {
             $cartItemsTable = TableRegistry::getTableLocator()->get('CartItems');
             $cartItem = $cartItemsTable->find()
@@ -231,7 +282,6 @@ class ShopController extends AppController
                 $this->Flash->error('Unable to remove that item. Please try again.');
                 return $this->redirect(['action' => 'cart']);
             }
-            // Fallback to session removal if DB context not valid
         }
 
         // Remove from session-based guest cart by variant ID
@@ -274,6 +324,17 @@ class ShopController extends AppController
                 ->first();
 
             if ($cartItem && (int)$cartItem->cart->user_id === (int)$identity->id) {
+                $variantsTable = $this->fetchTable('ProductVariants');
+                $variant = $variantsTable->get($cartItem->product_variant_id);
+
+                if ($variant->stock == 0) {
+                    $this->Flash->error('Out of stock.');
+                    return $this->redirect(['action' => 'cart']);
+                }
+                if ($qty > $variant->stock) {
+                    $this->Flash->error(__('Could not update quantity. Only {0} items are in stock.', $variant->stock));
+                    return $this->redirect(['action' => 'cart']);
+                }
                 $cartItem->quantity = $qty;
                 if ($cartItemsTable->save($cartItem)) {
                     $this->Flash->success('Cart updated.');
@@ -281,12 +342,19 @@ class ShopController extends AppController
                 }
                 $this->Flash->error('Unable to update quantity. Please try again.');
                 return $this->redirect(['action' => 'cart']);
+
             }
-            // Fall through to session as a safety net
         }
 
         // Guest/session cart: update by variant ID
         if ($variantId > 0) {
+            $variantsTable = $this->fetchTable('ProductVariants');
+            $variant = $variantsTable->get($variantId);
+
+            if ($qty > $variant->stock) {
+                $this->Flash->error(__('Could not update quantity. Only {0} items are in stock.', $variant->stock));
+                return $this->redirect(['action' => 'cart']);
+            }
             $session = $this->request->getSession();
             $guestCart = (array)$session->read('GuestCart');
             $guestCart[$variantId] = $qty;

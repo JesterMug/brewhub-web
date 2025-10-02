@@ -76,7 +76,6 @@ class CartItemsTable extends Table
 
         $validator
             ->boolean('is_preorder')
-            ->requirePresence('is_preorder', 'create')
             ->notEmptyString('is_preorder');
 
         $validator
