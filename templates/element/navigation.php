@@ -36,6 +36,7 @@ $user = $this->request->getAttribute('identity');
                                 <li><a class="dropdown-item" href="<?= $this->Url->build(['controller' => 'Pages', 'action' => 'dashboard']) ?>">Admin Dashboard</a></li>
                                 <li><hr class="dropdown-divider"></li>
                             <?php endif; ?>
+                            <li><a class="dropdown-item" href="<?= $this->Url->build(['controller' => 'Orders', 'action' => 'index']) ?>">Orders</a></li>
                             <li><a class="dropdown-item" href="<?= $this->Url->build(['controller' => 'Auth', 'action' => 'logout']) ?>">Logout</a></li>
                         </ul>
                     </li>

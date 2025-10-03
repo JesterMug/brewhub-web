@@ -6,6 +6,8 @@ use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Database\Exception\QueryException;
+use Cake\Core\Configure;
+use Cake\Routing\Router;
 
 class ShopController extends AppController
 {
@@ -114,6 +116,7 @@ class ShopController extends AppController
             'tax' => 0.0,
             'total' => 0.0,
         ];
+        $addresses = [];
 
         if ($identity) {
             $cartsTable = TableRegistry::getTableLocator()->get('Carts');
@@ -132,6 +135,31 @@ class ShopController extends AppController
                 ->orderDesc('Carts.id')
                 ->first();
 
+            // Handle address selection submission
+            if ($cart && $this->request->is('post') && $this->request->getData('set_address') !== null) {
+                $addressId = (int)$this->request->getData('address_id');
+                if ($addressId > 0) {
+                    // Ensure address belongs to current user
+                    $addressesTable = TableRegistry::getTableLocator()->get('Addresses');
+                    $address = $addressesTable->find()
+                        ->where(['Addresses.id' => $addressId, 'Addresses.user_id' => (int)$identity->id])
+                        ->first();
+                    if ($address) {
+                        $cart->address_id = $addressId;
+                        if ($cartsTable->save($cart)) {
+                            $this->Flash->success('Address selected for this cart.');
+                        } else {
+                            $this->Flash->error('Could not update the cart address. Please try again.');
+                        }
+                    } else {
+                        $this->Flash->error('Invalid address selection.');
+                    }
+                } else {
+                    $cart->address_id = null;
+                    $cartsTable->save($cart);
+                }
+            }
+
             if ($cart) {
                 $cartItems = $cart->cart_items ?? [];
                 foreach ($cartItems as $ci) {
@@ -140,6 +168,14 @@ class ShopController extends AppController
                     $totals['subtotal'] += $price * $qty;
                 }
             }
+
+            // Load addresses for the logged-in user
+            $addressesTable = TableRegistry::getTableLocator()->get('Addresses');
+            $addresses = $addressesTable->find()
+                ->where(['Addresses.user_id' => (int)$identity->id, 'Addresses.is_active' => true])
+                ->orderAsc('Addresses.label')
+                ->all()
+                ->toList();
         } else {
             // Guest cart via session
             $session = $this->request->getSession();
@@ -172,7 +208,7 @@ class ShopController extends AppController
         // Simple total calc (no business rules yet)
         $totals['total'] = $totals['subtotal'] - $totals['discount'] + $totals['shipping'] + $totals['tax'];
 
-        $this->set(compact('cart', 'cartItems', 'totals'));
+        $this->set(compact('cart', 'cartItems', 'totals', 'addresses'));
     }
 
     // Add to cart (handles guest carts via session and logged in user carts)
@@ -358,7 +394,7 @@ class ShopController extends AppController
             }
         }
 
-        // Guest/session cart: update by variant ID
+        // Guest cart update by variant ID
         elseif ($variantId > 0) {
             $session = $this->request->getSession();
             $guestCart = (array)$session->read('GuestCart');
@@ -380,6 +416,312 @@ class ShopController extends AppController
         } else {
             $this->Flash->error('Invalid update request.');
         }
+        return $this->redirect(['action' => 'cart']);
+    }
+
+    // Create a Stripe Checkout Session and redirect customer
+    public function checkout()
+    {
+        $this->request->allowMethod(['post']);
+
+        $secretKey = (string)Configure::read('Stripe.secret_key');
+        if (!$secretKey) {
+            $this->Flash->error('Payment configuration missing.');
+            return $this->redirect(['action' => 'cart']);
+        }
+
+        $identity = $this->request->getAttribute('identity');
+        $cartItems = [];
+        if ($identity) {
+            $cartsTable = TableRegistry::getTableLocator()->get('Carts');
+            $cart = $cartsTable->find()
+                ->where([
+                    'Carts.user_id' => (int)$identity->id,
+                    'Carts.status' => 'active',
+                ])
+                ->contain([
+                    'CartItems' => [
+                        'ProductVariants' => [
+                            'Products' => ['ProductImages']
+                        ]
+                    ]
+                ])
+                ->orderDesc('Carts.id')
+                ->first();
+
+            if ($cart) {
+                $cartItems = $cart->cart_items ?? [];
+                if ((int)($cart->address_id ?? 0) <= 0) {
+                    $this->Flash->error('Please select a shipping address before checkout.');
+                    return $this->redirect(['action' => 'cart']);
+                }
+            }
+        } else {
+            $session = $this->request->getSession();
+            $guestCart = (array)$session->read('GuestCart');
+            if (!empty($guestCart)) {
+                $variantIds = array_keys($guestCart);
+                $variantsTable = TableRegistry::getTableLocator()->get('ProductVariants');
+                $variants = $variantsTable->find()
+                    ->where(['ProductVariants.id IN' => $variantIds])
+                    ->contain(['Products' => ['ProductImages']])
+                    ->all()
+                    ->indexBy('id')
+                    ->toArray();
+
+                foreach ($guestCart as $vid => $itemData) {
+                    if (!isset($variants[$vid])) {
+                        continue;
+                    }
+                    $item = (object) [
+                        'product_variant' => $variants[$vid],
+                        'quantity' => (int)$itemData['quantity'],
+                        'is_preorder' => (bool)$itemData['is_preorder'],
+                    ];
+                    $cartItems[] = $item;
+                }
+            }
+        }
+
+        if (empty($cartItems)) {
+            $this->Flash->warning('Your cart is empty.');
+            return $this->redirect(['action' => 'cart']);
+        }
+
+        $lineItems = [];
+        $currency = 'aud';
+        foreach ($cartItems as $ci) {
+            $variant = $ci->product_variant ?? null;
+            if (!$variant) { continue; }
+            $product = $variant->product ?? null;
+            $name = $product->name ?? 'Item';
+            $unitAmount = (int)round(((float)($variant->price ?? 0)) * 100);
+            $qty = max(1, (int)($ci->quantity ?? 1));
+
+            $lineItem = [
+                'price_data' => [
+                    'currency' => $currency,
+                    'product_data' => [
+                        'name' => $name,
+                    ],
+                    'unit_amount' => $unitAmount,
+                ],
+                'quantity' => $qty,
+            ];
+            $lineItems[] = $lineItem;
+        }
+
+        if (empty($lineItems)) {
+            $this->Flash->error('Unable to prepare your cart for checkout.');
+            return $this->redirect(['action' => 'cart']);
+        }
+
+        $successUrl = Router::url(['controller' => 'Shop', 'action' => 'success'], true) . '?session_id={CHECKOUT_SESSION_ID}';
+        $cancelUrl = Router::url(['controller' => 'Shop', 'action' => 'cancel'], true);
+
+        try {
+            $stripe = new \Stripe\StripeClient($secretKey);
+
+            $params = [
+                'mode' => 'payment',
+                'payment_method_types' => ['card'],
+                'line_items' => $lineItems,
+                'success_url' => $successUrl,
+                'cancel_url' => $cancelUrl,
+                'billing_address_collection' => 'auto',
+                'automatic_tax' => ['enabled' => false],
+            ];
+
+            // Pass the authenticated user's email to Stripe so it pre-fills the checkout email
+            if ($identity && !empty($identity->email)) {
+                $params['customer_email'] = (string)$identity->email;
+            }
+
+            $session = $stripe->checkout->sessions->create($params);
+        } catch (\Throwable $e) {
+            $this->Flash->error('Payment service error: ' . $e->getMessage());
+            return $this->redirect(['action' => 'cart']);
+        }
+
+        // Redirect to Stripe checkout
+        return $this->redirect($session->url, 303);
+    }
+
+    public function success()
+    {
+        $this->viewBuilder()->setLayout('frontend');
+        $sessionId = (string)$this->request->getQuery('session_id');
+        if ($sessionId) {
+            $this->set('sessionId', $sessionId);
+        }
+
+        $session = $this->request->getSession();
+
+        // Prevent duplicate processing on manual refreshes
+        if ($sessionId) {
+            $processedKey = 'ProcessedSessions.' . $sessionId;
+            if ($session->read($processedKey)) {
+                // Already processed this session
+                return;
+            }
+        }
+
+        // Verify payment status with Stripe first
+        $secretKey = (string)Configure::read('Stripe.secret_key');
+        $isPaid = false;
+        if ($sessionId && $secretKey) {
+            try {
+                $stripe = new \Stripe\StripeClient($secretKey);
+                $checkoutSession = $stripe->checkout->sessions->retrieve($sessionId);
+                $isPaid = ($checkoutSession && ($checkoutSession->payment_status === 'paid'));
+            } catch (\Throwable $e) {
+                // If we cannot verify, do not create orders to avoid phantom orders
+                $isPaid = false;
+            }
+        }
+
+        if (!$isPaid) {
+            // For safety, do not attempt order creation without verified payment
+            // Still clear guest cart so the UX matches Stripe success page
+            $session->delete('GuestCart');
+            return;
+        }
+
+        // Build items from the user's cart (DB) or guest cart (session)
+        $identity = $this->request->getAttribute('identity');
+        $cartItems = [];
+        $userCart = null;
+        if ($identity) {
+            $cartsTable = TableRegistry::getTableLocator()->get('Carts');
+            $userCart = $cartsTable->find()
+                ->where([
+                    'Carts.user_id' => (int)$identity->id,
+                    'Carts.status' => 'active',
+                ])
+                ->contain([
+                    'CartItems' => [
+                        'ProductVariants'
+                    ]
+                ])
+                ->orderDesc('Carts.id')
+                ->first();
+            if ($userCart) {
+                $cartItems = $userCart->cart_items ?? [];
+            }
+        } else {
+            // Guest cart (cannot be linked to a user order as Orders.user_id is required)
+            $guestCart = (array)$session->read('GuestCart');
+            if (!empty($guestCart)) {
+                $variantIds = array_keys($guestCart);
+                $variantsTable = TableRegistry::getTableLocator()->get('ProductVariants');
+                $variants = $variantsTable->find()
+                    ->where(['ProductVariants.id IN' => $variantIds])
+                    ->all()
+                    ->indexBy('id')
+                    ->toArray();
+                foreach ($guestCart as $vid => $itemData) {
+                    if (!isset($variants[$vid])) { continue; }
+                    $cartItems[] = (object)[
+                        'product_variant' => $variants[$vid],
+                        'quantity' => (int)($itemData['quantity'] ?? 1),
+                        'is_preorder' => (bool)($itemData['is_preorder'] ?? false),
+                    ];
+                }
+            }
+        }
+
+        if (empty($cartItems)) {
+            // Nothing to convert into an order
+            $session->delete('GuestCart');
+            if ($sessionId) { $session->write('ProcessedSessions.' . $sessionId, true); }
+            return;
+        }
+
+        // Only create orders for authenticated users (Orders.user_id is required)
+        if (!$identity) {
+            // Clear guest cart and stop (cannot create an order without a user)
+            $session->delete('GuestCart');
+            if ($sessionId) { $session->write('ProcessedSessions.' . $sessionId, true); }
+            return;
+        }
+
+        $ordersTable = $this->fetchTable('Orders');
+        $orderItemsTable = $this->fetchTable('OrderProductVariants');
+        $invTxTable = $this->fetchTable('InventoryTransactions');
+
+        $connection = $ordersTable->getConnection();
+        $now = new \DateTimeImmutable('now');
+        $createdBy = (string)($identity->email ?? ($identity->id ?? 'web'));
+        $createdBy = substr($createdBy, 0, 50);
+
+        $orderId = null;
+        $connection->transactional(function () use ($ordersTable, $orderItemsTable, $invTxTable, $identity, $cartItems, $now, $createdBy, &$orderId, $userCart) {
+            // Create order
+            $order = $ordersTable->newEntity([
+                'user_id' => (int)$identity->id,
+                'address_id' => null,
+                'order_date' => $now,
+                'shipping_status' => 'pending',
+            ]);
+            $ordersTable->saveOrFail($order);
+            $orderId = (int)$order->id;
+
+            // Create order items and inventory transactions
+            foreach ($cartItems as $ci) {
+                $variant = $ci->product_variant ?? null;
+                if (!$variant) { continue; }
+                $qty = max(1, (int)($ci->quantity ?? 1));
+                $isPre = (bool)($ci->is_preorder ?? false);
+
+                $orderItem = $orderItemsTable->newEntity([
+                    'order_id' => $orderId,
+                    'product_variant_id' => (int)$variant->id,
+                    'quantity' => $qty,
+                    'is_preorder' => $isPre,
+                ]);
+                $orderItemsTable->saveOrFail($orderItem);
+
+                // Inventory change only for in-stock (non-preorder) items
+                if (!$isPre) {
+                    $inv = $invTxTable->newEntity([
+                        'product_variant_id' => (int)$variant->id,
+                        'change_type' => 'purchase',
+                        'quantity_change' => -$qty,
+                        'note' => 'Order #' . $orderId,
+                        'created_by' => $createdBy,
+                        'date_created' => $now,
+                    ]);
+                    $invTxTable->saveOrFail($inv);
+                }
+            }
+
+            // Mark the user's cart as ordered and clear it
+            if ($userCart) {
+                // If you want to keep history, you may keep items; here we clear items
+                if (!empty($userCart->cart_items)) {
+                    $cartItemsTable = TableRegistry::getTableLocator()->get('CartItems');
+                    foreach ($userCart->cart_items as $item) {
+                        $cartItemsTable->delete($item);
+                    }
+                }
+                TableRegistry::getTableLocator()->get('Carts')->save($userCart);
+            }
+        });
+
+        // Clear guest cart (if any) and mark processed
+        $session->delete('GuestCart');
+        if ($sessionId) { $session->write('ProcessedSessions.' . $sessionId, true); }
+
+        // Optionally set order id for display
+        if (!empty($orderId)) {
+            $this->set('orderId', $orderId);
+        }
+    }
+
+    public function cancel()
+    {
+        $this->viewBuilder()->setLayout('frontend');
+        $this->Flash->warning('Checkout canceled. You can review your cart and try again.');
         return $this->redirect(['action' => 'cart']);
     }
 }

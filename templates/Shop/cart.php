@@ -109,6 +109,45 @@
             </div>
             <?php endforeach; ?>
 
+            <?php if (!empty($cart) && isset($addresses)) : ?>
+            <div class="card border shadow-none my-3">
+                <div class="card-body">
+                    <h5 class="mb-3">Shipping Address</h5>
+                    <?php if (!empty($addresses)) : ?>
+                        <?= $this->Form->create(null, ['url' => ['controller' => 'Shop', 'action' => 'cart']]) ?>
+                            <div class="row g-2 align-items-end">
+                                <div class="col-md-8">
+                                    <?php
+                                        $addressOptions = [];
+                                        foreach ($addresses as $a) {
+                                            $line = trim(($a->label ? ($a->label . ' - ') : '') . $a->recipient_full_name . ', ' . $a->street . ', ' . $a->city . ', ' . $a->state . ' ' . $a->postcode);
+                                            $addressOptions[$a->id] = $line;
+                                        }
+                                    ?>
+                                    <?= $this->Form->control('address_id', [
+                                        'type' => 'select',
+                                        'options' => $addressOptions,
+                                        'empty' => 'Select an address',
+                                        'value' => $cart->address_id ?? null,
+                                        'label' => false,
+                                        'class' => 'form-select'
+                                    ]) ?>
+                                </div>
+                                <div class="col">
+                                    <?= $this->Form->hidden('set_address', ['value' => 1]) ?>
+                                    <button type="submit" class="btn btn-primary">Use this address</button>
+                                    <a href="<?= $this->Url->build(['controller' => 'Addresses', 'action' => 'add']) ?>" class="btn btn-link">Add new address</a>
+                                </div>
+                            </div>
+                        <?= $this->Form->end() ?>
+                    <?php else : ?>
+                        <p class="mb-2">You haven't added any addresses yet.</p>
+                        <a href="<?= $this->Url->build(['controller' => 'Addresses', 'action' => 'add']) ?>" class="btn btn-outline-primary">Add a shipping address</a>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?php endif; ?>
+
             <div class="row my-4">
                 <div class="col-sm-6">
                     <a href="<?= $this->Url->build(['controller' => 'Shop', 'action' => 'index']) ?>" class="btn btn-link text-muted">
@@ -116,23 +155,23 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="text-sm-end mt-2 mt-sm-0">
-                        <a href="#" id="checkoutBtn" class="btn btn-success">
-                            <i class="mdi mdi-cart-outline me-1"></i> Checkout </a>
+                        <?= $this->Form->create(null, ['url' => ['controller' => 'Shop', 'action' => 'checkout'], 'id' => 'checkoutForm']) ?>
+                            <button type="submit" id="checkoutBtn" class="btn btn-success">
+                                <i class="mdi mdi-cart-outline me-1"></i> Checkout
+                            </button>
+                        <?= $this->Form->end() ?>
                     </div>
                 </div>
             </div>
-            <div id="checkoutMessage" class="alert bg-dark text-white mt-3" style="display:none;">
-                <h2>Please call us directly on <?= $this->ContentBlock->text('phone') ?> to finalise your order:</h2>
-                <a href="tel:+61<?= ltrim(preg_replace('/\s+/', '', $this->ContentBlock->text('phone')), '0') ?>" class="btn btn-primary">
-                    Call Us
-                </a>
-                <p class="mt-3"><?= $this->ContentBlock->text('opening_hours') ?> <br><?= $this->ContentBlock->text('address') ?></p>
-            </div>
             <script>
-                document.getElementById("checkoutBtn").addEventListener("click", function(event) {
-                    event.preventDefault(); // stop the default link action
-                    document.getElementById("checkoutMessage").style.display = "block";
-                });
+                const checkoutForm = document.getElementById('checkoutForm');
+                const checkoutBtn = document.getElementById('checkoutBtn');
+                if (checkoutForm && checkoutBtn) {
+                    checkoutForm.addEventListener('submit', function () {
+                        checkoutBtn.disabled = true;
+                        checkoutBtn.innerText = 'Redirecting...';
+                    });
+                }
             </script>
         </div>
 

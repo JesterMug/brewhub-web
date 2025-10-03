@@ -45,12 +45,19 @@ class AddressesController extends AppController
     public function add()
     {
         $address = $this->Addresses->newEmptyEntity();
+        $identity = $this->request->getAttribute('identity');
         if ($this->request->is('post')) {
-            $address = $this->Addresses->patchEntity($address, $this->request->getData());
+            $data = $this->request->getData();
+            if ($identity) {
+                // Force the address to be linked to the logged-in user
+                $data['user_id'] = (int)$identity->id;
+            }
+            $address = $this->Addresses->patchEntity($address, $data);
             if ($this->Addresses->save($address)) {
                 $this->Flash->success(__('The address has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                // If coming from the cart, send the user back there
+                return $this->redirect(['controller' => 'Shop', 'action' => 'cart']);
             }
             $this->Flash->error(__('The address could not be saved. Please, try again.'));
         }
