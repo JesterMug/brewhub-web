@@ -14,8 +14,8 @@ class ShopController extends AppController
     public function beforeFilter(\Cake\Event\EventInterface $event)
     {
         parent::beforeFilter($event);
-        // Allow unauthenticated access to shop listing, product view, cart, and cart mutations
-        $this->Authentication->addUnauthenticatedActions(['index', 'view', 'cart', 'addToCart', 'removeFromCart', 'updateCartQuantity']);
+        // Allow unauthenticated access to shop listing, product view, cart, cart mutations, and checkout flow
+        $this->Authentication->addUnauthenticatedActions(['index', 'view', 'cart', 'addToCart', 'removeFromCart', 'updateCartQuantity', 'checkout', 'preorderCheckout', 'success', 'cancel']);
         $this->viewBuilder()->setLayout('frontend');
     }
 
@@ -116,7 +116,6 @@ class ShopController extends AppController
             'tax' => 0.0,
             'total' => 0.0,
         ];
-        $addresses = [];
 
         if ($identity) {
             $cartsTable = TableRegistry::getTableLocator()->get('Carts');
@@ -135,30 +134,7 @@ class ShopController extends AppController
                 ->orderDesc('Carts.id')
                 ->first();
 
-            // Handle address selection submission
-            if ($cart && $this->request->is('post') && $this->request->getData('set_address') !== null) {
-                $addressId = (int)$this->request->getData('address_id');
-                if ($addressId > 0) {
-                    // Ensure address belongs to current user
-                    $addressesTable = TableRegistry::getTableLocator()->get('Addresses');
-                    $address = $addressesTable->find()
-                        ->where(['Addresses.id' => $addressId, 'Addresses.user_id' => (int)$identity->id])
-                        ->first();
-                    if ($address) {
-                        $cart->address_id = $addressId;
-                        if ($cartsTable->save($cart)) {
-                            $this->Flash->success('Address selected for this cart.');
-                        } else {
-                            $this->Flash->error('Could not update the cart address. Please try again.');
-                        }
-                    } else {
-                        $this->Flash->error('Invalid address selection.');
-                    }
-                } else {
-                    $cart->address_id = null;
-                    $cartsTable->save($cart);
-                }
-            }
+
 
             if ($cart) {
                 $cartItems = $cart->cart_items ?? [];
@@ -169,13 +145,6 @@ class ShopController extends AppController
                 }
             }
 
-            // Load addresses for the logged-in user
-            $addressesTable = TableRegistry::getTableLocator()->get('Addresses');
-            $addresses = $addressesTable->find()
-                ->where(['Addresses.user_id' => (int)$identity->id, 'Addresses.is_active' => true])
-                ->orderAsc('Addresses.label')
-                ->all()
-                ->toList();
         } else {
             // Guest cart via session
             $session = $this->request->getSession();
@@ -208,7 +177,7 @@ class ShopController extends AppController
         // Simple total calc (no business rules yet)
         $totals['total'] = $totals['subtotal'] - $totals['discount'] + $totals['shipping'] + $totals['tax'];
 
-        $this->set(compact('cart', 'cartItems', 'totals', 'addresses'));
+        $this->set(compact('cart', 'cartItems', 'totals'));
     }
 
     // Add to cart (handles guest carts via session and logged in user carts)
@@ -451,10 +420,6 @@ class ShopController extends AppController
 
             if ($cart) {
                 $cartItems = $cart->cart_items ?? [];
-                if ((int)($cart->address_id ?? 0) <= 0) {
-                    $this->Flash->error('Please select a shipping address before checkout.');
-                    return $this->redirect(['action' => 'cart']);
-                }
             }
         } else {
             $session = $this->request->getSession();
@@ -520,6 +485,9 @@ class ShopController extends AppController
         $cancelUrl = Router::url(['controller' => 'Shop', 'action' => 'cancel'], true);
 
         try {
+            if (!class_exists(\Stripe\StripeClient::class)) {
+                throw new \RuntimeException('Stripe SDK is not installed.');
+            }
             $stripe = new \Stripe\StripeClient($secretKey);
 
             $params = [
@@ -530,6 +498,14 @@ class ShopController extends AppController
                 'cancel_url' => $cancelUrl,
                 'billing_address_collection' => 'auto',
                 'automatic_tax' => ['enabled' => false],
+                // Collect email, name, shipping address, and phone on Stripe for both guests and logged-in users
+                'customer_creation' => 'always',
+                'shipping_address_collection' => [
+                    'allowed_countries' => ['AU']
+                ],
+                'phone_number_collection' => [
+                    'enabled' => true
+                ],
             ];
 
             // Pass the authenticated user's email to Stripe so it pre-fills the checkout email
@@ -539,7 +515,7 @@ class ShopController extends AppController
 
             $session = $stripe->checkout->sessions->create($params);
         } catch (\Throwable $e) {
-            $this->Flash->error('Payment service error: ' . $e->getMessage());
+            $this->Flash->error('Payment service error. Please try again later.');
             return $this->redirect(['action' => 'cart']);
         }
 
@@ -571,6 +547,9 @@ class ShopController extends AppController
         $isPaid = false;
         if ($sessionId && $secretKey) {
             try {
+                if (!class_exists(\Stripe\StripeClient::class)) {
+                    throw new \RuntimeException('Stripe SDK is not installed.');
+                }
                 $stripe = new \Stripe\StripeClient($secretKey);
                 $checkoutSession = $stripe->checkout->sessions->retrieve($sessionId);
                 $isPaid = ($checkoutSession && ($checkoutSession->payment_status === 'paid'));
@@ -723,5 +702,90 @@ class ShopController extends AppController
         $this->viewBuilder()->setLayout('frontend');
         $this->Flash->warning('Checkout canceled. You can review your cart and try again.');
         return $this->redirect(['action' => 'cart']);
+    }
+
+    // Direct checkout for a single pre-order item (bypass cart)
+    public function preorderCheckout()
+    {
+        $this->request->allowMethod(['post']);
+
+        $variantId = (int)$this->request->getData('product_variant_id');
+        $qty = (int)max(1, (int)$this->request->getData('quantity'));
+        if ($variantId <= 0) {
+            $this->Flash->error('Invalid product selection.');
+            return $this->redirect($this->referer() ?: ['action' => 'index']);
+        }
+
+        $secretKey = (string)Configure::read('Stripe.secret_key');
+        if (!$secretKey) {
+            $this->Flash->error('Payment configuration missing.');
+            return $this->redirect($this->referer() ?: ['action' => 'view']);
+        }
+
+        $variantsTable = $this->fetchTable('ProductVariants');
+        $variant = $variantsTable->find()
+            ->where(['ProductVariants.id' => $variantId])
+            ->contain(['Products'])
+            ->first();
+        if (!$variant) {
+            $this->Flash->error('Selected item is unavailable.');
+            return $this->redirect($this->referer() ?: ['action' => 'index']);
+        }
+
+        $currency = 'aud';
+        $name = $variant->product->name ?? 'Item';
+        $unitAmount = (int)round(((float)($variant->price ?? 0)) * 100);
+        $qty = max(1, $qty);
+
+        $lineItems = [[
+            'price_data' => [
+                'currency' => $currency,
+                'product_data' => [
+                    'name' => $name,
+                ],
+                'unit_amount' => $unitAmount,
+            ],
+            'quantity' => $qty,
+        ]];
+
+        $successUrl = Router::url(['controller' => 'Shop', 'action' => 'success'], true) . '?session_id={CHECKOUT_SESSION_ID}';
+        $cancelUrl = Router::url(['controller' => 'Shop', 'action' => 'cancel'], true);
+
+        $identity = $this->request->getAttribute('identity');
+
+        try {
+            if (!class_exists(\Stripe\StripeClient::class)) {
+                throw new \RuntimeException('Stripe SDK is not installed.');
+            }
+            $stripe = new \Stripe\StripeClient($secretKey);
+
+            $params = [
+                'mode' => 'payment',
+                'payment_method_types' => ['card'],
+                'line_items' => $lineItems,
+                'success_url' => $successUrl,
+                'cancel_url' => $cancelUrl,
+                'billing_address_collection' => 'auto',
+                'automatic_tax' => ['enabled' => false],
+                'customer_creation' => 'always',
+                'shipping_address_collection' => [
+                    'allowed_countries' => ['AU']
+                ],
+                'phone_number_collection' => [
+                    'enabled' => true
+                ],
+            ];
+
+            if ($identity && !empty($identity->email)) {
+                $params['customer_email'] = (string)$identity->email;
+            }
+
+            $session = $stripe->checkout->sessions->create($params);
+        } catch (\Throwable $e) {
+            $this->Flash->error('Payment service error. Please try again later.');
+            return $this->redirect($this->referer() ?: ['action' => 'index']);
+        }
+
+        return $this->redirect($session->url, 303);
     }
 }

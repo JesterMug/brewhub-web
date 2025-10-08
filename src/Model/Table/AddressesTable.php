@@ -12,7 +12,6 @@ use Cake\Validation\Validator;
  * Addresses Model
  *
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
- * @property \App\Model\Table\CartsTable&\Cake\ORM\Association\HasMany $Carts
  * @property \App\Model\Table\OrdersTable&\Cake\ORM\Association\HasMany $Orders
  *
  * @method \App\Model\Entity\Address newEmptyEntity()
@@ -49,9 +48,6 @@ class AddressesTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER',
         ]);
-        $this->hasMany('Carts', [
-            'foreignKey' => 'address_id',
-        ]);
         $this->hasMany('Orders', [
             'foreignKey' => 'address_id',
         ]);
@@ -73,17 +69,22 @@ class AddressesTable extends Table
         $validator
             ->scalar('recipient_full_name')
             ->maxLength('recipient_full_name', 127)
+            ->regex('recipient_full_name', "/^[\p{L}\s'\-]+$/u", 'Only letters, spaces, hyphens, and apostrophes allowed')
             ->requirePresence('recipient_full_name', 'create')
             ->notEmptyString('recipient_full_name');
 
         $validator
             ->scalar('recipient_phone')
             ->maxLength('recipient_phone', 23)
+            ->regex('recipient_phone', '/^[+()\d\s-]{8,20}$/', 'Enter a valid phone number')
             ->requirePresence('recipient_phone', 'create')
             ->notEmptyString('recipient_phone');
 
+        // Restrict to allowed property types
+        $allowedPropertyTypes = ['House', 'Apartment', 'Business', 'PO Box', 'Other'];
         $validator
             ->scalar('property_type')
+            ->inList('property_type', $allowedPropertyTypes, 'Invalid property type')
             ->requirePresence('property_type', 'create')
             ->notEmptyString('property_type');
 
@@ -101,21 +102,26 @@ class AddressesTable extends Table
         $validator
             ->scalar('city')
             ->maxLength('city', 100)
+            ->regex('city', "/^[\p{L}\s'\-]+$/u", 'Only letters, spaces, hyphens, and apostrophes allowed')
             ->requirePresence('city', 'create')
             ->notEmptyString('city');
 
+        // AU states
+        $auStates = ['ACT','NSW','NT','QLD','SA','TAS','VIC','WA'];
         $validator
             ->scalar('state')
+            ->inList('state', $auStates, 'Select a valid state/territory')
             ->requirePresence('state', 'create')
             ->notEmptyString('state');
 
         $validator
             ->requirePresence('postcode', 'create')
+            ->regex('postcode', '/^\d{4}$/', 'Enter a valid 4-digit postcode')
             ->notEmptyString('postcode');
 
         $validator
             ->boolean('is_active')
-            ->notEmptyString('is_active');
+            ->allowEmptyString('is_active');
 
         $validator
             ->integer('user_id')

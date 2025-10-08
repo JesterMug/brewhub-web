@@ -68,46 +68,6 @@
                 </tr>
             </table>
             <div class="related">
-                <h4><?= __('Related Carts') ?></h4>
-                <?php if (!empty($address->carts)) : ?>
-                <div class="table-responsive">
-                    <table>
-                        <tr>
-                            <th><?= __('Id') ?></th>
-                            <th><?= __('User Id') ?></th>
-                            <th><?= __('Address Id') ?></th>
-                            <th><?= __('Status') ?></th>
-                            <th><?= __('Date Created') ?></th>
-                            <th><?= __('Date Modified') ?></th>
-                            <th class="actions"><?= __('Actions') ?></th>
-                        </tr>
-                        <?php foreach ($address->carts as $cart) : ?>
-                        <tr>
-                            <td><?= h($cart->id) ?></td>
-                            <td><?= h($cart->user_id) ?></td>
-                            <td><?= h($cart->address_id) ?></td>
-                            <td><?= h($cart->status) ?></td>
-                            <td><?= h($cart->date_created) ?></td>
-                            <td><?= h($cart->date_modified) ?></td>
-                            <td class="actions">
-                                <?= $this->Html->link(__('View'), ['controller' => 'Carts', 'action' => 'view', $cart->id]) ?>
-                                <?= $this->Html->link(__('Edit'), ['controller' => 'Carts', 'action' => 'edit', $cart->id]) ?>
-                                <?= $this->Form->postLink(
-                                    __('Delete'),
-                                    ['controller' => 'Carts', 'action' => 'delete', $cart->id],
-                                    [
-                                        'method' => 'delete',
-                                        'confirm' => __('Are you sure you want to delete # {0}?', $cart->id),
-                                    ]
-                                ) ?>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </table>
-                </div>
-                <?php endif; ?>
-            </div>
-            <div class="related">
                 <h4><?= __('Related Orders') ?></h4>
                 <?php if (!empty($address->orders)) : ?>
                 <div class="table-responsive">

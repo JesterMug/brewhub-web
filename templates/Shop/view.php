@@ -75,7 +75,13 @@
             <p class="lead"><?= h($product->description) ?></p>
 
             <div class="d-flex">
-                <?= $this->Form->create(null, ['url' => ['controller' => 'Shop', 'action' => 'addToCart'], 'class' => 'd-flex align-items-center']) ?>
+                <?php $addUrl = $this->Url->build(['controller' => 'Shop', 'action' => 'addToCart']); ?>
+                <?php $preUrl = $this->Url->build(['controller' => 'Shop', 'action' => 'preorderCheckout']); ?>
+                <?= $this->Form->create(null, [
+                    'url' => ['controller' => 'Shop', 'action' => 'addToCart'],
+                    'id' => 'productActionForm',
+                    'class' => 'd-flex align-items-center'
+                ]) ?>
                     <input class="form-control text-center me-3" name="quantity" id="inputQuantity" type="number" min="1" value="1" style="max-width: 4rem" />
                     <?php
                         // Default to first variant if available
@@ -98,6 +104,9 @@
                     const isPreorderInput = document.getElementById('isPreorder');
                     const btnText = document.getElementById('btnText');
                     const quantityInput = document.getElementById('inputQuantity');
+                    const form = document.getElementById('productActionForm');
+                    const addUrl = <?= json_encode($addUrl) ?>;
+                    const preUrl = <?= json_encode($preUrl) ?>;
 
                     function updateButtonState() {
                         if (!select) return;
@@ -109,10 +118,12 @@
                             btnText.textContent = 'Add to Cart';
                             isPreorderInput.value = '0';
                             quantityInput.disabled = false;
+                            if (form) form.action = addUrl;
                         } else {
-                            btnText.textContent = 'Pre-Order';
+                            btnText.textContent = 'Pre-Order Now';
                             isPreorderInput.value = '1';
                             quantityInput.disabled = false;
+                            if (form) form.action = preUrl;
                         }
                     }
 

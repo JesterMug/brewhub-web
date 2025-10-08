@@ -69,6 +69,24 @@ $this->assign('title', 'Admin Dashboard');
     </div>
 
     <div class="col-xl-3 col-md-6 mb-4">
+        <a href="<?= $this->Url->build(['controller' => 'orders', 'action' => 'index']) ?>" class="text-decoration-none">
+            <div class="card border-left-secondary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">Orders</div>
+                            <div class="h5 mb-0 font-weight-bold"><?= (int)$ordersCount ?></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-receipt fa-2x text-gray-300" style="color: var(--text-secondary-dark) !important;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
         <a href="<?= $this->Url->build(['controller' => 'users', 'action' => 'index']) ?>" class="text-decoration-none">
             <div class="card border-left-warning shadow h-100 py-2">
                 <div class="card-body">

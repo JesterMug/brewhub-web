@@ -10,6 +10,11 @@ namespace App\Controller;
  */
 class OrdersController extends AppController
 {
+    public function initialize(): void
+    {
+        parent::initialize();
+    }
+
     /**
      * Index method
      *
@@ -25,6 +30,28 @@ class OrdersController extends AppController
     }
 
     /**
+     * Admin Index method (Admin dashboard view)
+     *
+     * Lists all orders in a DataTable-like view similar to products/index.
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function adminIndex()
+    {
+        // Restrict to admin/superuser similar to ProductsController
+        $this->checkAdminAuth();
+
+        $query = $this->Orders->find()
+            ->contain(['Users', 'Addresses'])
+            ->orderDesc('Orders.created');
+
+        $orders = $this->paginate($query);
+
+        $this->set(compact('orders'));
+        $this->viewBuilder()->setTemplate('admin_index');
+    }
+
+    /**
      * View method
      *
      * @param string|null $id Order id.
@@ -33,7 +60,12 @@ class OrdersController extends AppController
      */
     public function view($id = null)
     {
-        $order = $this->Orders->get($id, contain: ['Users', 'Addresses', 'Invoices', 'OrderProductVariants']);
+        $order = $this->Orders->get($id, contain: [
+            'Users',
+            'Addresses',
+            'Invoices',
+            'OrderProductVariants' => ['ProductVariants' => ['Products']],
+        ]);
         $this->set(compact('order'));
     }
 

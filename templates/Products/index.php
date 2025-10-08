@@ -40,10 +40,13 @@ echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['bl
                             ],
                         ) ?>
 
-                        <?= $this->Form->postLink(
-                            __('Feature'),
-                            ['controller' => 'products', 'action' => 'feature', $product->id],
-                        ) ?>
+                        <?php if ($product->is_featured == 0) : ?>
+                            <?= $this->Form->postLink(
+                                __('Feature'),
+                                ['controller' => 'products', 'action' => 'feature', $product->id],
+
+                            ) ?>
+                        <?php endif; ?>
 
                     </td>
                 </tr>

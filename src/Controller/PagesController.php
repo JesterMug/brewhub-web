@@ -74,13 +74,15 @@ class PagesController extends AppController
         $productsTable = $this->fetchTable('Products');
         $usersTable = $this->fetchTable('Users');
         $formsTable = $this->fetchTable('Forms');
+        $ordersTable = $this->fetchTable('Orders');
 
         $productsCount = $productsTable->find()->count();
         $usersCount = $usersTable->find()->count();
+        $ordersCount = $ordersTable->find()->count();
         $newMessagesCount = $formsTable->find()->where(['replied_status' => false])->count();
         $totalRevenue = 0;
 
-        $this->set(compact('productsCount', 'usersCount', 'newMessagesCount', 'totalRevenue'));
+        $this->set(compact('productsCount', 'usersCount', 'ordersCount', 'newMessagesCount', 'totalRevenue'));
 
         $this->viewBuilder()->setLayout('default');
     }
