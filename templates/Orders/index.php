@@ -15,16 +15,16 @@ echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['bl
     <div class="table-responsive">
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
-            <tr>
-                <th><?= h('Order #') ?></th>
-                <th><?= h('Customer') ?></th>
-                <th><?= h('Order Date') ?></th>
-                <th><?= h('Shipping Status') ?></th>
-                <th class="actions"><?= __('Actions') ?></th>
-            </tr>
+                <tr>
+                    <th><?= h('Order #') ?></th>
+                    <th><?= h('Customer') ?></th>
+                    <th><?= h('Order Date') ?></th>
+                    <th><?= h('Shipping Status') ?></th>
+                    <th class="actions"><?= __('Actions') ?></th>
+                </tr>
             </thead>
             <tbody>
-            <?php foreach ($orders as $order): ?>
+                <?php foreach ($orders as $order): ?>
                 <tr>
                     <td><?= h($order->id) ?></td>
                     <td><?= $order->hasValue('user') ? h(($order->user->first_name ?? '') . ' ' . ($order->user->last_name ?? '')) : '' ?></td>
@@ -34,7 +34,7 @@ echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['bl
                         <?= $this->Html->link(__('View'), ['action' => 'view', $order->id]) ?>
                     </td>
                 </tr>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
             </tbody>
         </table>
     </div>

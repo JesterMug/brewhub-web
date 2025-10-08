@@ -43,7 +43,7 @@ class OrdersController extends AppController
 
         $query = $this->Orders->find()
             ->contain(['Users', 'Addresses'])
-            ->orderDesc('Orders.created');
+            ->orderByDesc('Orders.created');
 
         $orders = $this->paginate($query);
 

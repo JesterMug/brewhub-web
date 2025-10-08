@@ -609,6 +609,33 @@ class ShopController extends AppController
             }
         }
 
+        // If cart is empty (e.g., direct pre-order checkout bypassed cart), try reconstructing from Stripe metadata
+        if (empty($cartItems) && isset($checkoutSession) && !empty($checkoutSession)) {
+            $metaArr = [];
+            $meta = $checkoutSession->metadata ?? null;
+            if ($meta instanceof \Stripe\StripeObject) {
+                $metaArr = $meta->toArray();
+            } elseif (is_array($meta)) {
+                $metaArr = $meta;
+            }
+            $isPreMeta = (string)($metaArr['preorder'] ?? '') === '1';
+            $variantIdMeta = isset($metaArr['variant_id']) ? (int)$metaArr['variant_id'] : 0;
+            $qtyMeta = isset($metaArr['quantity']) ? (int)$metaArr['quantity'] : 0;
+            if ($isPreMeta && $variantIdMeta > 0 && $qtyMeta > 0) {
+                $variantsTable = TableRegistry::getTableLocator()->get('ProductVariants');
+                try {
+                    $variant = $variantsTable->get($variantIdMeta);
+                    $cartItems[] = (object) [
+                        'product_variant' => $variant,
+                        'quantity' => max(1, $qtyMeta),
+                        'is_preorder' => true,
+                    ];
+                } catch (\Throwable $e) {
+                    // ignore if cannot load variant
+                }
+            }
+        }
+
         if (empty($cartItems)) {
             // Nothing to convert into an order
             $session->delete('GuestCart');
@@ -773,6 +800,11 @@ class ShopController extends AppController
                 ],
                 'phone_number_collection' => [
                     'enabled' => true
+                ],
+                'metadata' => [
+                    'preorder' => '1',
+                    'variant_id' => (string)$variantId,
+                    'quantity' => (string)$qty,
                 ],
             ];
 
