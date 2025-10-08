@@ -33,7 +33,7 @@ class ProfileController extends AppController
         $usersTable = $this->fetchTable('Users');
         $user = $usersTable->get((int)$identity->id, [
             'contain' => [
-                'Addresses',
+                'Addresses' => function($q) { return $q->where(['Addresses.is_active' => true]); },
                 'Orders' => function($q) { return $q->orderDesc('Orders.id')->limit(5); },
             ]
         ]);
@@ -51,7 +51,7 @@ class ProfileController extends AppController
 
         $addressesTable = $this->fetchTable('Addresses');
         $addresses = $addressesTable->find()
-            ->where(['user_id' => (int)$identity->id])
+            ->where(['user_id' => (int)$identity->id, 'is_active' => true])
             ->orderByDesc('id')
             ->all();
 

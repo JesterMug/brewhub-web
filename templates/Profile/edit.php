@@ -30,11 +30,11 @@
                         <?= $this->Form->label('last_name', 'Last Name') ?>
                         <?= $this->Form->text('last_name', ['class' => 'form-control', 'required' => true]) ?>
                     </div>
-                    <div class="mb-3">
-                        <?= $this->Form->label('email', 'Email') ?>
-                        <?= $this->Form->email('email', ['class' => 'form-control', 'required' => true]) ?>
+<!--                    <div class="mb-3">
+                        <?php /*= $this->Form->label('email', 'Email') */?>
+                        <?php /*= $this->Form->email('email', ['class' => 'form-control', 'required' => true]) */?>
                     </div>
-                    <div class="d-flex gap-2">
+-->                    <div class="d-flex gap-2">
                         <a href="<?= $this->Url->build(['action' => 'index']) ?>" class="btn btn-outline-secondary">Cancel</a>
                         <button type="submit" class="btn btn-primary">Save Changes</button>
                     </div>

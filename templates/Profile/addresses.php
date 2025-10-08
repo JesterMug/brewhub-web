@@ -5,7 +5,7 @@
  */
 ?>
 <header>
-    <div class="py-4"></div>
+    <div class="py-5"></div>
     <div class="container px-4 px-lg-5 my-4">
         <div class="text-center text-white">
             <h1 class="display-6 fw-bolder">My Addresses</h1>
@@ -28,13 +28,18 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card h-100 shadow-sm">
                         <div class="card-body">
-                            <h6 class="card-subtitle mb-2 text-muted">Address #<?= (int)$addr->id ?></h6>
-                            <p class="mb-1"><?= h($addr->address_line_1) ?></p>
-                            <?php if (!empty($addr->address_line_2)): ?>
-                                <p class="mb-1"><?= h($addr->address_line_2) ?></p>
+                            <div class="d-flex justify-content-between align-items-start">
+                                <h6 class="card-subtitle mb-2 text-muted">Address #<?= (int)$addr->id ?></h6>
+                                <?php if (!empty($addr->label)): ?>
+                                    <span class="badge bg-secondary"><?= h($addr->label) ?></span>
+                                <?php endif; ?>
+                            </div>
+                            <p class="mb-1"><strong><?= h($addr->recipient_full_name) ?></strong><?= !empty($addr->recipient_phone) ? ' • ' . h($addr->recipient_phone) : '' ?></p>
+                            <p class="mb-1"><?= h($addr->street) ?></p>
+                            <?php if (!empty($addr->building)): ?>
+                                <p class="mb-1"><?= h($addr->building) ?></p>
                             <?php endif; ?>
-                            <p class="mb-1"><?= h($addr->suburb) ?>, <?= h($addr->state) ?> <?= h($addr->postcode) ?></p>
-                            <p class="mb-0"><?= h($addr->country ?? 'Australia') ?></p>
+                            <p class="mb-0"><?= h($addr->city) ?>, <?= h($addr->state) ?> <?= h($addr->postcode) ?></p>
                         </div>
                         <div class="card-footer bg-transparent border-0 d-flex gap-2 pt-0">
                             <a class="btn btn-outline-dark btn-sm flex-fill" href="<?= $this->Url->build(['controller' => 'Addresses', 'action' => 'edit', $addr->id]) ?>">Edit</a>

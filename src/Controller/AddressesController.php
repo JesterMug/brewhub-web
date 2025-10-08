@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Cake\Http\Exception\ForbiddenException;
+use Cake\Datasource\Exception\RecordNotFoundException;
 
 /**
  * Addresses Controller
@@ -12,54 +12,42 @@ use Cake\Http\Exception\ForbiddenException;
  */
 class AddressesController extends AppController
 {
-    public function beforeFilter(\Cake\Event\EventInterface $event)
+    public function initialize(): void
     {
-        parent::beforeFilter($event);
-        // Require authentication for all address actions (customer-owned)
-        $this->Authentication->addUnauthenticatedActions([]);
-        // Use the frontend site layout
+        parent::initialize();
+        // Frontend customer context
         $this->viewBuilder()->setLayout('frontend');
+        // Require authentication for managing addresses
+        $this->Authentication->addUnauthenticatedActions([]);
     }
 
     /**
-     * Index method (customer's own addresses)
+     * Index method (admin-style list retained if needed)
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
     public function index()
     {
-        $identity = $this->request->getAttribute('identity');
-        if (!$identity) {
-            return $this->redirect(['controller' => 'Users', 'action' => 'login']);
-        }
-
-        $addresses = $this->Addresses->find()
-            ->where(['user_id' => (int)$identity->id])
-            ->orderByDesc('id');
-
+        $query = $this->Addresses->find()->contain(['Users']);
+        $addresses = $this->paginate($query);
         $this->set(compact('addresses'));
     }
 
     /**
-     * View a single address (must belong to the logged-in user)
+     * View method
+     *
+     * @param string|null $id Address id.
+     * @return \Cake\Http\Response|null|void Renders view
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null)
     {
-        $identity = $this->request->getAttribute('identity');
-        if (!$identity) {
-            return $this->redirect(['controller' => 'Users', 'action' => 'login']);
-        }
-        $address = $this->Addresses->get($id);
-        if ((int)$address->user_id !== (int)$identity->id) {
-            throw new ForbiddenException('You are not allowed to view this address.');
-        }
+        $address = $this->Addresses->get($id, contain: ['Users', 'Orders']);
         $this->set(compact('address'));
     }
 
     /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
+     * Add method — customer adds own address.
      */
     public function add()
     {
@@ -71,23 +59,26 @@ class AddressesController extends AppController
         $address = $this->Addresses->newEmptyEntity();
         if ($this->request->is('post')) {
             $data = $this->request->getData();
-            // Force ownership to logged-in user; ignore any incoming user_id
+            // Force ownership and default active if not set
             $data['user_id'] = (int)$identity->id;
-            $address = $this->Addresses->patchEntity($address, $data);
+            if (!isset($data['is_active'])) { $data['is_active'] = true; }
+
+            $address = $this->Addresses->patchEntity($address, $data, [
+                'accessibleFields' => ['user_id' => true],
+            ]);
             if ($this->Addresses->save($address)) {
-                $this->Flash->success(__('The address has been saved.'));
+                $this->Flash->success(__('Address saved.'));
                 return $this->redirect(['controller' => 'Profile', 'action' => 'addresses']);
             }
-            $this->Flash->error(__('The address could not be saved. Please, check the details and try again.'));
+            $this->Flash->error(__('The address could not be saved. Please, check details and try again.'));
         }
         $this->set(compact('address'));
     }
 
     /**
-     * Edit method
+     * Edit method — only owner can edit.
      *
-     * @param string|null $id Address id.
-     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
+     * @param string|int|null $id Address id.
      */
     public function edit($id = null)
     {
@@ -96,47 +87,51 @@ class AddressesController extends AppController
             return $this->redirect(['controller' => 'Users', 'action' => 'login']);
         }
 
-        $address = $this->Addresses->get($id);
-        if ((int)$address->user_id !== (int)$identity->id) {
-            throw new ForbiddenException('You are not allowed to edit this address.');
+        $address = $this->Addresses->find()
+            ->where(['Addresses.id' => (int)$id, 'Addresses.user_id' => (int)$identity->id])
+            ->first();
+        if (!$address) {
+            throw new RecordNotFoundException('Address not found.');
         }
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
-            $data['user_id'] = (int)$identity->id; // ensure ownership remains
-            $address = $this->Addresses->patchEntity($address, $data);
+            // Never allow changing ownership
+            $address = $this->Addresses->patchEntity($address, $data, [
+                'accessibleFields' => ['user_id' => false],
+            ]);
             if ($this->Addresses->save($address)) {
-                $this->Flash->success(__('The address has been saved.'));
+                $this->Flash->success(__('Address updated.'));
                 return $this->redirect(['controller' => 'Profile', 'action' => 'addresses']);
             }
-            $this->Flash->error(__('The address could not be saved. Please, check the details and try again.'));
+            $this->Flash->error(__('The address could not be saved. Please, check details and try again.'));
         }
         $this->set(compact('address'));
     }
 
     /**
-     * Delete method
-     *
-     * @param string|null $id Address id.
-     * @return \Cake\Http\Response|null Redirects to profile addresses.
+     * Delete method — only owner can delete but softly.
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
         $identity = $this->request->getAttribute('identity');
         if (!$identity) {
             return $this->redirect(['controller' => 'Users', 'action' => 'login']);
         }
-        $address = $this->Addresses->get($id);
-        if ((int)$address->user_id !== (int)$identity->id) {
-            throw new ForbiddenException('You are not allowed to delete this address.');
+        $address = $this->Addresses->find()
+            ->where(['Addresses.id' => (int)$id, 'Addresses.user_id' => (int)$identity->id])
+            ->first();
+        if (!$address) {
+            $this->Flash->error(__('Address not found.'));
+            return $this->redirect(['controller' => 'Profile', 'action' => 'addresses']);
         }
-        if ($this->Addresses->delete($address)) {
+        // Soft delete: mark as inactive instead of removing the record because order will store them,
+        $address->is_active = false;
+        if ($this->Addresses->save($address)) {
             $this->Flash->success(__('The address has been deleted.'));
         } else {
             $this->Flash->error(__('The address could not be deleted. Please, try again.'));
         }
-
         return $this->redirect(['controller' => 'Profile', 'action' => 'addresses']);
     }
 }

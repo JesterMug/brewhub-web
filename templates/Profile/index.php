@@ -29,7 +29,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-8">
+        <div>
             <div class="row g-4">
                 <div class="col-md-6">
                     <div class="card h-100 shadow-sm">
@@ -62,17 +62,17 @@
                                     <table class="table table-sm align-middle">
                                         <thead>
                                         <tr>
-                                            <th>#</th>
-                                            <th>Date</th>
-                                            <th>Status</th>
+                                            <th class="text-white">Order#</th>
+                                            <th class="text-white">Date</th>
+                                            <th class="text-white">Status</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <?php foreach ($user->orders as $o): ?>
                                             <tr>
-                                                <td><?= (int)$o->id ?></td>
-                                                <td><?= h($o->order_date ? $o->order_date->format('Y-m-d H:i') : '') ?></td>
-                                                <td><span class="badge bg-secondary"><?= h($o->shipping_status) ?></span></td>
+                                                <td class="text-muted mb-4"><?= (int)$o->id ?></td>
+                                                <td class="text-muted mb-4"><?= h($o->order_date ? $o->order_date->format('Y-m-d H:i') : '') ?></td>
+                                                <td class="text-muted mb-4"><span class="badge bg-secondary"><?= h($o->shipping_status) ?></span></td>
                                             </tr>
                                         <?php endforeach; ?>
                                         </tbody>
