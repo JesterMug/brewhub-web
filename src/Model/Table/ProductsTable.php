@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use Cake\ORM\Query; // ← added for type-hints
 use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -11,7 +12,7 @@ use Cake\Validation\Validator;
 /**
  * Products Model
  *
- * @property \App\Model\Table\ProductCoffeeTable&\Cake\ORM\Association\HasMany $ProductCoffee
+ * @property \App\Model\Table\ProductCoffeeTable&\Cake\ORM\Association\HasOne $ProductCoffee
  * @property \App\Model\Table\ProductImagesTable&\Cake\ORM\Association\HasMany $ProductImages
  * @property \App\Model\Table\ProductMerchandiseTable&\Cake\ORM\Association\HasMany $ProductMerchandise
  * @property \App\Model\Table\ProductVariantsTable&\Cake\ORM\Association\HasMany $ProductVariants
@@ -107,5 +108,41 @@ class ProductsTable extends Table
             ->notEmptyDateTime('date_modified');
 
         return $validator;
+    }
+
+    /** Add total stock (SUM(ProductVariants.stock)) as "stock_effective" per product. */
+    public function findWithStock(Query $query, array $options)
+    {
+        $fn = $query->func();
+
+        return $query
+            ->leftJoinWith('ProductVariants')
+            ->select([
+                'Products.id',
+                'Products.name',
+                'Products.category',
+                'Products.description',
+                'Products.date_created',
+                'Products.date_modified',
+                'stock_effective' => $fn->coalesce([$fn->sum('ProductVariants.stock'), 0]),
+            ])
+            ->group(['Products.id']);
+    }
+
+    /** Filter low-stock products (<= threshold, default 5). */
+    public function findLowStock(Query $query, array $options)
+    {
+        $threshold = (int)($options['threshold'] ?? 5);
+        $query = $this->find('withStock');
+
+        return $query->having(function ($exp) use ($threshold) {
+            return $exp->lte('stock_effective', $threshold);
+        });
+    }
+
+    /** Helper to directly fetch low-stock products. */
+    public function getLowStockProducts(int $threshold = 5)
+    {
+        return $this->find('lowStock', compact('threshold'))->all();
     }
 }

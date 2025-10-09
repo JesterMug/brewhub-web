@@ -66,6 +66,9 @@ return function (RouteBuilder $routes): void {
         $builder->connect('/pages/view/:id', ['controller' => 'Pages', 'action' => 'view'])
             ->setPass(['id'])
             ->setPatterns(['id' => '\d+']);
+        //reported generate
+        $builder->connect('/products/report', ['controller' => 'Products', 'action' => 'report']);
+
 
 
         /*
