@@ -68,20 +68,36 @@ class AddressesTable extends Table
 
         $validator
             ->scalar('recipient_full_name')
-            ->maxLength('recipient_full_name', 127)
+            ->maxLength('recipient_full_name', 100)
             ->requirePresence('recipient_full_name', 'create')
-            ->notEmptyString('recipient_full_name');
+            ->notEmptyString('recipient_full_name')
+            ->add('recipient_full_name', 'lettersOnly', [
+                'rule' => function ($value) {
+                    return (bool)preg_match("/^[A-Za-zÀ-ÖØ-öø-ÿ' -]{2,100}$/u", (string)$value);
+                },
+                'message' => 'Full name should contain only letters, spaces, hyphens or apostrophes.'
+            ]);
 
         $validator
             ->scalar('recipient_phone')
-            ->maxLength('recipient_phone', 23)
+            ->maxLength('recipient_phone', 20)
             ->requirePresence('recipient_phone', 'create')
-            ->notEmptyString('recipient_phone');
+            ->notEmptyString('recipient_phone')
+            ->add('recipient_phone', 'validPhone', [
+                'rule' => function ($value) {
+                    return (bool)preg_match('/^[0-9\s\+\-\(\)\.]{6,20}$/', (string)$value);
+                },
+                'message' => 'Please enter a valid phone number (6-20 digits; spaces, +, (), . and - allowed).'
+            ]);
 
         $validator
             ->scalar('property_type')
             ->requirePresence('property_type', 'create')
-            ->notEmptyString('property_type');
+            ->notEmptyString('property_type')
+            ->add('property_type', 'inList', [
+                'rule' => ['inList', ['House', 'Apartment', 'Business', 'Other']],
+                'message' => 'Please select a valid property type.'
+            ]);
 
         $validator
             ->scalar('street')
@@ -98,12 +114,22 @@ class AddressesTable extends Table
             ->scalar('city')
             ->maxLength('city', 100)
             ->requirePresence('city', 'create')
-            ->notEmptyString('city');
+            ->notEmptyString('city')
+            ->add('city', 'lettersOnly', [
+                'rule' => function ($value) {
+                    return (bool)preg_match("/^[A-Za-zÀ-ÖØ-öø-ÿ' -]{2,100}$/u", (string)$value);
+                },
+                'message' => 'City should contain only letters, spaces, hyphens or apostrophes.'
+            ]);
 
         $validator
             ->scalar('state')
             ->requirePresence('state', 'create')
-            ->notEmptyString('state');
+            ->notEmptyString('state')
+            ->add('state', 'inList', [
+                'rule' => ['inList', ['NSW', 'VIC', 'QLD', 'SA', 'WA', 'TAS', 'ACT', 'NT']],
+                'message' => 'Please select a valid state.'
+            ]);
 
         $validator
             ->requirePresence('postcode', 'create')
