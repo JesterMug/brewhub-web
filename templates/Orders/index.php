@@ -17,7 +17,6 @@ echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['bl
             <thead>
                 <tr>
                     <th><?= h('Order #') ?></th>
-                    <th><?= h('Customer') ?></th>
                     <th><?= h('Order Date') ?></th>
                     <th><?= h('Shipping Status') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
@@ -27,7 +26,6 @@ echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['bl
                 <?php foreach ($orders as $order): ?>
                 <tr>
                     <td><?= h($order->id) ?></td>
-                    <td><?= $order->hasValue('user') ? h(($order->user->first_name ?? '') . ' ' . ($order->user->last_name ?? '')) : '' ?></td>
                     <td><?= h($order->order_date) ?></td>
                     <td><?= h($order->shipping_status) ?></td>
                     <td class="actions">

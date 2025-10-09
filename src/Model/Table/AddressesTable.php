@@ -46,7 +46,7 @@ class AddressesTable extends Table
 
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
-            'joinType' => 'INNER',
+            'joinType' => 'LEFT',
         ]);
         $this->hasMany('Orders', [
             'foreignKey' => 'address_id',
@@ -107,7 +107,13 @@ class AddressesTable extends Table
 
         $validator
             ->requirePresence('postcode', 'create')
-            ->notEmptyString('postcode');
+            ->notEmptyString('postcode')
+            ->add('postcode', 'numeric', [
+                'rule' => function ($value) {
+                    return (bool)preg_match('/^\d{4}$/', (string)$value);
+                },
+                'message' => 'Please enter a valid 4-digit postcode.'
+            ]);
 
         $validator
             ->boolean('is_active')
@@ -115,7 +121,7 @@ class AddressesTable extends Table
 
         $validator
             ->integer('user_id')
-            ->notEmptyString('user_id');
+            ->allowEmptyString('user_id');
 
         return $validator;
     }
@@ -129,7 +135,8 @@ class AddressesTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn(['user_id'], 'Users'), ['errorField' => 'user_id']);
+        // Allow guest addresses without a user account
+        // $rules->add($rules->existsIn(['user_id'], 'Users'), ['errorField' => 'user_id']);
 
         return $rules;
     }

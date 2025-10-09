@@ -23,7 +23,7 @@ class OrdersController extends AppController
     public function index()
     {
         $query = $this->Orders->find()
-            ->contain(['Users', 'Addresses']);
+            ->contain(['Addresses']);
         $orders = $this->paginate($query);
 
         $this->set(compact('orders'));
@@ -61,7 +61,6 @@ class OrdersController extends AppController
     public function view($id = null)
     {
         $order = $this->Orders->get($id, contain: [
-            'Users',
             'Addresses',
             'Invoices',
             'OrderProductVariants' => ['ProductVariants' => ['Products']],

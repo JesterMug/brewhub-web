@@ -116,7 +116,7 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="text-sm-end mt-2 mt-sm-0">
-                            <?= $this->Form->create(null, ['url' => ['controller' => 'Shop', 'action' => 'checkout'], 'id' => 'checkoutForm']) ?>
+                            <?= $this->Form->create(null, ['url' => ['controller' => 'Shop', 'action' => 'review'], 'id' => 'checkoutForm']) ?>
                             <button type="submit" id="checkoutBtn" class="btn btn-success">
                                 <i class="mdi mdi-cart-outline me-1"></i> Checkout
                             </button>

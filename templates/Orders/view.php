@@ -8,15 +8,42 @@
     <div class="column column-80">
         <div class="orders view content">
             <h3><?="Order #", h($order->id) ?></h3>
+
+            <div class="card mb-3">
+                <div class="card-header"><?= __('Shipping Address') ?></div>
+                <div class="card-body">
+                    <?php if ($order->has('address')): $addr = $order->address; ?>
+                        <div class="small">
+                            <div class="mb-1 d-flex align-items-center gap-2">
+                                <?php if (!empty($addr->label)): ?>
+                                    <span class="badge bg-secondary"><?= h($addr->label) ?></span>
+                                <?php endif; ?>
+                                <strong><?= h($addr->recipient_full_name ?? '') ?></strong>
+                                <?php if (!empty($addr->recipient_phone)): ?>
+                                    <span class="text-muted">• <?= h($addr->recipient_phone) ?></span>
+                                <?php endif; ?>
+                            </div>
+                            <?php if (!empty($addr->street)): ?>
+                                <div class="mb-1"><?= h($addr->street) ?></div>
+                            <?php endif; ?>
+                            <?php if (!empty($addr->building)): ?>
+                                <div class="mb-1"><?= h($addr->building) ?></div>
+                            <?php endif; ?>
+                            <div class="mb-1">
+                                <?= h($addr->city ?? '') ?><?= !empty($addr->city) && (!empty($addr->state) || !empty($addr->postcode)) ? ',' : '' ?>
+                                <?= h($addr->state ?? '') ?> <?= h($addr->postcode ?? '') ?>
+                            </div>
+                            <div class="mt-2">
+                                <?= $this->Html->link(__('View address'), ['controller' => 'Addresses', 'action' => 'view', $addr->id], ['class' => 'link-primary']) ?>
+                            </div>
+                        </div>
+                    <?php else: ?>
+                        <span class="text-muted"><?= __('No address on file') ?></span>
+                    <?php endif; ?>
+                </div>
+            </div>
+
             <table class="table table-bordered table-sm" width="100%" cellspacing="0">
-                <tr>
-                    <th><?= __('User') ?></th>
-                    <td><?= $order->hasValue('user') ? $this->Html->link($order->user->first_name, ['controller' => 'Users', 'action' => 'view', $order->user->id]) : '' ?></td>
-                </tr>
-                <tr>
-                    <th><?= __('Address') ?></th>
-                    <td><?= $order->hasValue('address') ? $this->Html->link($order->address->label, ['controller' => 'Addresses', 'action' => 'view', $order->address->id]) : '' ?></td>
-                </tr>
                 <tr>
                     <th><?= __('Shipping Status') ?></th>
                     <td>
@@ -28,15 +55,12 @@
                                     'type' => 'select',
                                     'options' => [
                                         'pending' => 'Pending',
-                                        'failed' => 'Failed',
                                         'shipped' => 'Shipped',
-                                        'completed' => 'Completed',
-                                        'cancelled' => 'Cancelled',
                                     ],
                                     'default' => $order->shipping_status,
                                     'class' => 'form-select form-select-sm me-2',
                                 ]) ?>
-                                <?= $this->Form->button(__('Update'), ['class' => 'btn btn-sm btn-primary ms-2']) ?>
+                                <?= $this->Form->button(__('Update'), ['class' => 'btn btn-sm btn-primary']) ?>
                             <?= $this->Form->end() ?>
                         <?php else: ?>
                             <?= h($order->shipping_status) ?>
@@ -67,7 +91,6 @@
                         </tr>
                         <?php foreach ($order->invoices as $invoice) : ?>
                         <tr>
-                            <td><?= h($invoice->id) ?></td>
                             <td><?= h($invoice->order_id) ?></td>
                             <td><?= h($invoice->payment_method) ?></td>
                             <td><?= h($invoice->transaction_number) ?></td>

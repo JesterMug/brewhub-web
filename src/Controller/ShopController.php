@@ -15,7 +15,7 @@ class ShopController extends AppController
     {
         parent::beforeFilter($event);
         // Allow unauthenticated access to shop listing, product view, cart, cart mutations, and checkout flow
-        $this->Authentication->addUnauthenticatedActions(['index', 'view', 'cart', 'addToCart', 'removeFromCart', 'updateCartQuantity', 'checkout', 'preorderCheckout', 'success', 'cancel']);
+        $this->Authentication->addUnauthenticatedActions(['index', 'view', 'cart', 'addToCart', 'removeFromCart', 'updateCartQuantity', 'review', 'checkout', 'preorderCheckout', 'success', 'cancel']);
         $this->viewBuilder()->setLayout('frontend');
     }
 
@@ -389,14 +389,120 @@ class ShopController extends AppController
     }
 
     // Create a Stripe Checkout Session and redirect customer
+    public function review()
+    {
+        $this->viewBuilder()->setLayout('frontend');
+        $session = $this->request->getSession();
+        $identity = $this->request->getAttribute('identity');
+
+        // Build cart preview the same way as in cart()
+        $cartItems = [];
+        if ($identity) {
+            $cartsTable = $this->fetchTable('Carts');
+            $cart = $cartsTable->find()
+                ->where(['Carts.user_id' => (int)$identity->id, 'Carts.status' => 'active'])
+                ->contain([
+                    'CartItems' => [
+                        'ProductVariants' => [
+                            'Products' => ['ProductImages']
+                        ]
+                    ]
+                ])->orderByDesc('Carts.id')->first();
+            if ($cart) { $cartItems = $cart->cart_items ?? []; }
+        } else {
+            $guestCart = (array)$session->read('GuestCart');
+            if (!empty($guestCart)) {
+                $variantIds = array_keys($guestCart);
+                $variants = $this->fetchTable('ProductVariants')->find()
+                    ->where(['ProductVariants.id IN' => $variantIds])
+                    ->contain(['Products' => ['ProductImages']])
+                    ->all()->indexBy('id')->toArray();
+                foreach ($guestCart as $vid => $itemData) {
+                    if (!isset($variants[$vid])) { continue; }
+                    $cartItems[] = (object) [
+                        'product_variant' => $variants[$vid],
+                        'quantity' => (int)$itemData['quantity'],
+                        'is_preorder' => (bool)$itemData['is_preorder'],
+                    ];
+                }
+            }
+        }
+        if (empty($cartItems)) {
+            $this->Flash->warning('Your cart is empty.');
+            return $this->redirect(['action' => 'cart']);
+        }
+
+        $addresses = [];
+        if ($identity) {
+            $addresses = $this->fetchTable('Addresses')->find()
+                ->where(['user_id' => (int)$identity->id, 'is_active' => true])
+                ->orderByAsc('id')->all()->toArray();
+        }
+
+        if ($this->request->is('post')) {
+            $data = $this->request->getData();
+            $addressesTable = $this->fetchTable('Addresses');
+
+            $selectedAddressId = (int)($data['address_id'] ?? 0);
+            $createNew = (bool)($data['create_new'] ?? false);
+
+            if ($identity && $selectedAddressId > 0 && !$createNew) {
+                // ensure that the selected address belongs to the user
+                $exists = $addressesTable->exists(['id' => $selectedAddressId, 'user_id' => (int)$identity->id]);
+                if ($exists) {
+                    $session->write('Checkout.address_id', $selectedAddressId);
+                    return $this->redirect(['action' => 'checkout']);
+                }
+                $this->Flash->error('Please select a valid address.');
+            }
+
+            // Prepare address payload from form
+            $addrPayload = [
+                'label' => (string)($data['label'] ?? ''),
+                'recipient_full_name' => (string)($data['recipient_full_name'] ?? ''),
+                'recipient_phone' => (string)($data['recipient_phone'] ?? ''),
+                'property_type' => (string)($data['property_type'] ?? ''),
+                'street' => (string)($data['street'] ?? ''),
+                'building' => (string)($data['building'] ?? ''),
+                'city' => (string)($data['city'] ?? ''),
+                'state' => (string)($data['state'] ?? ''),
+                'postcode' => (string)($data['postcode'] ?? ''),
+                'is_active' => true,
+            ];
+
+            // For logged-in users, link the address; for guests, leave user_id null
+            if ($identity) {
+                $addrPayload['user_id'] = (int)$identity->id;
+            }
+
+            // Some basic sanitation
+            $addrPayload['postcode'] = preg_replace('/[^0-9]/', '', (string)$addrPayload['postcode']);
+
+            $address = $addressesTable->newEntity($addrPayload);
+            if ($addressesTable->save($address)) {
+                $session->write('Checkout.address_id', (int)$address->id);
+                return $this->redirect(['action' => 'checkout']);
+            }
+
+            $this->set('address', $address);
+        }
+
+        $this->set(compact('addresses', 'cartItems'));
+    }
+
     public function checkout()
     {
-        $this->request->allowMethod(['post']);
-
         $secretKey = (string)Configure::read('Stripe.secret_key');
         if (!$secretKey) {
             $this->Flash->error('Payment configuration missing.');
             return $this->redirect(['action' => 'cart']);
+        }
+
+        $session = $this->request->getSession();
+        $addressId = (int)$session->read('Checkout.address_id');
+        if ($addressId <= 0) {
+            $this->Flash->warning('Please provide a shipping address first.');
+            return $this->redirect(['action' => 'review']);
         }
 
         $identity = $this->request->getAttribute('identity');
@@ -415,7 +521,7 @@ class ShopController extends AppController
                         ]
                     ]
                 ])
-                ->orderDesc('Carts.id')
+                ->orderByDesc('Carts.id')
                 ->first();
 
             if ($cart) {
@@ -498,13 +604,10 @@ class ShopController extends AppController
                 'cancel_url' => $cancelUrl,
                 'billing_address_collection' => 'auto',
                 'automatic_tax' => ['enabled' => false],
-                // Collect email, name, shipping address, and phone on Stripe for both guests and logged-in users
                 'customer_creation' => 'always',
-                'shipping_address_collection' => [
-                    'allowed_countries' => ['AU']
-                ],
-                'phone_number_collection' => [
-                    'enabled' => true
+                'metadata' => [
+                    'address_id' => (string)$addressId,
+                    'guest' => $identity ? '0' : '1',
                 ],
             ];
 
@@ -643,12 +746,14 @@ class ShopController extends AppController
             return;
         }
 
-        // Only create orders for authenticated users (Orders.user_id is required)
-        if (!$identity) {
-            // Clear guest cart and stop (cannot create an order without a user)
-            $session->delete('GuestCart');
-            if ($sessionId) { $session->write('ProcessedSessions.' . $sessionId, true); }
-            return;
+        // Pull address selected/created during review
+        $addressId = (int)$session->read('Checkout.address_id');
+        if ($addressId <= 0 && isset($checkoutSession)) {
+            $meta = $checkoutSession->metadata ?? null;
+            if ($meta instanceof \Stripe\StripeObject) { $meta = $meta->toArray(); }
+            if (is_array($meta) && !empty($meta['address_id'])) {
+                $addressId = (int)$meta['address_id'];
+            }
         }
 
         $ordersTable = $this->fetchTable('Orders');
@@ -657,15 +762,15 @@ class ShopController extends AppController
 
         $connection = $ordersTable->getConnection();
         $now = new \DateTimeImmutable('now');
-        $createdBy = (string)($identity->email ?? ($identity->id ?? 'web'));
+        $createdBy = $identity ? (string)($identity->email ?? ($identity->id ?? 'web')) : 'guest';
         $createdBy = substr($createdBy, 0, 50);
 
         $orderId = null;
-        $connection->transactional(function () use ($ordersTable, $orderItemsTable, $invTxTable, $identity, $cartItems, $now, $createdBy, &$orderId, $userCart) {
+        $connection->transactional(function () use ($ordersTable, $orderItemsTable, $invTxTable, $identity, $cartItems, $now, $createdBy, &$orderId, $userCart, $addressId) {
             // Create order
             $order = $ordersTable->newEntity([
-                'user_id' => (int)$identity->id,
-                'address_id' => null,
+                'user_id' => $identity ? (int)$identity->id : null,
+                'address_id' => $addressId ?: null,
                 'order_date' => $now,
                 'shipping_status' => 'pending',
             ]);
@@ -716,6 +821,7 @@ class ShopController extends AppController
 
         // Clear guest cart (if any) and mark processed
         $session->delete('GuestCart');
+        $session->delete('Checkout.address_id');
         if ($sessionId) { $session->write('ProcessedSessions.' . $sessionId, true); }
 
         // Optionally set order id for display
