@@ -7,6 +7,7 @@ use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use ZxcvbnPhp\Zxcvbn;
 
 /**
  * Users Model
@@ -87,9 +88,16 @@ class UsersTable extends Table
 
         $validator
             ->scalar('password')
-            ->maxLength('password', 255)
-            ->requirePresence('password', 'create')
-            ->notEmptyString('password');
+            ->minLength('password', 8, 'Password must be at least 8 characters long.')
+            ->maxlength('password', 255)
+            ->add('password', 'strength', [
+                'rule' => function ($value, $context) {
+                    $z = new Zxcvbn();
+                    $score = $z->passwordStrength($value)['score'];
+                    return $score >= 3; // Require "strong" or better
+                },
+                'message' => 'Password is too weak. Use a longer passphrase or more varied words.'
+            ]);
 
         $validator
             ->scalar('user_type')
