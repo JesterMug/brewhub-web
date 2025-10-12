@@ -110,13 +110,12 @@
                 <?php endforeach; ?>
 
                 <div class="row my-4">
-                    <div class="col-sm-6">
-                        <a href="<?= $this->Url->build(['controller' => 'Shop', 'action' => 'index']) ?>" class="btn btn-link text-muted">
-                            <i class="mdi mdi-arrow-left me-1"></i> Continue Shopping </a>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="text-sm-end mt-2 mt-sm-0">
-                            <?= $this->Form->create(null, ['url' => ['controller' => 'Shop', 'action' => 'review'], 'id' => 'checkoutForm']) ?>
+                    <div class="col-12">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="<?= $this->Url->build(['controller' => 'Shop', 'action' => 'index']) ?>" class="btn btn-link text-muted">
+                                <i class="mdi mdi-arrow-left me-1"></i> Continue Shopping
+                            </a>
+                            <?= $this->Form->create(null, ['url' => ['controller' => 'Shop', 'action' => 'review'], 'id' => 'checkoutForm', 'class' => 'm-0']) ?>
                             <button type="submit" id="checkoutBtn" class="btn btn-success">
                                 <i class="mdi mdi-cart-outline me-1"></i> Checkout
                             </button>
