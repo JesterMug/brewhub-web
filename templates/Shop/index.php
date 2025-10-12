@@ -43,13 +43,13 @@
         <div class="row mb-5">
             <div class="col-12">
                 <div class="text-center">
-                    <a href="<?= $this->Url->build(['?' => ['type' => $type, 'q' => $q]]) ?>"
+                    <a href="<?= $this->Url->build(['?' => ['type' => $type, 'q' => $this->request->getQuery('q')]]) ?>"
                        class="btn btn-sm rounded-pill me-2 mb-2 <?= empty($selectedCategory) ? 'btn-primary' : 'btn-outline-primary' ?>">
                         All
                     </a>
 
                     <?php foreach ($categories as $category): ?>
-                        <a href="<?= $this->Url->build(['?' => ['type' => $type, 'q' => $q, 'category' => $category]]) ?>"
+                        <a href="<?= $this->Url->build(['?' => ['type' => $type, 'q' => $this->request->getQuery('q'), 'category' => $category]]) ?>"
                            class="btn btn-sm rounded-pill me-2 mb-2 <?= ($selectedCategory === $category) ? 'btn-primary' : 'btn-outline-primary' ?>">
                             <?= h($category) ?>
                         </a>
@@ -86,9 +86,10 @@
                 } else {
                     $priceHtml = '<span class="text-muted">Unavailable</span>';
                 }
+                $productUrl = $this->Url->build(['controller' => 'Shop', 'action' => 'view', $product->id]);
                 ?>
                 <div class="col mb-5">
-                    <div class="card h-100">
+                    <div class="card h-100" role="link" tabindex="0" onclick="window.location='<?= h($productUrl) ?>'" style="cursor: pointer;">
                         <img class="card-img-top" src="<?= h($imageUrl) ?>" alt="<?= h($product->name) ?>" />
                         <div class="card-body p-4 text-center">
                             <h5 class="fw-bolder"><?= h($product->name) ?></h5>
@@ -96,8 +97,8 @@
                         </div>
                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent text-center">
                             <a class="btn btn-outline-dark mt-auto"
-                               href="<?= $this->Url->build(['controller' => 'Shop', 'action' => 'view', $product->id]) ?>">
-                                View
+                               href="<?= h($productUrl) ?>">
+                                Buy
                             </a>
                         </div>
                     </div>
