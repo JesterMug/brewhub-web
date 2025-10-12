@@ -33,9 +33,11 @@ $this->Html->css('ContentBlocks.content-blocks', ['block' => true]);
             <?php
             if ($contentBlock->type === 'text') {
                 echo $this->Form->control('value', [
-                    'type' => 'text',
+                    'type' => 'textarea',
+                    'rows' => 8, // adjust as needed
                     'value' => html_entity_decode($contentBlock->value),
                     'label' => false,
+                    'class' => 'form-control wide-textarea'
                 ]);
             } else if ($contentBlock->type === 'html') {
                 echo $this->Form->control('value', [
