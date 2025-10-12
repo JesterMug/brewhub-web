@@ -4,75 +4,72 @@
  * @var \App\Model\Entity\Form $form
  */
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>BrewHub</title>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-</head>
-<body>
-<div class="container">
-    <header class="">
-        <div class="py-4">
-        </div>
-        <div class="container px-4 px-lg-5 my-5">
-            <div class="text-center text-white">
-                <h1 class="display-4 fw-bolder">Contact Us</h1>
-            </div>
+
+<?php // This template is rendered inside templates/layout/frontend.php ?>
+
+<div class="container mt-5 py-5">
+    <header class="mt-2 mb-4">
+        <div class="text-center">
+            <h1 class="display-6 fw-semibold">Contact Us</h1>
         </div>
     </header>
+
     <div class="row justify-content-center">
-        <div class="col-lg-6">
-            <div class="card shadow mb-4">
-                <div class="card-body">
-                    <?= $this->Form->create($form) ?>
+        <div class="col-lg-7 col-xl-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <?= $this->Form->create($form, ['class' => 'needs-validation']) ?>
 
-                    <div class="form-group">
-                        <?= $this->Form->control('first_name', [
-                            'class' => 'form-control',
-                            'label' => 'First Name',
-                            'placeholder' => 'Enter your first name'
-                        ]) ?>
+                    <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <div class="row g-2">
+                            <div class="col-12 col-md-6">
+                                <?= $this->Form->control('first_name', [
+                                    'label' => false,
+                                    'class' => 'form-control',
+                                    'placeholder' => 'First name'
+                                ]) ?>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <?= $this->Form->control('last_name', [
+                                    'label' => false,
+                                    'class' => 'form-control',
+                                    'placeholder' => 'Last name'
+                                ]) ?>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <?= $this->Form->control('last_name', [
-                            'class' => 'form-control',
-                            'label' => 'Last Name',
-                            'placeholder' => 'Enter your last name'
-                        ]) ?>
-                    </div>
-
-                    <div class="form-group">
+                    <div class="mb-3">
                         <?= $this->Form->control('email', [
                             'class' => 'form-control',
                             'label' => 'Email Address',
-                            'placeholder' => 'Enter your email'
+                            'placeholder' => 'you@example.com'
                         ]) ?>
                     </div>
 
-                    <div class="form-group">
+                    <div class="mb-3">
                         <?= $this->Form->control('message', [
                             'type' => 'textarea',
-                            'rows' => 5,
+                            'rows' => 4,
                             'class' => 'form-control',
                             'label' => 'Message',
                             'placeholder' => 'Type your message here...'
                         ]) ?>
                     </div>
-                    <div class="form-group">
-                        <div class="g-recaptcha" data-sitekey="6LeMd8wrAAAAAMJUYNsJZX7Ka3IQ9920tDY92F_7"></div>
+
+                    <div class="mb-3 text-center">
+                        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                        <div class="g-recaptcha d-inline-block" data-sitekey="6LeMd8wrAAAAAMJUYNsJZX7Ka3IQ9920tDY92F_7"></div>
                     </div>
-                    <div class="text-right">
+
+                    <div class="d-grid">
                         <?= $this->Form->button(__('Submit'), ['class' => 'btn btn-primary']) ?>
                     </div>
 
                     <?= $this->Form->end() ?>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
-</body>
