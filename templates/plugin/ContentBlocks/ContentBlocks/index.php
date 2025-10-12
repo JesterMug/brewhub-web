@@ -27,40 +27,43 @@ $slugify = function($text) {
 
     <h3><?= __('Content Blocks') ?></h3>
 
-    <div>
-        Quick links
-        <?php foreach(array_keys($contentBlocksGrouped) as $parent) { ?>
-            :: <a href="#<?= $slugify($parent) ?>"><?= $parent ?></a>
-        <?php } ?>
+    <div class="d-flex align-items-center gap-2 mb-3">
+        <label for="cb-filter" class="form-label mb-0 me-2">Filter blocks</label>
+        <input id="cb-filter" type="search" class="form-control" placeholder="Search by title, slug, or content…" style="max-width: 420px;">
     </div>
 
-    <?php foreach($contentBlocksGrouped as $parent => $contentBlocks) { ?>
+    <?php
+    $allBlocks = [];
+    foreach ($contentBlocksGrouped as $group) {
+        foreach ($group as $block) {
+            $allBlocks[] = $block;
+        }
+    }
+    ?>
 
-        <h4 class="content-blocks--list-subheading">
-            <a href="#<?= $slugify($parent)?>" id="<?= $slugify($parent)?>">
-                <?= $parent ?>
-            </a>
-        </h4>
-
-        <ul class="content-blocks--list-group">
-            <?php foreach($contentBlocks as $contentBlock) { ?>
-                <li class="content-blocks--list-group-item">
-                    <div class="content-blocks--text">
-                        <div class="content-blocks--display-name">
-                            <?= $contentBlock['label'] ?>
-                        </div>
-                        <div class="content-blocks--description">
-                            <?= $contentBlock['description'] ?>
-                        </div>
+    <ul class="content-blocks--list-group">
+        <?php foreach ($allBlocks as $contentBlock): ?>
+            <li class="content-blocks--list-group-item">
+                <div class="content-blocks--text">
+                    <div class="content-blocks--display-name">
+                        <?= h($contentBlock->label) ?>
                     </div>
-                    <div class="content-blocks--actions">
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $contentBlock->id]) ?>
-                        <?php if (!empty($contentBlock->previous_value)) echo " :: " . $this->Form->postLink(__('Restore'), ['action' => 'restore', $contentBlock->id], ['confirm' => __("Are you sure you want to restore the previous version for this item?\n{0}/{1}\nNote: You cannot cancel this action!", $contentBlock->parent, $contentBlock->slug)]) ?>
+                    <div class="content-blocks--description">
+                        <?= h($contentBlock->description) ?>
                     </div>
-                </li>
-            <?php } ?>
-        </ul>
-
-    <?php } ?>
+                </div>
+                <div class="content-blocks--actions">
+                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $contentBlock->id]) ?>
+                    <?php if (!empty($contentBlock->previous_value)): ?>
+                        <?= ' :: ' . $this->Form->postLink(
+                            __('Restore'),
+                            ['action' => 'restore', $contentBlock->id],
+                            ['confirm' => __("Are you sure you want to restore the previous version for this item?\n{0}/{1}\nNote: You cannot cancel this action!", $contentBlock->parent, $contentBlock->slug)]
+                        ) ?>
+                    <?php endif; ?>
+                </div>
+            </li>
+        <?php endforeach; ?>
+    </ul>
 
 </div>
