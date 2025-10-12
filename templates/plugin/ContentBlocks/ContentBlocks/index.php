@@ -27,23 +27,37 @@ $slugify = function($text) {
 
     <h3><?= __('Content Blocks') ?></h3>
 
-    <div class="d-flex align-items-center gap-2 mb-3">
-        <label for="cb-filter" class="form-label mb-0 me-2">Filter blocks</label>
-        <input id="cb-filter" type="search" class="form-control" placeholder="Search by title, slug, or content…" style="max-width: 420px;">
+    <div class="mb-3">
+        <label for="cb-search" class="sr-only"><?= __('Search content blocks') ?></label>
+        <input
+            type="search"
+            id="cb-search"
+            class="form-control"
+            placeholder="<?= __('Search blocks by name or description…') ?>"
+            autocomplete="off"
+            aria-describedby="cb-search-help cb-results-count"
+        >
+        <small id="cb-search-help" class="form-text text-muted">
+            <?= __('Type to filter. Showing only matching blocks.') ?>
+        </small>
+        <div id="cb-results-count" class="mt-1 text-muted"></div>
     </div>
 
     <?php
+    // Flatten grouped array into one list ($contentBlocksGrouped => $allBlocks)
     $allBlocks = [];
     foreach ($contentBlocksGrouped as $group) {
         foreach ($group as $block) {
             $allBlocks[] = $block;
         }
     }
+    // (Optional) sort by label
+    usort($allBlocks, fn($a, $b) => strcmp($a->label, $b->label));
     ?>
 
-    <ul class="content-blocks--list-group">
+    <ul id="cb-list" class="content-blocks--list-group">
         <?php foreach ($allBlocks as $contentBlock): ?>
-            <li class="content-blocks--list-group-item">
+            <li class="content-blocks--list-group-item" data-search-text="<?= h(mb_strtolower(($contentBlock->label ?? '') . ' ' . ($contentBlock->description ?? ''))) ?>">
                 <div class="content-blocks--text">
                     <div class="content-blocks--display-name">
                         <?= h($contentBlock->label) ?>
@@ -65,5 +79,56 @@ $slugify = function($text) {
             </li>
         <?php endforeach; ?>
     </ul>
+
+    <p id="cb-empty" class="text-muted" style="display:none;"><?= __('No content blocks match your search.') ?></p>
+
+    <?php // Tiny, framework-free filter script ?>
+    <script>
+        (function () {
+            const input = document.getElementById('cb-search');
+            const list  = document.getElementById('cb-list');
+            const items = Array.from(list.querySelectorAll('.content-blocks--list-group-item'));
+            const empty = document.getElementById('cb-empty');
+            const count = document.getElementById('cb-results-count');
+
+            // Debounce for comfort
+            let t;
+            function debounced(fn, delay=120){ clearTimeout(t); t=setTimeout(fn, delay); }
+
+            function update() {
+                const q = (input.value || '').toLowerCase().trim();
+                let visible = 0;
+
+                if (!q) {
+                    items.forEach(li => li.style.display = '');
+                    empty.style.display = 'none';
+                    count.textContent = `<?= __('Showing {0} blocks', [count($allBlocks)]) ?>`;
+                    return;
+                }
+
+                items.forEach(li => {
+                    const hay = li.getAttribute('data-search-text') || '';
+                    const show = hay.includes(q);
+                    li.style.display = show ? '' : 'none';
+                    if (show) visible++;
+                });
+
+                empty.style.display = visible ? 'none' : '';
+                count.textContent = `<?= __('Showing {0} of {1} blocks') ?>`.replace('{0}', visible).replace('{1}', <?= (int)count($allBlocks) ?>);
+            }
+
+            input.addEventListener('input', () => debounced(update));
+            // Initialise count on load
+            update();
+
+            // Optional: allow ?q=foo to prefill search
+            const params = new URLSearchParams(location.search);
+            if (params.has('q')) {
+                input.value = params.get('q');
+                update();
+            }
+        })();
+    </script>
+
 
 </div>
