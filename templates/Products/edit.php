@@ -88,7 +88,7 @@
     <button type="button" id="addVariantBtn" class="btn btn-secondary mt-2">+ Add Another Variant</button>
 </div>
 
-<?= $this->Form->button(__('Submit'), ['class' => 'btn btn-primary mt-3']) ?>
+<?= $this->Form->button(__('Save'), ['class' => 'btn btn-primary mt-3']) ?>
 <?= $this->Form->end() ?>
     </div>
 </div>

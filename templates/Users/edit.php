@@ -12,7 +12,7 @@
     echo $this->Form->control('email');
     echo $this->Form->control('password');
     ?>
-<?= $this->Form->button(__('Submit'), ['class' => 'btn btn-primary']) ?>
+<?= $this->Form->button(__('Save'), ['class' => 'btn btn-primary']) ?>
 <?= $this->Form->postLink(
     __('Delete'),
     ['action' => 'delete', $user->id],
