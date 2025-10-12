@@ -57,17 +57,17 @@ echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['bl
                     <td class="actions">
                         <?= $this->Html->link(__('View'), ['action' => 'view', $product->id]) ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $product->id]) ?>
-                        <?= $this->Form->postLink(
-                            __('Delete'),
-                            ['action' => 'delete', $product->id],
-                            [
-                                'method' => 'delete',
-                                'confirm' => __(
-                                    'Are you sure you want to delete {0}? This will delete all associated product variants and images.',
-                                    $product->name
-                                ),
-                            ],
-                        ) ?>
+<!--                        --><?php //= $this->Form->postLink(
+//                            __('Delete'),
+//                            ['action' => 'delete', $product->id],
+//                            [
+//                                'method' => 'delete',
+//                                'confirm' => __(
+//                                    'Are you sure you want to delete {0}? This will delete all associated product variants and images.',
+//                                    $product->name
+//                                ),
+//                            ],
+//                        ) ?>
                         <?php if ($product->is_featured == 0) : ?>
                             <?= $this->Form->postLink(
                                 __('Feature'),
