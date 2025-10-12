@@ -124,6 +124,7 @@ class ProductsTable extends Table
                 'Products.description',
                 'Products.date_created',
                 'Products.date_modified',
+                'Products.is_featured',
                 'stock_effective' => $fn->coalesce([$fn->sum('ProductVariants.stock'), 0]),
             ])
             ->group(['Products.id']);

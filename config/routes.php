@@ -84,6 +84,9 @@ return function (RouteBuilder $routes): void {
          * It is NOT recommended to use fallback routes after your initial prototyping phase!
          * See https://book.cakephp.org/5/en/development/routing.html#fallbacks-method for more information
          */
+        $builder->connect('/stripe/webhook', ['controller' => 'Webhooks', 'action' => 'stripe', '_method' => 'POST']);
+        $builder->connect('/webhooks/stripe', ['controller' => 'Webhooks', 'action' => 'stripe', '_method' => 'POST']);
+
         $builder->fallbacks();
     });
 

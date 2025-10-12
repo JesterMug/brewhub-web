@@ -40,7 +40,7 @@
 
 <main>
     <?= $this->Flash->render() ?>
-    <?= $this->fetch('content') // This is where home.php, view.php, etc. are injected ?>
+    <?= $this->fetch('content') ?>
 </main>
 
 <footer class="footer bg-black small text-center text-white-50">

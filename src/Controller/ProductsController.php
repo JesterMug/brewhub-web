@@ -23,6 +23,8 @@ class ProductsController extends AppController
 
     /**
      * Index method
+     *
+     * @return \Cake\Http\Response|null|void Renders view
      */
     public function index()
     {
@@ -146,6 +148,26 @@ class ProductsController extends AppController
         }
 
         $this->set(compact('product'));
+    }
+    /**
+     * Feature method
+     */
+    public function feature(?string $id = null)
+    {
+        $this->request->allowMethod(['post', 'feature']);
+
+        $this->Products->updateAll(['is_featured' => 0], []);
+
+        $product = $this->Products->get($id);
+        $product->is_featured = 1;
+
+        if ($this->Products->save($product)) {
+            $this->Flash->success(__('{0} is featured now', $product->name));
+        } else {
+            $this->Flash->error(__('{0} could not be featured.', $product->name));
+        }
+
+        return $this->redirect(['action' => 'index']);
     }
 
     /**
@@ -281,6 +303,9 @@ class ProductsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+
+
 
     private function removeImageFileSafe(?string $basename): void
     {

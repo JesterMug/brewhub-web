@@ -66,12 +66,16 @@ echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['bl
                                     'Are you sure you want to delete {0}? This will delete all associated product variants and images.',
                                     $product->name
                                 ),
-                            ]
+                            ],
                         ) ?>
-                        <?= $this->Form->postLink(
-                            __('Feature'),
-                            ['controller' => 'Products', 'action' => 'feature', $product->id]
-                        ) ?>
+                        <?php if ($product->is_featured == 0) : ?>
+                            <?= $this->Form->postLink(
+                                __('Feature'),
+                                ['controller' => 'products', 'action' => 'feature', $product->id],
+
+                            ) ?>
+                        <?php endif; ?>
+
                     </td>
                 </tr>
             <?php endforeach; ?>

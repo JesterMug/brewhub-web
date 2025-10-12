@@ -74,13 +74,25 @@ class PagesController extends AppController
         $productsTable = $this->fetchTable('Products');
         $usersTable = $this->fetchTable('Users');
         $formsTable = $this->fetchTable('Forms');
+        $ordersTable = $this->fetchTable('Orders');
 
         $productsCount = $productsTable->find()->count();
         $usersCount = $usersTable->find()->count();
+        $ordersCount = $ordersTable->find()->count();
         $newMessagesCount = $formsTable->find()->where(['replied_status' => false])->count();
+
+        // Count orders that have at least one preorder item
+        $preorderedOrdersCount = $ordersTable->find()
+            ->matching('OrderProductVariants', function ($q) {
+                return $q->where(['OrderProductVariants.is_preorder' => true]);
+            })
+            ->select(['Orders.id'])
+            ->distinct(['Orders.id'])
+            ->count();
+
         $totalRevenue = 0;
 
-        $this->set(compact('productsCount', 'usersCount', 'newMessagesCount', 'totalRevenue'));
+        $this->set(compact('productsCount', 'usersCount', 'ordersCount', 'newMessagesCount', 'preorderedOrdersCount', 'totalRevenue'));
 
         $this->viewBuilder()->setLayout('default');
     }

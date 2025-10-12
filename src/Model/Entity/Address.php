@@ -22,7 +22,6 @@ use Cake\ORM\Entity;
  * @property int $user_id
  *
  * @property \App\Model\Entity\User $user
- * @property \App\Model\Entity\Cart[] $carts
  * @property \App\Model\Entity\Order[] $orders
  */
 class Address extends Entity
@@ -49,7 +48,6 @@ class Address extends Entity
         'is_active' => true,
         'user_id' => true,
         'user' => true,
-        'carts' => true,
         'orders' => true,
     ];
 }

@@ -31,7 +31,7 @@ $this->assign('title', 'Home');
         <img class="img-fluid"
              src="<?= $this->Url->build(!empty($featuredProduct->product_images[0]) ? '/img/products/' . $featuredProduct->product_images[0]->image_file : '/assets/img/featureddefault.png') ?>"
     </div>
-    <a class="btn btn-secondary mb-5" href="<?= $this->Url->Build(['controller' => 'shop', 'action' => 'view/30']) ?>"><?= $this->ContentBlock->text('home_promo_call_to_action') ?></a>
+    <a class="btn btn-secondary mb-5" href="<?= $this->Url->Build(['controller' => 'shop', 'action' => 'view', $featuredProduct->id]) ?>"><?= $this->ContentBlock->text('home_promo_call_to_action') ?></a>
 </section>
 <!-- Projects-->
 <section class="projects-section bg-light" id="projects">
