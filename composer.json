@@ -14,7 +14,8 @@
         "dompdf/dompdf": "2.0",
         "mobiledetect/mobiledetectlib": "^4.8.03",
         "stripe/stripe-php": "^14",
-        "ugie-cake/cakephp-content-blocks": "^1.3"
+        "ugie-cake/cakephp-content-blocks": "^1.3",
+        "ext-gd": "*"
     },
     "require-dev": {
         "cakephp/bake": "^3.0.0",

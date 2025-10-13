@@ -243,7 +243,7 @@ class ProductsController extends AppController
             }
 
             $mediaType = (string)$file->getClientMediaType();
-            if (strpos($mediaType, 'image/') !== 0) {
+            if (!str_starts_with($mediaType, 'image/')) {
                 return null;
             }
 
