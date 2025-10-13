@@ -68,7 +68,7 @@
                         </div>
                         <div class="col-md-6">
                             <?= $this->Form->control('postcode', ['label' => 'Postcode', 'class' => 'form-control', 'required' => true, 'maxlength' => 4, 'pattern' => '^\d{4}$', 'inputmode' => 'numeric', 'title' => 'Enter 4 digits']) ?>
-                            <div class="form-text">Digits only, 4 numbers.</div>
+                            <div class="form-text text-white">Digits only, 4 numbers.</div>
                         </div>
                     </div>
 

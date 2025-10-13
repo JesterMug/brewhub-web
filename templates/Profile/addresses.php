@@ -6,6 +6,7 @@
 ?>
 <header>
     <div class="py-5"></div>
+    <div class="py-5"></div>
     <div class="container px-4 px-lg-5 my-4">
         <div class="text-center text-white">
             <h1 class="display-6 fw-bolder">My Addresses</h1>
@@ -20,7 +21,6 @@
     <?php if (empty($addresses)): ?>
         <div class="text-center py-5">
             <p class="text-muted mb-4">You have not added any addresses yet.</p>
-            <a class="btn btn-primary" href="<?= $this->Url->build(['controller' => 'Addresses', 'action' => 'add']) ?>">Add Address</a>
         </div>
     <?php else: ?>
         <div class="row g-4">
