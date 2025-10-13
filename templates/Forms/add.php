@@ -18,7 +18,7 @@
         <div class="col-lg-7 col-xl-6">
             <div class="card shadow-sm border-0">
                 <div class="card-body p-4">
-                    <?= $this->Form->create($form, ['class' => 'needs-validation']) ?>
+                    <?= $this->Form->create($form, ['class' => 'needs-validation', 'novalidate' => true]) ?>
 
                     <div class="mb-3">
                         <label class="form-label">Full Name</label>
