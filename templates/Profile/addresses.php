@@ -29,7 +29,6 @@
                     <div class="card h-100 shadow-sm">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start">
-                                <h6 class="card-subtitle mb-2 text-muted">Address #<?= (int)$addr->id ?></h6>
                                 <?php if (!empty($addr->label)): ?>
                                     <span class="badge bg-secondary"><?= h($addr->label) ?></span>
                                 <?php endif; ?>
