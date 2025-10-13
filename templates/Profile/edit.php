@@ -21,7 +21,7 @@
         <div class="col-md-8 col-lg-6">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <?= $this->Form->create($user) ?>
+                    <?= $this->Form->create($user, ['novalidate' => true]) ?>
                     <div class="mb-3">
                         <?= $this->Form->label('first_name', 'First Name') ?>
                         <?= $this->Form->text('first_name', ['class' => 'form-control', 'required' => true]) ?>
