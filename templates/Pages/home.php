@@ -93,3 +93,35 @@ $this->assign('title', 'Home');
         </div>
     </div>
 </section>
+<?php
+$contactSent = (bool)($this->getRequest()->getQuery('contact_sent'));
+?>
+
+<!-- Contact Sent Modal -->
+<div class="modal fade" id="contactSentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-3">
+            <div class="modal-header">
+                <h5 class="modal-title"><?= __('Message sent') ?></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="<?= __('Close') ?>"></button>
+            </div>
+            <div class="modal-body">
+                <?= $this->Flash->render('contact') ?: '<p>' . __('Thanks! We’ll get back to you soon.') . '</p>' ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal"><?= __('OK') ?></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php if ($contactSent): ?>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var el = document.getElementById('contactSentModal');
+            if (el && window.bootstrap && bootstrap.Modal) {
+                new bootstrap.Modal(el).show();
+            }
+        });
+    </script>
+<?php endif; ?>
