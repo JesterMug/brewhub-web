@@ -4,89 +4,117 @@
  * @var \App\Model\Entity\Address $address
  */
 ?>
+
+<?php // This template is rendered inside templates/layout/frontend.php ?>
+
 <header>
     <div class="py-5"></div>
-    <div class="container px-4 px-lg-5 my-4">
+    <div class="container px-lg-5 my-4">
         <div class="text-center text-white">
             <h1 class="display-6 fw-bolder">Add Address</h1>
-            <p class="lead">Enter a new shipping address</p>
+            <p class="lead">Provide accurate details for smooth delivery</p>
         </div>
     </div>
 </header>
 
 <div class="container my-5">
     <?= $this->Flash->render() ?>
+
     <div class="row justify-content-center">
-        <div class="col-lg-8 col-xl-7">
+        <div class="col-md-10 col-lg-8">
             <div class="card shadow-sm">
-                <div class="card-body">
-                    <?= $this->Form->create($address, ['class' => 'needs-validation', 'novalidate' => true]) ?>
+                <div class="card-body p-4">
+                    <?= $this->Form->create($address, ['novalidate' => true]) ?>
 
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <?= $this->Form->label('label', 'Address Label (optional)') ?>
-                            <?= $this->Form->text('label', ['class' => 'form-control', 'maxlength' => 63, 'placeholder' => 'Home, Office']) ?>
-                        </div>
-                        <div class="col-md-6">
-                            <?= $this->Form->label('property_type', 'Property Type') ?>
-                            <?= $this->Form->select('property_type', [
-                                'house' => 'House',
-                                'apartment' => 'Apartment/Unit',
-                                'business' => 'Business',
-                                'other' => 'Other',
-                            ], ['class' => 'form-select', 'required' => true]) ?>
-                        </div>
-
-                        <div class="col-md-6">
-                            <?= $this->Form->label('recipient_full_name', 'Recipient Full Name') ?>
-                            <?= $this->Form->text('recipient_full_name', [
+                            <?= $this->Form->control('label', [
+                                'label' => 'Label (optional)',
                                 'class' => 'form-control',
-                                'required' => true,
-                                'maxlength' => 127,
-                                'pattern' => "[\p{L}0-9 .,'-]+",
-                                'title' => 'Letters, numbers, spaces and - , . allowed'
+                                'maxlength' => 63,
+                                'placeholder' => 'Home, Office, etc.'
                             ]) ?>
                         </div>
                         <div class="col-md-6">
-                            <?= $this->Form->label('recipient_phone', 'Recipient Phone') ?>
-                            <?= $this->Form->tel('recipient_phone', [
+                            <?= $this->Form->control('property_type', [
+                                'label' => 'Property Type',
+                                'class' => 'form-select',
+                                'options' => ['House' => 'House', 'Apartment' => 'Apartment', 'Business' => 'Business', 'Other' => 'Other'],
+                                'empty' => 'Select type',
+                                'required' => true
+                            ]) ?>
+                        </div>
+
+                        <div class="col-md">
+                            <?= $this->Form->control('recipient_full_name', [
+                                'label' => 'Recipient Full Name',
                                 'class' => 'form-control',
+                                'maxlength' => 100,
                                 'required' => true,
-                                'maxlength' => 23,
-                                'pattern' => '^[0-9 +()-]{8,23}$',
-                                'inputmode' => 'tel',
-                                'title' => 'Enter a valid phone number'
+                                'pattern' => "[A-Za-zÀ-ÖØ-öø-ÿ' -]{2,100}",
+                                'title' => "Only letters, spaces, hyphens or apostrophes; 2-100 chars"
+                            ]) ?>
+                        </div>
+
+                        <div class="col-md-6">
+                            <?= $this->Form->control('recipient_phone', [
+                                'label' => 'Recipient Phone',
+                                'class' => 'form-control',
+                                'maxlength' => 20,
+                                'required' => true,
+                                'pattern' => "[0-9\s\+\-\(\)\.]{6,20}",
+                                'title' => '6-20 digits; spaces, +, (), . and - allowed'
                             ]) ?>
                         </div>
 
                         <div class="col-12">
-                            <?= $this->Form->label('street', 'Street Address') ?>
-                            <?= $this->Form->text('street', ['class' => 'form-control', 'required' => true, 'maxlength' => 255, 'placeholder' => 'e.g., 123 Main St']) ?>
-                        </div>
-                        <div class="col-md-6">
-                            <?= $this->Form->label('building', 'Building, Apartment, Suite (optional)') ?>
-                            <?= $this->Form->text('building', ['class' => 'form-control', 'maxlength' => 100]) ?>
+                            <?= $this->Form->control('street', [
+                                'label' => 'Street Address',
+                                'class' => 'form-control',
+                                'maxlength' => 255,
+                                'required' => true,
+                                'placeholder' => 'Street and number'
+                            ]) ?>
                         </div>
 
                         <div class="col-md-6">
-                            <?= $this->Form->label('city', 'City/Suburb') ?>
-                            <?= $this->Form->text('city', ['class' => 'form-control', 'required' => true, 'maxlength' => 100]) ?>
+                            <?= $this->Form->control('building', [
+                                'label' => 'Building, Apartment, Suite (optional)',
+                                'class' => 'form-control',
+                                'maxlength' => 100,
+                                'placeholder' => 'Apartment, suite, unit, etc.'
+                            ]) ?>
                         </div>
+
                         <div class="col-md-6">
-                            <?= $this->Form->label('state', 'State') ?>
-                            <?= $this->Form->select('state', [
-                                'ACT' => 'ACT', 'NSW' => 'NSW', 'NT' => 'NT', 'QLD' => 'QLD', 'SA' => 'SA', 'TAS' => 'TAS', 'VIC' => 'VIC', 'WA' => 'WA'
-                            ], ['class' => 'form-select', 'required' => true]) ?>
+                            <?= $this->Form->control('city', [
+                                'label' => 'City/Suburb',
+                                'class' => 'form-control',
+                                'maxlength' => 100,
+                                'required' => true,
+                                'pattern' => "[A-Za-zÀ-ÖØ-öø-ÿ' -]{2,100}",
+                                'title' => "Only letters, spaces, hyphens or apostrophes; 2-100 chars"
+                            ]) ?>
                         </div>
-                        <div class="col-md-6">
-                            <?= $this->Form->label('postcode', 'Postcode') ?>
-                            <?= $this->Form->text('postcode', [
+
+                        <div class="col-md">
+                            <?= $this->Form->control('state', [
+                                'label' => 'State',
+                                'class' => 'form-select',
+                                'options' => ['NSW' => 'NSW', 'VIC' => 'VIC', 'QLD' => 'QLD', 'SA' => 'SA', 'WA' => 'WA', 'TAS' => 'TAS', 'ACT' => 'ACT', 'NT' => 'NT'],
+                                'empty' => 'Select state',
+                                'required' => true
+                            ]) ?>
+                        </div>
+                        <div class="col-md">
+                            <?= $this->Form->control('postcode', [
+                                'label' => 'Postcode',
                                 'class' => 'form-control',
                                 'required' => true,
+                                'pattern' => "\\d{4}",
+                                'title' => '4-digit postcode',
                                 'maxlength' => 4,
-                                'pattern' => '^[0-9]{4}$',
-                                'inputmode' => 'numeric',
-                                'title' => '4-digit postcode'
+                                'inputmode' => 'numeric'
                             ]) ?>
                         </div>
                     </div>
