@@ -347,7 +347,7 @@ class ShopController extends AppController
                     if ($cartItemsTable->save($cartItem)) {
                         $this->Flash->success('Cart updated.');
                     } else {
-                        $this->Flash->error('Unable to update quantity. Please try again.');
+                        $this->Flash->error('Unable to update quantity. Please try again later.');
                     }
                 } catch (QueryException $e) {
                     if (str_contains($e->getMessage(), 'Not enough stock')) {
