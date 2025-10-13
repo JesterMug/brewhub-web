@@ -347,7 +347,7 @@ class ShopController extends AppController
                     if ($cartItemsTable->save($cartItem)) {
                         $this->Flash->success('Cart updated.');
                     } else {
-                        $this->Flash->error('Unable to update quantity. Please try again.');
+                        $this->Flash->error('Unable to update quantity. Please try again later.');
                     }
                 } catch (QueryException $e) {
                     if (str_contains($e->getMessage(), 'Not enough stock')) {
@@ -827,6 +827,109 @@ class ShopController extends AppController
         // Optionally set order id for display
         if (!empty($orderId)) {
             $this->set('orderId', $orderId);
+        }
+
+        // Send order confrmation email using email from Stripe
+        try {
+            $recipientEmail = null;
+            if (isset($checkoutSession) && $checkoutSession) {
+                // Prefer customer_details.email when available
+                $recipientEmail = $checkoutSession->customer_details->email
+                    ?? $checkoutSession->customer_email
+                    ?? null;
+            }
+            if (!$recipientEmail && $identity && !empty($identity->email)) {
+                $recipientEmail = (string)$identity->email;
+            }
+
+            if ($recipientEmail && !empty($orderId)) {
+                $order = $ordersTable->get($orderId, contain: [
+                    'OrderProductVariants' => ['ProductVariants' => ['Products']]
+                ]);
+
+                $items = [];
+                $subtotal = 0.0;
+                foreach ($order->order_product_variants as $opv) {
+                    $variant = $opv->product_variant ?? null;
+                    $product = $variant ? ($variant->product ?? null) : null;
+                    $name = $product ? (string)$product->name : 'Item';
+                    $variantLabel = null;
+                    if ($variant) {
+                        $sizeValue = $variant->size_value ?? null;
+                        $sizeUnit = $variant->size_unit ?? null;
+                        $variantLabel = ($sizeValue && $sizeUnit) ? ($sizeValue . ' ' . $sizeUnit) : null;
+                    }
+                    $qty = (int)$opv->quantity;
+                    $price = (float)($variant->price ?? 0);
+                    $lineTotal = $price * $qty;
+                    $subtotal += $lineTotal;
+
+                    $items[] = [
+                        'name' => $name,
+                        'variant' => $variantLabel,
+                        'qty' => $qty,
+                        'price' => $price,
+                        'line_total' => $lineTotal,
+                        'is_preorder' => (bool)$opv->is_preorder,
+                    ];
+                }
+
+                // Extract shipping from Stripe session, otherwise fall back to customer saved Address
+                $shipping = null;
+                if (isset($checkoutSession) && $checkoutSession) {
+                    $shippingDetails = $checkoutSession->shipping_details ?? null;
+                    if ($shippingDetails && isset($shippingDetails->address)) {
+                        $addr = $shippingDetails->address;
+                        $shipping = [
+                            'name' => $shippingDetails->name ?? null,
+                            'line1' => $addr->line1 ?? null,
+                            'line2' => $addr->line2 ?? null,
+                            'city' => $addr->city ?? null,
+                            'state' => $addr->state ?? null,
+                            'postal_code' => $addr->postal_code ?? null,
+                            'country' => $addr->country ?? null,
+                        ];
+                    }
+                }
+
+                //use the Address selected during checkout if Stripe didn't return shipping details
+                if (!$shipping) {
+                    try {
+                        $addrId = (int)($addressId ?? 0);
+                        if ($addrId > 0) {
+                            $addressesTable = $this->fetchTable('Addresses');
+                            $addr = $addressesTable->get($addrId);
+                            $shipping = [
+                                'name' => (string)($addr->recipient_full_name ?? ''),
+                                'line1' => (string)($addr->street ?? ''),
+                                'line2' => (string)($addr->building ?? ''),
+                                'city' => (string)($addr->city ?? ''),
+                                'state' => (string)($addr->state ?? ''),
+                                'postal_code' => (string)($addr->postcode ?? ''),
+                                'country' => null,
+                            ];
+                        }
+                    } catch (\Throwable $ee) {
+                        // ignore fallback failure
+                    }
+                }
+
+                // Send email through the OrderMailer
+                /** @var \App\Mailer\OrderMailer $mailer */
+                $mailer = new \App\Mailer\OrderMailer('default');
+                $mailer->sendOrderConfirmation($recipientEmail, [
+                    'order' => [
+                        'id' => $order->id,
+                        'order_date' => $order->order_date?->format('M j, Y g:i A') ?? ''
+                    ],
+                    'items' => $items,
+                    'subtotal' => $subtotal,
+                    'total' => $subtotal,
+                    'shipping' => $shipping,
+                ]);
+            }
+        } catch (\Throwable $e) {
+
         }
     }
 
