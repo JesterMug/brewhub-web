@@ -38,7 +38,11 @@ $this->assign('title', 'Home');
     <div class="container px-4 px-lg-5">
         <!-- Featured Project Row-->
         <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
-            <div class="col-xl-6"><img class="img-fluid" src="assets/img/coffee-bg6.jpg" alt="..." /></div>
+            <div class="col-lg-6">
+                <?= $this->ContentBlock->image('home_p1_image', [
+                    'class' => 'img-fluid',
+                ]) ?>
+            </div>
             <div class="col-xl-6 order-lg-first">
                 <div class="bg-black text-center h-100 project">
                     <div class="d-flex h-100">
@@ -53,7 +57,11 @@ $this->assign('title', 'Home');
 
         <!-- Project One Row-->
         <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
-            <div class="col-lg-6"><img class="img-fluid" src="assets/img/coffee-bg4.jpg" alt="..." /></div>
+            <div class="col-lg-6">
+                <?= $this->ContentBlock->image('home_p2_image', [
+                    'class' => 'img-fluid',
+                ]) ?>
+            </div>
             <div class="col-lg-6">
                 <div class="bg-black text-center h-100 project">
                     <div class="d-flex h-100">
@@ -67,7 +75,11 @@ $this->assign('title', 'Home');
         </div>
         <!-- Project Two Row-->
         <div class="row gx-0 justify-content-center">
-            <div class="col-lg-6"><img class="img-fluid" src="assets/img/coffee-bg5.jpg" alt="..." /></div>
+            <div class="col-lg-6">
+                <?= $this->ContentBlock->image('home_p3_image', [
+                    'class' => 'img-fluid',
+                ]) ?>
+            </div>
             <div class="col-lg-6 order-lg-first">
                 <div class="bg-black text-center h-100 project">
                     <div class="d-flex h-100">

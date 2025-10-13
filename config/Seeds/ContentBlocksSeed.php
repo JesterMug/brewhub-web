@@ -117,7 +117,7 @@ class ContentBlocksSeed extends AbstractSeed
                 'description' => 'An image for project one.',
                 'slug'  => 'home_p1_image',
                 'type'  => 'image',
-                //'value' => '/assets/img/coffee-bg6.jpg',
+                'value' => '/assets/img/coffee-bg6.jpg',
             ],
             //Project Two Section
             [
@@ -142,7 +142,7 @@ class ContentBlocksSeed extends AbstractSeed
                 'description' => 'An image for project two.',
                 'slug'  => 'home_p2_image',
                 'type'  => 'image',
-                //'value' => '/assets/img/coffee-bg4.jpg',
+                'value' => '/assets/img/coffee-bg4.jpg',
             ],
             //Project Three Section
             [
@@ -167,7 +167,7 @@ class ContentBlocksSeed extends AbstractSeed
                 'description' => 'An image for project three.',
                 'slug'  => 'home_p3_image',
                 'type'  => 'image',
-                //'value' => '/assets/img/coffee-bg5.jpg',
+                'value' => '/assets/img/coffee-bg5.jpg',
             ],
         ];
 
