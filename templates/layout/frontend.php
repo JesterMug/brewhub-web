@@ -44,6 +44,20 @@
 </main>
 
 <footer class="footer bg-black small text-center text-white-50">
+    <div class="row justify-content-center text-center">
+        <div class="col-md-4 mb-2">
+            <strong>Address</strong>
+            <div><?= $this->ContentBlock->text('address') ?></div>
+        </div>
+        <div class="col-md-4 mb-2">
+            <strong>Opening Hours</strong>
+            <div><?= $this->ContentBlock->text('opening_hours') ?></div>
+        </div>
+        <div class="col-md-4 mb-2">
+            <strong>Phone</strong>
+            <div><?= $this->ContentBlock->text('phone') ?></div>
+        </div>
+    </div>
     <div class="container px-4 px-lg-5">Copyright &copy; <?= date('Y') ?> BrewHub. All Rights Reserved.</div>
 </footer>
 

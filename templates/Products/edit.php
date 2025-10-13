@@ -128,9 +128,9 @@
 
 <div class="mt-3">
     <?= $this->Html->link(__('Back to List'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
-    <?= $this->Form->postLink(
-        __('Delete'),
-        ['action' => 'delete', $product->id],
-        ['confirm' => __('Are you sure you want to delete {0}? This will delete all associated product variants and images.', $product->name), 'class' => 'side-nav-item btn btn-link text-danger']
-    ) ?>
+<!--    --><?php //= $this->Form->postLink(
+//        __('Delete'),
+//        ['action' => 'delete', $product->id],
+//        ['confirm' => __('Are you sure you want to delete {0}? This will delete all associated product variants and images.', $product->name), 'class' => 'side-nav-item btn btn-link text-danger']
+//    ) ?>
 </div>
