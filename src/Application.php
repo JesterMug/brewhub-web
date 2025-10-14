@@ -34,6 +34,7 @@ use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\Routing\Router;
 use Psr\Http\Message\ServerRequestInterface;
+use App\Middleware\PluginRoleGateMiddleware;
 
 /**
  * Application setup class.
@@ -96,6 +97,9 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             ->add(new BodyParserMiddleware())
             ->add(new AuthenticationMiddleware($this))
 
+            ->add(new PluginRoleGateMiddleware([
+                'ContentBlocks' => ['superuser'],
+            ]))
             // Cross Site Request Forgery (CSRF) Protection Middleware
             // https://book.cakephp.org/5/en/security/csrf.html#cross-site-request-forgery-csrf-middleware
             ->add((function() {
