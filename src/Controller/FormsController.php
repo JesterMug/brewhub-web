@@ -67,6 +67,26 @@ class FormsController extends AppController
             if (isset($responseKeys['success']) && $responseKeys['success'] == true) {
                 $form = $this->Forms->patchEntity($form, $data);
                 if ($this->Forms->save($form)) {
+                    // Prepare data for emails
+                    $payload = [
+                        'first_name' => (string)($form->first_name ?? ''),
+                        'last_name' => (string)($form->last_name ?? ''),
+                        'email' => (string)($form->email ?? ''),
+                        'message' => (string)($form->message ?? '')
+                    ];
+
+                    // Send emails (user + admin) but don't block UX on failures
+                    try {
+                        /** @var \App\Mailer\ContactMailer $mailer */
+                        $mailer = new \App\Mailer\ContactMailer('default');
+                        if (!empty($payload['email'])) {
+                            $mailer->sendUserConfirmation($payload['email'], ['data' => $payload]);
+                        }
+                        $mailer->sendAdminNotification('superuser@brewhub.com', ['data' => $payload], $payload['email'] ?: null);
+                    } catch (\Throwable $e) {
+                        $this->Flash->error(__('Email failed.'));
+                    }
+
                     $this->Flash->success(
                         __('Thank you for your message. We will get back to you shortly.'),
                         ['key' => 'contact']
