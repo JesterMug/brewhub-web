@@ -43,12 +43,43 @@ class OrdersController extends AppController
 
         $query = $this->Orders->find()
             ->contain(['Users', 'Addresses'])
-            ->orderByDesc('Orders.created');
+            ->orderByDesc('Orders.order_date');
 
         $orders = $this->paginate($query);
 
         $this->set(compact('orders'));
         $this->viewBuilder()->setTemplate('admin_index');
+    }
+
+    /**
+     * Admin Preorders method
+     *
+     * Lists orders that contain at least one preorder item and are not shipped.
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function adminPreorders()
+    {
+        // Restrict to admin/superuser
+        $this->checkAdminAuth();
+
+        $query = $this->Orders->find()
+            ->contain(['Users', 'Addresses'])
+            ->matching('OrderProductVariants', function ($q) {
+                return $q->where(['OrderProductVariants.is_preorder' => true]);
+            })
+            ->where(function ($exp, $q) {
+                // Exclude shipped orders
+                return $exp->notEq('Orders.shipping_status', 'shipped');
+            })
+            ->select(['Orders.id', 'Orders.order_date', 'Orders.shipping_status', 'Orders.user_id', 'Orders.address_id'])
+            ->distinct(['Orders.id'])
+            ->orderByDesc('Orders.order_date');
+
+        $orders = $this->paginate($query);
+
+        $this->set(compact('orders'));
+        $this->viewBuilder()->setTemplate('admin_preorders');
     }
 
     /**
