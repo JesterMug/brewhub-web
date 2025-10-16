@@ -29,7 +29,7 @@ echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['bl
                 <?php foreach ($preorderItems as $row): ?>
                     <?php $variant = $row->product_variant ?? null; $product = $variant->product ?? null; $totalQty = (int)($row->get('total_quantity') ?? 0); $ordersCount = (int)($row->get('orders_count') ?? 0); $stock = (int)($variant->stock ?? 0); $need = max(0, $totalQty - $stock); ?>
                     <tr>
-                        <td><?= h($product->name ?? 'Item') ?></td>
+                        <td><?= $this->Html->link(__($product->name ?? 'Item'), ['controller' => 'products','action' => 'edit', $product->id]) ?></td>
                         <td><?= h($variant ? ($variant->size ?? (($variant->size_value ?? '') . ($variant->size_unit ?? ''))) : '') ?></td>
                         <td><?= h($variant->sku ?? '') ?></td>
                         <td class="text-end"><?= (int)$totalQty ?></td>

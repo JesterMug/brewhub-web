@@ -55,7 +55,7 @@ echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['bl
                         <?php endif; ?>
                     </td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $product->id]) ?>
+                        <?= $this->Html->link(__('View'), ['controller' => 'shop','action' => 'view', $product->id]) ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $product->id]) ?>
 <!--                        --><?php //= $this->Form->postLink(
 //                            __('Delete'),
