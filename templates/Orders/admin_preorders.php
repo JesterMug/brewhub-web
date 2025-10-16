@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var iterable<\App\Model\Entity\Order> $orders
+ * @var \Cake\Datasource\ResultSetInterface|array $preorderItems
  */
 
 echo $this->Html->css('/vendor/datatables/dataTables.bootstrap4.min.css', ['block' => true]);
@@ -10,42 +10,33 @@ echo $this->Html->script('/vendor/datatables/dataTables.bootstrap4.min.js', ['bl
 ?>
 <div class="orders index content">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800"><?= __('Preorders (Unshipped)') ?></h1>
+        <h1 class="h3 mb-0 text-gray-800"><?= __('Preorder Items (Unshipped Orders)') ?></h1>
     </div>
     <div class="table-responsive">
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
                 <tr>
-                    <th><?= h('Order #') ?></th>
-                    <th><?= h('Customer') ?></th>
-                    <th><?= h('Order Date') ?></th>
-                    <th><?= h('Shipping Status') ?></th>
-                    <th class="actions"><?= __('Actions') ?></th>
+                    <th><?= h('Product') ?></th>
+                    <th><?= h('Variant') ?></th>
+                    <th><?= h('SKU') ?></th>
+                    <th class="text-end"><?= h('Total Preorder Qty') ?></th>
+                    <th class="text-end"><?= h('# Orders') ?></th>
+                    <th class="text-end"><?= h('Current Stock') ?></th>
+                    <th class="text-end"><?= h('Need to Buy') ?></th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($orders as $order): ?>
-                <tr>
-                    <td>
-                        <span class="badge badge-info mr-1"><?= __('Pre-Order') ?></span>
-                        <?= h($order->id) ?>
-                    </td>
-                    <td>
-                        <?php if (!empty($order->user)) : ?>
-                            <?= h($order->user->first_name ?? '') ?> <?= h($order->user->last_name ?? '') ?>
-                            <?php if (!empty($order->user->email)) : ?>
-                                <div class="small text-muted"><?= $this->Html->link(h($order->user->email), 'mailto:' . h($order->user->email)) ?></div>
-                            <?php endif; ?>
-                        <?php else: ?>
-                            <span class="text-muted">Guest</span>
-                        <?php endif; ?>
-                    </td>
-                    <td><?= $this->Time->nice($order->order_date) ?></td>
-                    <td><span class="badge badge-secondary"><?= h($order->shipping_status) ?></span></td>
-                    <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $order->id], ['class' => 'btn btn-sm btn-outline-primary']) ?>
-                    </td>
-                </tr>
+                <?php foreach ($preorderItems as $row): ?>
+                    <?php $variant = $row->product_variant ?? null; $product = $variant->product ?? null; $totalQty = (int)($row->get('total_quantity') ?? 0); $ordersCount = (int)($row->get('orders_count') ?? 0); $stock = (int)($variant->stock ?? 0); $need = max(0, $totalQty - $stock); ?>
+                    <tr>
+                        <td><?= h($product->name ?? 'Item') ?></td>
+                        <td><?= h($variant ? ($variant->size ?? (($variant->size_value ?? '') . ($variant->size_unit ?? ''))) : '') ?></td>
+                        <td><?= h($variant->sku ?? '') ?></td>
+                        <td class="text-end"><?= (int)$totalQty ?></td>
+                        <td class="text-end"><span class="badge badge-light"><?= (int)$ordersCount ?></span></td>
+                        <td class="text-end"><?= (int)$stock ?></td>
+                        <td class="text-end fw-bold <?= $need > 0 ? 'text-danger' : 'text-success' ?>"><?= (int)$need ?></td>
+                    </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>

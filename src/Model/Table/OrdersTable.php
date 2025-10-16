@@ -62,6 +62,75 @@ class OrdersTable extends Table
     }
 
     /**
+     * Process preorder shipment: When an order is marked as shipped, deduct inventory
+     * for preorder line items and create inventory transaction records.
+     *
+     * This method is idempotent only when called once per order transition to 'shipped'.
+     * Ensure you only call it when shipping_status changes to 'shipped'.
+     *
+     * @param int $orderId
+     * @param string $actor
+     * @return void
+     */
+    public function processPreorderShipment(int $orderId, string $actor = 'system'): void
+    {
+        $connection = $this->getConnection();
+        $connection->transactional(function () use ($orderId, $actor) {
+            $order = $this->get($orderId, contain: [
+                'OrderProductVariants' => ['ProductVariants']
+            ]);
+
+            // Filter preorder items only
+            $preorderItems = array_filter($order->order_product_variants ?? [], function ($opv) {
+                return (bool)($opv->is_preorder ?? false);
+            });
+
+            if (empty($preorderItems)) {
+                return; // nothing to do
+            }
+
+            $inventoryTransactions = $this->getAssociation('OrderProductVariants')
+                ->getTarget()
+                ->getAssociation('ProductVariants')
+                ->getTarget()
+                ->getAssociation('InventoryTransactions')
+                ->getTarget();
+
+            $productVariantsTable = $this->OrderProductVariants->ProductVariants;
+
+            $now = new \Cake\I18n\FrozenTime();
+            foreach ($preorderItems as $item) {
+                $variant = $item->product_variant;
+                if (!$variant) {
+                    // Ensure we have the variant loaded
+                    $variant = $productVariantsTable->get($item->product_variant_id);
+                }
+
+                $qty = (int)$item->quantity;
+                if ($qty <= 0) {
+                    continue;
+                }
+
+                // Decrement stock without going below zero
+                $newStock = max(0, (int)$variant->stock - $qty);
+                $variant->stock = $newStock;
+                $productVariantsTable->saveOrFail($variant);
+
+                // Create inventory transaction (negative quantity for shipment)
+                $txn = $inventoryTransactions->newEntity([
+                    'product_variant_id' => $variant->id,
+                    'change_type' => 'shipment',
+                    'quantity_change' => -$qty,
+                    'note' => sprintf('Preorder shipment for Order #%d', $order->id),
+                    'created_by' => $actor,
+                    'date_created' => $now,
+                ]);
+                $inventoryTransactions->saveOrFail($txn);
+            }
+        });
+    }
+
+    /**
      * Default validation rules.
      *
      * @param \Cake\Validation\Validator $validator Validator instance.

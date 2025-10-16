@@ -209,6 +209,36 @@ class ShopController extends AppController
                 }
             );
 
+            // Guard against mixing items with a preorder item in cart
+            $existingItems = $cartItemsTable->find()->where(['cart_id' => $cart->id])->all()->toArray();
+            $hasPreorderInCart = false;
+            $hasNonPreorderInCart = false;
+            $hasSameVariant = false;
+            foreach ($existingItems as $ei) {
+                if ((int)$ei->product_variant_id === $variantId) {
+                    $hasSameVariant = true;
+                }
+                if ($ei->is_preorder) {
+                    $hasPreorderInCart = true;
+                } else {
+                    $hasNonPreorderInCart = true;
+                }
+            }
+
+            if ($isPreorder) {
+                // If any non-preorder exists OR a different preorder item exists, block
+                if ($hasNonPreorderInCart || ($hasPreorderInCart && !$hasSameVariant)) {
+                    $this->Flash->error("You can't add more items while your cart contains a preorder item. Please complete or remove the preorder first.");
+                    return $this->redirect(['action' => 'cart']);
+                }
+            } else {
+                // Adding a normal item while a preorder is present is not allowed
+                if ($hasPreorderInCart) {
+                    $this->Flash->error("You can't add more items while your cart contains a preorder item. Please complete or remove the preorder first.");
+                    return $this->redirect(['action' => 'cart']);
+                }
+            }
+
             $cartItem = $cartItemsTable->find()
                 ->where(['cart_id' => $cart->id, 'product_variant_id' => $variantId])
                 ->first();
@@ -246,6 +276,30 @@ class ShopController extends AppController
             $session = $this->request->getSession();
             $guestCart = (array)$session->read('GuestCart');
 
+            // Guard for guest carts as well
+            $hasPreorderInCart = false;
+            $hasNonPreorderInCart = false;
+            $hasSameVariant = array_key_exists($variantId, $guestCart);
+            foreach ($guestCart as $vid => $data) {
+                if (!empty($data['is_preorder'])) {
+                    $hasPreorderInCart = true;
+                } else {
+                    $hasNonPreorderInCart = true;
+                }
+            }
+
+            if ($isPreorder) {
+                if ($hasNonPreorderInCart || ($hasPreorderInCart && !$hasSameVariant)) {
+                    $this->Flash->error("You can't add more items while your cart contains a preorder item. Please complete or remove the preorder first.");
+                    return $this->redirect(['action' => 'cart']);
+                }
+            } else {
+                if ($hasPreorderInCart) {
+                    $this->Flash->error("You can't add more items while your cart contains a preorder item. Please complete or remove the preorder first.");
+                    return $this->redirect(['action' => 'cart']);
+                }
+            }
+
             $currentItemData = $guestCart[$variantId] ?? ['quantity' => 0, 'is_preorder' => false];
             $newTotalQty = $currentItemData['quantity'] + $qty;
 
@@ -262,6 +316,10 @@ class ShopController extends AppController
             ];
             $session->write('GuestCart', $guestCart);
             $this->Flash->success($isPreorder ? 'Item pre-ordered and added to your cart.' : 'Item added to your cart.');
+        }
+        // If this is a preorder flow, take the customer to the review page to add/select address
+        if ($isPreorder) {
+            return $this->redirect(['action' => 'review']);
         }
         return $this->redirect(['action' => 'cart']);
     }

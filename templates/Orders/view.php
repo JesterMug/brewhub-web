@@ -49,6 +49,20 @@
                     <td>
                         <?php $identity = $this->request->getAttribute('identity'); ?>
                         <?php if ($identity && in_array($identity->user_type ?? null, ['admin', 'superuser'], true)) : ?>
+                            <?php
+                                // Determine if we can mark as shipped. Preorder items must have sufficient stock
+                                $canShip = true;
+                                if (!empty($order->order_product_variants)) {
+                                    foreach ($order->order_product_variants as $opv) {
+                                        if (!empty($opv->is_preorder)) {
+                                            $variant = $opv->product_variant ?? null;
+                                            $variantStock = (int)($variant->stock ?? 0);
+                                            $qty = (int)($opv->quantity ?? 0);
+                                            if ($variantStock < $qty) { $canShip = false; break; }
+                                        }
+                                    }
+                                }
+                            ?>
                             <?= $this->Form->create($order, ['url' => ['action' => 'edit', $order->id], 'class' => 'd-flex align-items-center gap-2']) ?>
                                 <?= $this->Form->control('shipping_status', [
                                     'label' => false,
@@ -59,9 +73,29 @@
                                     ],
                                     'default' => $order->shipping_status,
                                     'class' => 'form-select form-select-sm me-2',
+                                    'disabled' => false,
+                                    'templates' => [
+                                        'selectOption' => '<option value="{{value}}"{{attrs}}>{{text}}</option>'
+                                    ],
                                 ]) ?>
+                                <script>
+                                    (function(){
+                                        var select = document.querySelector('select[name="shipping_status"]');
+                                        if (select) {
+                                            var shippedOption = Array.from(select.options).find(function(o){ return o.value === 'shipped'; });
+                                            if (shippedOption && <?= $canShip ? 'false' : 'true' ?>) {
+                                                shippedOption.disabled = true;
+                                                shippedOption.text = shippedOption.text + ' (insufficient preorder stock)';
+                                                if (select.value === 'shipped') { select.value = 'pending'; }
+                                            }
+                                        }
+                                    })();
+                                </script>
                                 <?= $this->Form->button(__('Update'), ['class' => 'btn btn-sm btn-primary']) ?>
                             <?= $this->Form->end() ?>
+                            <?php if (!$canShip): ?>
+                                <div class="text-danger small mt-1">Cannot mark as shipped until preorder item stock is available.</div>
+                            <?php endif; ?>
                         <?php else: ?>
                             <?= h($order->shipping_status) ?>
                         <?php endif; ?>

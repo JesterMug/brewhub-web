@@ -179,12 +179,34 @@ class ProductsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
 
+            // Handle requested deletions of existing variants before save .
+            if (!empty($data['product_variants']) && is_array($data['product_variants'])) {
+                $variantsTable = $this->Products->ProductVariants;
+                foreach ($data['product_variants'] as $idx => $variant) {
+                    $toDelete = !empty($variant['_delete']);
+                    $vid = (int)($variant['id'] ?? 0);
+                    if ($toDelete && $vid > 0) {
+                        // Verify the variant belongs to this product, then delete it
+                        $existing = $variantsTable->find()->where([
+                            'ProductVariants.id' => $vid,
+                            'ProductVariants.product_id' => (int)$product->id,
+                        ])->first();
+                        if ($existing) {
+                            $variantsTable->delete($existing);
+                        }
+                        unset($data['product_variants'][$idx]);
+                    }
+                }
+                $data['product_variants'] = array_values($data['product_variants']);
+            }
+
             if (!empty($data['product_variants'])) {
                 foreach ($data['product_variants'] as &$variant) {
                     if (!empty($variant['size_value']) && !empty($variant['size_unit'])) {
                         $variant['size'] = $variant['size_value'] . $variant['size_unit'];
                     }
                 }
+                unset($variant);
             }
 
             $uploadedFiles = $this->request->getData('product_images_files');

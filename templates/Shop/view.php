@@ -123,7 +123,7 @@
                             btnText.textContent = 'Pre-Order Now';
                             isPreorderInput.value = '1';
                             quantityInput.disabled = false;
-                            if (form) form.action = preUrl;
+                            if (form) form.action = addUrl;
                         }
                     }
 
