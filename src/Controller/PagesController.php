@@ -90,9 +90,18 @@ class PagesController extends AppController
             ->distinct(['Orders.id'])
             ->count();
 
+        $unshippedPreordersCount = $ordersTable->find()
+            ->matching('OrderProductVariants', function ($q) {
+                return $q->where(['OrderProductVariants.is_preorder' => true]);
+            })
+            ->where(['Orders.shipping_status !=' => 'shipped'])
+            ->select(['Orders.id'])
+            ->distinct()
+            ->count();
+
         $totalRevenue = 0;
 
-        $this->set(compact('productsCount', 'usersCount', 'ordersCount', 'newMessagesCount', 'preorderedOrdersCount', 'totalRevenue'));
+        $this->set(compact('productsCount', 'usersCount', 'ordersCount', 'newMessagesCount', 'preorderedOrdersCount', 'unshippedPreordersCount', 'totalRevenue'));
 
         $this->viewBuilder()->setLayout('default');
     }

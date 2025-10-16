@@ -100,6 +100,13 @@ $currentController = $this->request->getParam('controller');
             </a>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link" href="<?= $this->Url->build(['plugin' => null, 'controller' => 'orders', 'action' => 'adminPreorders']) ?>">
+                <i class="fas fa-fw fa-clock"></i>
+                <span>Preorders</span>
+            </a>
+        </li>
+
         <?php if ($user && $user->user_type === 'superuser') : ?>
         <li class="nav-item">
             <a class="nav-link" href="<?= $this->Url->build(['plugin' => 'ContentBlocks', 'controller' => 'ContentBlocks', 'action' => 'index']) ?>">

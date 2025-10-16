@@ -16,6 +16,30 @@ class UsersController extends AppController
         $this->checkAdminAuth();
     }
 
+    public function password($id = null)
+    {
+        $user = $this->Users->get($id);
+        if ($this->request->is(['post', 'put', 'patch'])) {
+            $data = (array)$this->request->getData();
+            $password = $data['password'] ?? '';
+            $confirm = $data['confirm_password'] ?? '';
+            if ($password === '' || $confirm === '') {
+                $this->Flash->error(__('Please enter and confirm the new password.'));
+            } elseif ($password !== $confirm) {
+                $this->Flash->error(__('Passwords do not match.'));
+            } else {
+                // Only patch the password field to avoid unintended changes
+                $user = $this->Users->patchEntity($user, ['password' => $password]);
+                if ($this->Users->save($user)) {
+                    $this->Flash->success(__('Password updated successfully.'));
+                    return $this->redirect(['action' => 'view', $user->id]);
+                }
+                $this->Flash->error(__('The password could not be updated. Please, try again.'));
+            }
+        }
+        $this->set(compact('user'));
+    }
+
     public function index()
     {
         $query = $this->Users->find();

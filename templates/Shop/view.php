@@ -2,7 +2,9 @@
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Product $product
+ * @var iterable<\App\Model\Entity\User> $users
  */
+$user = $this->request->getAttribute('identity');
 ?>
 <header>
     <div class="py-5">
@@ -12,6 +14,11 @@
 </header>
 <div class="container my-5">
     <div class="row gx-4 gx-lg-5 align-items-center">
+        <?php if ($user && ($user->user_type === 'admin' || $user->user_type === 'superuser')) : ?>
+            <div class="mt-2">
+                <?= $this->Html->link(__('Back to Products List'), ['controller' => 'products','action' => 'index'], ['class' => 'side-nav-item']) ?>
+            </div>
+        <?php endif;?>
         <div class="col-md-6">
             <?php
             $images = [];
@@ -123,7 +130,7 @@
                             btnText.textContent = 'Pre-Order Now';
                             isPreorderInput.value = '1';
                             quantityInput.disabled = false;
-                            if (form) form.action = preUrl;
+                            if (form) form.action = addUrl;
                         }
                     }
 
