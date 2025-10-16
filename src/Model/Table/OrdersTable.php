@@ -111,15 +111,10 @@ class OrdersTable extends Table
                     continue;
                 }
 
-                // Decrement stock without going below zero
-                $newStock = max(0, (int)$variant->stock - $qty);
-                $variant->stock = $newStock;
-                $productVariantsTable->saveOrFail($variant);
-
                 // Create inventory transaction (negative quantity for shipment)
                 $txn = $inventoryTransactions->newEntity([
                     'product_variant_id' => $variant->id,
-                    'change_type' => 'shipment',
+                    'change_type' => 'adjustment',
                     'quantity_change' => -$qty,
                     'note' => sprintf('Preorder shipment for Order #%d', $order->id),
                     'created_by' => $actor,
@@ -127,6 +122,8 @@ class OrdersTable extends Table
                 ]);
                 $inventoryTransactions->saveOrFail($txn);
             }
+            $order->shipping_status = 'shipped';
+            $this->saveOrFail($order);
         });
     }
 

@@ -105,13 +105,13 @@ $this->assign('title', 'Admin Dashboard');
     </div>
 
     <div class="col-xl-3 col-md-6 mb-4">
-        <a href="<?= $this->Url->build(['controller' => 'orders', 'action' => 'adminPreorders']) ?>" class="text-decoration-none">
+        <a href="<?= $this->Url->build(['controller' => 'orders', 'action' => 'index']) ?>" class="text-decoration-none">
             <div class="card border-left-danger shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Preorders</div>
-                            <div class="h5 mb-0 font-weight-bold"><?= (int)($preorderedOrdersCount ?? 0) ?></div>
+                            <div class="h5 mb-0 font-weight-bold"><?= (int)($unshippedPreordersCount ?? 0) ?></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-clock fa-2x text-gray-300" style="color: var(--text-secondary-dark) !important;"></i>
