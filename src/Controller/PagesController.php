@@ -99,7 +99,31 @@ class PagesController extends AppController
             ->distinct()
             ->count();
 
-        $totalRevenue = 0;
+        // Calculate total revenue for the current month
+        try {
+            $now = new \Cake\I18n\FrozenTime();
+            $monthStart = $now->startOfMonth();
+            $monthEnd = $now->endOfMonth();
+
+            $opvTable = $this->fetchTable('OrderProductVariants');
+
+            $query = $opvTable->find()
+                ->innerJoinWith('Orders', function ($q) use ($monthStart, $monthEnd) {
+                    return $q->where([
+                        'Orders.order_date >=' => $monthStart,
+                        'Orders.order_date <=' => $monthEnd,
+                    ]);
+                })
+                ->innerJoinWith('ProductVariants')
+                ->select([
+                    'total' => $opvTable->find()->newExpr('SUM(OrderProductVariants.quantity * ProductVariants.price)')
+                ]);
+
+            $row = $query->first();
+            $totalRevenue = (float)($row?->get('total') ?? 0);
+        } catch (\Throwable $e) {
+            $totalRevenue = 0;
+        }
 
         $this->set(compact('productsCount', 'usersCount', 'ordersCount', 'newMessagesCount', 'preorderedOrdersCount', 'unshippedPreordersCount', 'totalRevenue'));
 
